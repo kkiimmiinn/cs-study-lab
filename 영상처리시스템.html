@@ -1533,6 +1533,11 @@ print('1차원 변환:', a.flatten())`,
     var html = '<div class="l3row head"><span class="l3n">줄</span>' +
                '<div class="l3code">코드 — 연한 밑줄 값(숫자·문자열)만 수정 가능, 문법·괄호는 잠김</div>' +
                '<div class="l3side">주석 · 해설</div></div>';
+    function chw(v){                              // 한글은 2ch 폭으로 계산
+      var n = 0;
+      for (var i = 0; i < v.length; i++) n += v.charCodeAt(i) > 0x2000 ? 2 : 1;
+      return Math.max(1, n);
+    }
     ex.code.split('\n').forEach(function(line, li){
       var tk = tokenizeLine(line);
       lineMeta.push(tk);
@@ -1543,7 +1548,7 @@ print('1차원 변환:', a.flatten())`,
         else if (sg.t === 'str'){
           var inner = sg.v.slice(1, -1), q = sg.v[0];
           codeHtml += '<span class="tk-str">' + q + '</span>' +
-            '<input class="tk-str" data-l="' + li + '" data-s="' + si + '" value="' + esc(inner).replace(/"/g, '&quot;') + '" style="width:' + Math.max(1, inner.length) + 'ch">' +
+            '<input class="tk-str" data-l="' + li + '" data-s="' + si + '" value="' + esc(inner).replace(/"/g, '&quot;') + '" style="width:' + chw(inner) + 'ch">' +
             '<span class="tk-str">' + q + '</span>';
         }
         else if (sg.t === 'sp') codeHtml += sg.v.replace(/ /g, '&nbsp;');
