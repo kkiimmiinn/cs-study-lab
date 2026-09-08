@@ -214,6 +214,32 @@ details.sol-toggle pre{margin-top:10px}
 .errhint.show{display:block}
 .errhint b{color:#c0334d}
 .errhint code{font-family:var(--mono);background:#f7dde3;border-radius:5px;padding:1px 7px;font-size:13px}
+/* 학습 모드 바 */
+.modebar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.modebar button{border:1.5px solid var(--line);background:var(--card);border-radius:11px;
+  padding:9px 18px;font-size:13.5px;font-weight:700;color:var(--ink2);cursor:pointer}
+.modebar button.on{background:var(--c2);border-color:var(--c2);color:#fff}
+.mode-desc{font-size:13px;color:var(--mute);margin-bottom:12px}
+/* 미니 코드 에디터 — 하이라이트 레이어 + 투명 textarea */
+.codeed{display:grid;grid-template-columns:40px 1fr;border-radius:14px;overflow:hidden;
+  border:1px solid var(--line);box-shadow:var(--shadow);background:#141e24}
+.codeed .gut{background:#101820;color:#4d6270;font-family:var(--mono);font-size:12px;line-height:1.55;
+  text-align:right;padding:12px 9px 12px 0;user-select:none;white-space:pre;overflow:hidden}
+.codeed .stack{position:relative}
+.codeed pre.hl{position:absolute;inset:0;margin:0;padding:12px 14px;font-family:var(--mono);font-size:13.5px;
+  line-height:1.55;color:#e8eef2;white-space:pre;pointer-events:none;background:none;border-radius:0;overflow:hidden}
+.codeed textarea{position:relative;display:block;width:100%;min-height:220px;padding:12px 14px;border:0;resize:none;
+  background:transparent;color:transparent;caret-color:#7ecbff;font-family:var(--mono);font-size:13.5px;
+  line-height:1.55;white-space:pre;overflow-x:auto;overflow-y:hidden;outline:none;box-sizing:border-box;scrollbar-width:thin}
+.codeed textarea::selection{background:rgba(124,147,245,.3)}
+.ind{box-shadow:inset 1px 0 0 rgba(140,170,200,.14)}      /* 들여쓰기 가이드 세로줄 */
+.codeed .ph{color:#4d6270}
+.dict-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dict-src{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#141e24}
+.dict-src .dh{background:#101820;color:#7e94a6;font-size:11.5px;padding:7px 12px;font-weight:700}
+.dict-src pre{margin:0;padding:12px 14px;font-size:13px;line-height:1.55;background:none}
+.diffok{color:var(--tip);font-weight:800}
+@media(max-width:860px){.dict-wrap{grid-template-columns:1fr}}
 @media(max-width:820px){
   .lab3-head{display:none}
   .l3row{grid-template-columns:36px 1fr}
@@ -821,10 +847,25 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
   <div class="runner">
     <div class="exbtns" id="exBtns"></div>
     <div class="ex-purpose" id="exPurpose"></div>
+    <div class="modebar" id="modeBar">
+      <button class="on" data-m="fill">① 값 실험</button>
+      <button data-m="free">② 자유 코딩</button>
+      <button data-m="dict">③ 받아쓰기</button>
+    </div>
+    <div class="mode-desc" id="modeDesc">문법은 잠겨 있고, 연한 밑줄 값만 바꿔 가며 실행해 봅니다 — 개념 실험에 최적.</div>
     <div class="lab3" id="lab3"></div>
+    <div id="freeWrap" hidden>
+      <div id="freeEd"></div>
+      <details class="sol-toggle" style="margin-top:10px"><summary>원본 코드 보기</summary><pre id="freeSrc"></pre></details>
+    </div>
+    <div class="dict-wrap" id="dictWrap" hidden>
+      <div class="dict-src"><div class="dh">원본 — 보고 그대로 타이핑</div><pre class="hl" id="dictSrc"></pre></div>
+      <div><div class="dh" style="background:var(--c2-soft);color:var(--c2);font-size:11.5px;padding:7px 12px;font-weight:800;border-radius:8px 8px 0 0">내 타이핑</div><div id="dictEd"></div></div>
+    </div>
     <div style="display:flex;gap:10px;margin:14px 0;align-items:center;flex-wrap:wrap">
       <button class="btn btn-run" id="pyRun">▶ 실행</button>
-      <button class="btn" id="pyReset" style="background:var(--card);border:1.5px solid var(--line);color:var(--ink2)">↺ 값 초기화</button>
+      <button class="btn" id="dictCheck" hidden style="background:var(--form);color:#fff">원본과 비교</button>
+      <button class="btn" id="pyReset" style="background:var(--card);border:1.5px solid var(--line);color:var(--ink2)">↺ 초기화</button>
       <span id="pyStatus" style="font-size:13px;color:var(--mute)"></span>
     </div>
     <div class="out" id="pyOut">실행 결과가 여기에 표시됩니다.</div>
@@ -1396,6 +1437,80 @@ print('1차원 변환:', a.flatten())`,
     return {segs: segs, comment: comment};
   }
 
+  /* 하이라이트 한 줄 → HTML (들여쓰기 가이드 포함) */
+  function hlLine(line){
+    var lead = (line.match(/^ */) || [''])[0];
+    var guides = '';
+    for (var g = 0; g + 4 <= lead.length; g += 4) guides += '<span class="ind">    </span>';
+    var rest = line.slice(guides.length ? Math.floor(lead.length / 4) * 4 : 0);
+    var tk = tokenizeLine(rest);
+    var h = '';
+    tk.segs.forEach(function(sg){
+      if (sg.t === 'sp') h += sg.v;
+      else h += '<span class="tk-' + (sg.t === 'pl' ? 'pl' : sg.t) + '">' + escH(sg.v) + '</span>';
+    });
+    if (tk.comment !== null) h += '<span class="tk-cm" style="color:#7e9a8f">' + (rest.trim() ? '   ' : '') + '# ' + escH(tk.comment) + '</span>';
+    return guides + h;
+  }
+  function escH(t){ return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function hlCode(code){
+    return code.split('\n').map(hlLine).join('\n') + '\n';
+  }
+  /* 미니 코드 에디터: 구문색 + Tab + 자동 들여쓰기 + 줄번호 */
+  function makeEditor(host, initial){
+    host.innerHTML = '<div class="codeed"><div class="gut">1</div>' +
+      '<div class="stack"><pre class="hl"><code></code></pre>' +
+      '<textarea spellcheck="false" wrap="off" aria-label="코드 입력"></textarea></div></div>';
+    var gut = host.querySelector('.gut'), code = host.querySelector('code'),
+        ta = host.querySelector('textarea'), stack = host.querySelector('.stack');
+    function refresh(){
+      code.innerHTML = hlCode(ta.value);
+      var n = ta.value.split('\n').length, gtext = '';
+      for (var i = 1; i <= n; i++) gtext += i + '\n';
+      gut.textContent = gtext;
+      ta.style.height = 'auto';
+      ta.style.height = Math.max(220, ta.scrollHeight) + 'px';   // 세로는 자동으로 늘어난다
+    }
+    ta.addEventListener('input', refresh);
+    ta.addEventListener('scroll', function(){                     // 가로 스크롤 동기화
+      code.parentElement.scrollLeft = ta.scrollLeft;
+      gut.scrollTop = ta.scrollTop;
+    });
+    ta.addEventListener('keydown', function(e){
+      var st = ta.selectionStart, en = ta.selectionEnd, v = ta.value;
+      if (e.key === 'Tab'){
+        e.preventDefault();
+        if (e.shiftKey){
+          var ls = v.lastIndexOf('\n', st - 1) + 1;
+          if (v.substr(ls, 4) === '    '){
+            ta.value = v.slice(0, ls) + v.slice(ls + 4);
+            ta.selectionStart = ta.selectionEnd = Math.max(ls, st - 4);
+          }
+        } else {
+          ta.value = v.slice(0, st) + '    ' + v.slice(en);
+          ta.selectionStart = ta.selectionEnd = st + 4;
+        }
+        refresh();
+      } else if (e.key === 'Enter'){
+        e.preventDefault();
+        var ls2 = v.lastIndexOf('\n', st - 1) + 1;
+        var line = v.slice(ls2, st);
+        var indent = (line.match(/^ */) || [''])[0];
+        if (/:\s*$/.test(line)) indent += '    ';
+        ta.value = v.slice(0, st) + '\n' + indent + v.slice(en);
+        ta.selectionStart = ta.selectionEnd = st + 1 + indent.length;
+        refresh();
+      }
+    });
+    ta.value = initial || '';
+    refresh();
+    return {get: function(){ return ta.value; },
+            set: function(t){ ta.value = t; refresh(); },
+            focus: function(){ ta.focus(); }};
+  }
+  window._pyHl = hlCode;   // 손코딩(연습 문제)에서도 쓴다
+  window._pyEd = makeEditor;
+
   var box = document.getElementById('lab3'), out = document.getElementById('pyOut'),
       run = document.getElementById('pyRun'), st = document.getElementById('pyStatus'),
       bar = document.getElementById('exBtns'), purpose = document.getElementById('exPurpose'),
@@ -1471,11 +1586,72 @@ print('1차원 변환:', a.flatten())`,
     b.innerHTML = (ex.star ? '<span class="star">★</span> ' : '') + ex.title;
     b.title = ex.file + (ex.star ? ' · 수업 시간에 실제 실습한 파일' : ' · 교재 예제 (수업에서는 건너뜀)');
     b.style.fontFamily = 'var(--sans)';
-    b.addEventListener('click', function(){ render(ex); });
+    b.addEventListener('click', function(){
+      render(ex);
+      if (typeof mode !== 'undefined' && mode !== 'fill') setMode(mode);
+    });
     bar.appendChild(b);
   });
+  /* ── 학습 모드: 값 실험 / 자유 코딩 / 받아쓰기 ── */
+  var MODE_DESC = {
+    fill: '문법은 잠겨 있고, 연한 밑줄 값만 바꿔 가며 실행해 봅니다 — 개념 실험에 최적.',
+    free: '빈 화면에 처음부터 끝까지 직접 코딩합니다. Tab 들여쓰기, 콜론 뒤 엔터 자동 들여쓰기, 들여쓰기 세로 가이드 지원. 막히면 아래 [원본 코드 보기].',
+    dict: '왼쪽 원본을 보며 오른쪽에 그대로 타이핑합니다(받아쓰기). [원본과 비교]로 들여쓰기·띄어쓰기까지 확인 — 코드가 손에 붙는 가장 빠른 길.',
+  };
+  var mode = 'fill', freeEd = null, dictEd = null;
+  var freeWrap = document.getElementById('freeWrap'), dictWrap = document.getElementById('dictWrap');
+  function setMode(m){
+    mode = m;
+    document.querySelectorAll('#modeBar button').forEach(function(x){ x.classList.toggle('on', x.dataset.m === m); });
+    document.getElementById('modeDesc').textContent = MODE_DESC[m];
+    box.hidden = m !== 'fill';
+    box.style.display = m === 'fill' ? '' : 'none';
+    freeWrap.hidden = m !== 'free';
+    dictWrap.hidden = m !== 'dict';
+    document.getElementById('dictCheck').hidden = m !== 'dict';
+    document.getElementById('pyReset').textContent = m === 'fill' ? '↺ 값 초기화' : '↺ 초기화';
+    clearErr();
+    out.textContent = '실행 결과가 여기에 표시됩니다.';
+    if (m === 'free'){
+      if (!freeEd) freeEd = window._pyEd(document.getElementById('freeEd'), '');
+      freeEd.set('# ' + cur.title + ' — 직접 작성해 보세요\n');
+      document.getElementById('freeSrc').textContent = cur.code;
+      freeEd.focus();
+    }
+    if (m === 'dict'){
+      if (!dictEd) dictEd = window._pyEd(document.getElementById('dictEd'), '');
+      dictEd.set('');
+      document.getElementById('dictSrc').innerHTML = window._pyHl(cur.code);
+      dictEd.focus();
+    }
+  }
+  document.querySelectorAll('#modeBar button').forEach(function(b){
+    b.addEventListener('click', function(){ setMode(b.dataset.m); });
+  });
+  document.getElementById('dictCheck').addEventListener('click', function(){
+    var src = cur.code.split('\n').map(function(l){ return l.replace(/\s+$/, ''); });
+    var mine = dictEd.get().split('\n').map(function(l){ return l.replace(/\s+$/, ''); });
+    while (src.length && !src[src.length-1]) src.pop();
+    while (mine.length && !mine[mine.length-1]) mine.pop();
+    for (var i = 0; i < Math.max(src.length, mine.length); i++){
+      if ((src[i] || '') !== (mine[i] || '')){
+        out.textContent = '✏ ' + (i + 1) + '번 줄이 달라요.\n원본:      ' + (src[i] || '(없음)') +
+                          '\n내 타이핑: ' + (mine[i] || '(없음)') +
+                          '\n(들여쓰기 4칸·띄어쓰기까지 똑같아야 해요)';
+        return;
+      }
+    }
+    out.textContent = '🎉 완벽하게 일치! 이제 [실행]으로 결과까지 확인해 보세요.';
+  });
+
   render(EX.find(function(e){ return e.file === '07.for.py'; }));
-  document.getElementById('pyReset').addEventListener('click', function(){ render(cur); });
+  document.getElementById('pyReset').addEventListener('click', function(){
+    if (mode === 'fill') render(cur);
+    else if (mode === 'free') freeEd.set('# ' + cur.title + ' — 직접 작성해 보세요\n');
+    else dictEd.set('');
+    out.textContent = '실행 결과가 여기에 표시됩니다.';
+    clearErr();
+  });
 
   /* ── 실행 엔진 ── */
   var pyodide = null, loading = false;
@@ -1522,20 +1698,25 @@ print('1차원 변환:', a.flatten())`,
     KeyError: '사전에 없는 키를 찾고 있어요. 키 이름을 확인!',
     SyntaxError: '파이썬 문법에 맞지 않아요. 따옴표·괄호 짝, 콜론(:)을 확인해 보세요.',
   };
+  function currentSource(){
+    if (mode === 'free') return freeEd ? freeEd.get() : '';
+    if (mode === 'dict') return dictEd ? dictEd.get() : '';
+    return buildCode();
+  }
   run.addEventListener('click', function(){
     clearErr();
-    if (/^\s*import\s+cv2/m.test(cur.code)){
+    if (mode === 'fill' && /^\s*import\s+cv2/m.test(cur.code)){
       out.textContent = 'ℹ cv2(OpenCV)는 브라우저 파이썬에서 지원되지 않습니다.\n' +
         'CH02 탭의 [회색 창 시뮬레이터]에서 값을 바꿔 가며 실습하세요.\n(내 컴퓨터 파이참에서는 그대로 실행됩니다)';
       return;
     }
     ensureEngine().then(function(py){
       st.textContent = ''; run.disabled = false;
-      py.globals.set('_code', buildCode());
+      py.globals.set('_code', currentSource());
       var r = JSON.parse(py.runPython(HARNESS));
       out.textContent = r.out || (r.err ? '' : '(출력 없음 — print()를 넣어 보세요)');
       if (r.err){
-        var row = r.line ? box.querySelector('.l3row[data-l="' + (r.line - 1) + '"]') : null;
+        var row = (mode === 'fill' && r.line) ? box.querySelector('.l3row[data-l="' + (r.line - 1) + '"]') : null;
         if (row){ row.classList.add('err'); row.scrollIntoView({block: 'nearest'}); }
         ehint.className = 'errhint show';
         ehint.innerHTML = '<b>' + r.err + '</b>' + (r.line ? ' — <code>' + r.line + '번 줄</code>에서 났어요.' : '') +
@@ -1759,9 +1940,11 @@ print('1차원 변환:', a.flatten())`,
         '<div class="qtext">' + h.t + '</div>' +
         '<div class="handcode">' + h.given + '</div>' +
         '<div class="qhint">조건: ' + h.req + '</div>' +
-        '<textarea spellcheck="false" placeholder="여기에 코드를 직접 작성해 보세요. 작성 후 모범 답안과 비교하고, 실습실에 붙여넣어 실행까지!"></textarea>' +
+        '<div class="handEd" id="handEd" style="margin-top:12px"></div>' +
+        '<div class="qhint" style="margin-top:8px">Tab 들여쓰기 · 콜론 뒤 엔터 자동 들여쓰기 · 들여쓰기 세로 가이드 — 실습실 에디터와 같습니다.</div>' +
         '<details class="sol-toggle"><summary>모범 답안 보기</summary><pre>' + h.ans.replace(/</g, '&lt;') + '</pre></details>' +
         '<div class="qbtns"><button class="btn new" id="qNew">다음 문제</button></div>';
+      if (window._pyEd) window._pyEd(document.getElementById('handEd'), '');
     } else {
       var g = GEN[curKind];
       var useCanon = !seenKinds[curKind] && g.canon;
