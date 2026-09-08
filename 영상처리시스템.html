@@ -41,6 +41,8 @@ html[data-theme="dark"] .l3side{border-bottom-color:#232b42}
 html[data-theme="dark"] .handcode{background:#241f14;border-color:#4a4231;color:#d8cfa8}
 body{transition:background .25s,color .25s}
 .nb{white-space:nowrap}
+.nbc{white-space:nowrap}
+@media(max-width:700px){.nbc{white-space:normal}}
 a,button{touch-action:manipulation}
 button{font-family:var(--sans)}
 :focus-visible{outline:2px solid #7c93f5;outline-offset:3px;border-radius:4px}
@@ -71,6 +73,13 @@ p,li,td,.tip,.warnb,.c p,.glance p,.formula .d{text-wrap:pretty}
 .tabs button{border:0;background:none;font-size:14.5px;color:var(--ink2);white-space:nowrap;
   padding:15px 16px;cursor:pointer;border-bottom:3px solid transparent}
 .tabs button.on{font-weight:800}
+.tabs .dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:8px;vertical-align:1px}
+.tabs .d1{background:var(--c1)} .tabs .dv{background:var(--navy)} .tabs .d2{background:var(--c2)}
+.tabs .dq{background:var(--form)} .tabs .dd{background:#b07d2c}
+html[data-theme="dark"] .tabs .dv{background:#7c93f5}
+.tabs button.on{background:var(--paper);border-radius:12px 12px 0 0}
+.theme-tab{margin-left:auto;font-size:17px !important;border-bottom:none !important}
+.tabs button[data-t="td"].on{color:#b07d2c;border-bottom-color:#b07d2c}
 .tabs button[data-t="tn"].on{color:var(--c1);border-bottom-color:var(--c1)}
 .tabs button[data-t="tv"].on{color:var(--navy);border-bottom-color:var(--navy)}
 .tabs button[data-t="tp"].on{color:var(--c2);border-bottom-color:var(--c2)}
@@ -123,7 +132,8 @@ pre{font-size:13.5px}
   padding:14px 16px;cursor:pointer;text-align:left;transition:all .18s}
 .chbar button .num{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;
   border-radius:11px;font-family:var(--mono);font-size:16px;font-weight:800;color:#fff;margin-bottom:9px}
-.chbar button .tt{display:block;font-size:14px;font-weight:700;color:var(--ink);line-height:1.4}
+.chbar button .tt{display:block;font-size:14.5px;font-weight:800;color:var(--ink);line-height:1.4}
+.chbar button .kw{display:block;font-size:11.5px;color:var(--mute);margin-top:3px;font-family:var(--mono)}
 .chbar button[data-ch="t1"] .num{background:var(--c1)}
 .chbar button[data-ch="t2"] .num{background:var(--c2)}
 .chbar button[data-ch="t3"] .num{background:var(--c3)}
@@ -378,34 +388,27 @@ pre:hover .copybtn{opacity:1}
     <a class="back" href="index.html">← CS STUDY LAB</a>
     <div class="kicker">Subject 01 · Image Processing Systems</div>
     <h1>영상처리시스템</h1>
-    <p><span class="nb">핵심 정리,</span> <span class="nb">슬라이드,</span> <span class="nb">직접 조작하는 실험,</span> <span class="nb">그리고 문제 연습까지.</span> <span class="nb">공부에 필요한 것을</span> <span class="nb">한곳에 모았습니다.</span></p>
-    <div class="top-actions">
-      <a class="btn btn-primary" href="ips/영상처리시스템_CH01.pptx" download>PPT · CH01</a>
-      <a class="btn btn-primary" href="ips/영상처리시스템_CH02.pptx" download>PPT · CH02</a>
-      <a class="btn btn-primary" href="ips/영상처리시스템_CH03.pptx" download>PPT · CH03</a>
-      <button class="btn btn-ghost" id="goViewer">슬라이드 미리보기</button>
-      <button class="btn btn-ghost" id="goLab">파이썬 실습실</button>
-      <button class="btn btn-ghost" id="goQuiz">문제 연습</button>
-      <button class="btn btn-ghost" id="themeBtn" title="라이트/다크 전환">◐ 테마</button>
-    </div>
+    <p><span class="nbc">핵심 정리부터 실습·연습 문제까지,</span> <span class="nbc">공부에 필요한 것을 한곳에 모았습니다.</span></p>
   </div>
 </div>
 
 <nav class="tabs" aria-label="탭 선택">
   <div class="tabs-inner">
-    <button class="on" data-t="tn">강의 노트</button>
-    <button data-t="tv">슬라이드</button>
-    <button data-t="tp">파이썬 실습실</button>
-    <button data-t="tq">문제 연습</button>
+    <button class="on" data-t="tn"><i class="dot d1"></i>강의 노트</button>
+    <button data-t="tv"><i class="dot dv"></i>슬라이드</button>
+    <button data-t="tp"><i class="dot d2"></i>파이썬 실습실</button>
+    <button data-t="tq"><i class="dot dq"></i>연습 문제</button>
+    <button data-t="td"><i class="dot dd"></i>자료실</button>
+    <button id="themeBtn" class="theme-tab" title="라이트/다크 전환">◐</button>
   </div>
 </nav>
 
 <main class="wrap">
 
 <div class="chbar" id="chBar">
-  <button class="on" data-ch="t1"><span class="num">01</span><span class="tt">영상은 숫자다</span></button>
-  <button data-ch="t2"><span class="num">02</span><span class="tt">도구를 갖추다</span></button>
-  <button data-ch="t3"><span class="num">03</span><span class="tt">파이썬 최소 문법</span></button>
+  <button class="on" data-ch="t1"><span class="num">01</span><span class="tt">디지털 영상의 원리</span><span class="kw">화소 · 표본화·양자화 · g=T[f]</span></button>
+  <button data-ch="t2"><span class="num">02</span><span class="tt">개발 환경 구축</span><span class="kw">파이썬 · 파이참 · OpenCV 설치</span></button>
+  <button data-ch="t3"><span class="num">03</span><span class="tt">파이썬 핵심 문법</span><span class="kw">자료구조 · 슬라이스 · NumPy</span></button>
 </div>
 
 <!-- ═══════════════════ CH01 ═══════════════════ -->
@@ -759,15 +762,39 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
     구체적으로 쓰세요.</div>
 </section>
 
+<!-- ═══════════════════ 자료실 ═══════════════════ -->
+<section class="panel" id="td">
+  <h2 class="sec" style="margin-top:0">자료실 — 강의 PPT 내려받기</h2>
+  <div class="sec-sub">챕터를 골라 .pptx 파일을 받으세요. 발표자 노트(설명 멘트)가 포함되어 있습니다. 새 챕터가 올라오면 여기에 쌓입니다.</div>
+  <div class="cardrow" style="grid-template-columns:repeat(auto-fill,minmax(270px,1fr))">
+    <div class="c" style="border-top-color:var(--c1)">
+      <h3 style="color:var(--c1)">CH01 디지털 영상의 원리</h3>
+      <p>화소 · 표본화·양자화 · g = T[f] · 응용 분야 (16장)</p>
+      <a class="btn" style="background:var(--c1);color:#fff;margin-top:12px" href="ips/영상처리시스템_CH01.pptx" download>PPT 내려받기</a>
+    </div>
+    <div class="c" style="border-top-color:var(--c2)">
+      <h3 style="color:var(--c2)">CH02 개발 환경 구축</h3>
+      <p>파이썬 · 파이참 · OpenCV 설치 · 첫 프로그램 (17장)</p>
+      <a class="btn" style="background:var(--c2);color:#fff;margin-top:12px" href="ips/영상처리시스템_CH02.pptx" download>PPT 내려받기</a>
+    </div>
+    <div class="c" style="border-top-color:var(--c3)">
+      <h3 style="color:var(--c3)">CH03 파이썬 핵심 문법</h3>
+      <p>자료구조 · 슬라이스 · 함수 · NumPy (16장)</p>
+      <a class="btn" style="background:var(--c3);color:#fff;margin-top:12px" href="ips/영상처리시스템_CH03.pptx" download>PPT 내려받기</a>
+    </div>
+  </div>
+  <div class="tip"><span class="tag">참고</span>연습 문제 탭의 [문제지 만들기]로 <b>인쇄용 PDF 문제지</b>도 만들 수 있습니다.</div>
+</section>
+
 <!-- ═══════════════════ 슬라이드 뷰어 ═══════════════════ -->
 <section class="panel" id="tv">
   <h2 class="sec" style="margin-top:0">강의 슬라이드 미리보기</h2>
   <div class="sec-sub">챕터를 고르고 ← → 방향키, 좌우 클릭, 아래 바로 넘겨 보세요</div>
   <div class="viewer">
     <div class="jump" style="margin:0 0 16px">
-      <button data-deck="1" class="on" style="border-color:#7c93f5;color:#fff">CH01 영상은 숫자다</button>
-      <button data-deck="2">CH02 도구를 갖추다</button>
-      <button data-deck="3">CH03 파이썬 최소 문법</button>
+      <button data-deck="1" class="on" style="border-color:#7c93f5;color:#fff">CH01 디지털 영상의 원리</button>
+      <button data-deck="2">CH02 개발 환경 구축</button>
+      <button data-deck="3">CH03 파이썬 핵심 문법</button>
     </div>
     <div class="frame">
       <img id="slideImg" src="ips/s1/01.jpg" alt="강의 슬라이드 1번">
@@ -813,7 +840,7 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
 <section class="panel" id="tq">
   <div class="quiz-head">
     <div>
-      <h2 class="sec" style="margin:0">문제 연습</h2>
+      <h2 class="sec" style="margin:0">연습 문제</h2>
       <div class="sec-sub">수치가 매번 바뀌고, 문제 속 <b>보라색 숫자를 직접 고치면</b> 그 값 기준으로 채점됩니다.</div>
     </div>
     <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
@@ -846,7 +873,8 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
     </div>
     <div class="foot-row foot-links">
       <span>근거 자료</span>
-      <a href="https://www.booksr.co.kr" target="_blank" rel="noopener">참고 교재 · 생능출판사</a>
+      <a href="https://www.yes24.com/product/goods/95785417" target="_blank" rel="noopener">참고 교재 (Yes24)</a>
+      <a href="https://www.booksr.co.kr" target="_blank" rel="noopener">생능출판사</a>
       <a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A0%80%EC%9E%91%EA%B6%8C%EB%B2%95" target="_blank" rel="noopener">저작권법 제28조·제37조 (국가법령정보센터)</a>
       <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>
     </div>
@@ -858,7 +886,7 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
 /* ── 탭: 메인 4탭 + 강의 노트 안의 챕터 선택 ── */
 var curChapter = 't1';
 function showTab(id){
-  document.querySelectorAll('.tabs button').forEach(function(x){ x.classList.toggle('on', x.dataset.t === id); });
+  document.querySelectorAll('.tabs button[data-t]').forEach(function(x){ x.classList.toggle('on', x.dataset.t === id); });
   var isNote = (id === 'tn');
   document.getElementById('chBar').style.display = isNote ? '' : 'none';
   document.querySelectorAll('.panel').forEach(function(p){
@@ -866,7 +894,7 @@ function showTab(id){
   });
   scrollTo({top:0});
 }
-document.querySelectorAll('.tabs button').forEach(function(b){
+document.querySelectorAll('.tabs button[data-t]').forEach(function(b){
   b.addEventListener('click', function(){ showTab(b.dataset.t); });
 });
 document.querySelectorAll('#chBar button').forEach(function(b){
@@ -877,9 +905,7 @@ document.querySelectorAll('#chBar button').forEach(function(b){
     showTab('tn');
   });
 });
-document.getElementById('goViewer').addEventListener('click', function(){ showTab('tv'); });
-document.getElementById('goLab').addEventListener('click', function(){ showTab('tp'); });
-document.getElementById('goQuiz').addEventListener('click', function(){ showTab('tq'); });
+
 
 /* ── 공통 장면 (실험 ①②가 같은 그림을 쓴다) ── */
 var SC_W = 340, SC_H = 255, sceneData = null;
@@ -1897,7 +1923,7 @@ print('1차원 변환:', a.flatten())`,
       '<div class="noprint" style="background:#eef;padding:10px 14px;border-radius:8px;margin-bottom:14px">' +
       '인쇄 창이 자동으로 열립니다. PDF로 저장하려면 프린터 대상에서 "PDF로 저장"을 선택하세요. ' +
       '<button onclick="print()">다시 인쇄</button></div>' +
-      '<h1>영상처리시스템 연습 문제지 (CH01~03)</h1>' +
+      '<h1>영상처리시스템 연습 문제지</h1>' +
       '<div class="meta">이름: ______________ &nbsp; 날짜: ______________ &nbsp;·&nbsp; 문항 수 ' + (qs.length + handList.length) + '개 &nbsp;·&nbsp; 정답지는 마지막 장</div>' +
       qHtml + handTitle + handHtml +
       '<div class="answers"><h1>정답지</h1>' + ansHtml + '</div>' +

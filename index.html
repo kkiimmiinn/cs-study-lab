@@ -30,6 +30,8 @@ html[data-theme="dark"] body{
 html[data-theme="dark"] .note-row:hover{background:#1d2438}
 body{transition:background .25s,color .25s}
 .nb{white-space:nowrap}
+.nbc{white-space:nowrap}
+@media(max-width:700px){.nbc{white-space:normal}}
 a,button{touch-action:manipulation}
 :focus-visible{outline:2px solid #7c93f5;outline-offset:3px;border-radius:4px}
 .skip{position:absolute;left:-9999px;z-index:9;background:var(--card);color:var(--ink);padding:10px 18px;border-radius:0 0 8px 0}
@@ -134,19 +136,19 @@ footer{border-top:1px solid var(--line);margin-top:96px}
   <div class="veil" aria-hidden="true"></div>
   <div class="topbar">
     <a class="wordmark" href="#"><b>CS</b> STUDY LAB</a>
-    <button id="themeBtn" title="라이트/다크 전환" style="background:none;border:1px solid #33406e;color:#9aa4c4;border-radius:8px;padding:6px 12px;font-size:12.5px;cursor:pointer;margin-right:14px">◐</button>
-    <nav aria-label="주요 섹션">
+    <nav aria-label="주요 섹션" style="display:flex;align-items:center;gap:26px">
       <a href="#welcome">소개</a>
       <a href="#subjects">과목</a>
       <a href="#labs">실험실</a>
       <a href="#notes">주간 노트</a>
+      <button id="themeBtn" title="라이트/다크 전환" style="background:none;border:1px solid #33406e;color:#9aa4c4;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer">◐</button>
     </nav>
   </div>
   <div class="hero-body">
     <div class="hero-copy">
       <div class="kicker">Kyungnam Univ. · Ph.D. Course</div>
       <h1>공부한 것은 전부<br><em>내 것으로</em> 만든다</h1>
-      <p class="lede"><span class="nb">박사과정에서 공부한 것을</span> <span class="nb">쉬운 언어로 정리하고,</span> <span class="nb">원리는 직접 조작하며 익히는</span> <span class="nb">온라인 실험실입니다.</span></p>
+      <p class="lede"><span class="nbc">박사과정 공부를 쉬운 언어로 정리하고,</span> <span class="nbc">직접 조작하며 익히는 온라인 실험실입니다.</span></p>
       <a class="cta" href="#welcome">E N T E R</a>
     </div>
   </div>
@@ -237,17 +239,17 @@ footer{border-top:1px solid var(--line);margin-top:96px}
     <a class="note-row" data-subj="영상처리시스템" href="영상처리시스템.html">
       <span class="note-date">2026.09.07</span>
       <span class="note-subj">영상처리시스템</span>
-      <span class="note-title">CH03 파이썬 최소 문법 — 슬라이스·함수·넘파이</span>
+      <span class="note-title">CH03 파이썬 핵심 문법 — 자료구조·슬라이스·NumPy</span>
     </a>
     <a class="note-row" data-subj="영상처리시스템" href="영상처리시스템.html">
       <span class="note-date">2026.09.07</span>
       <span class="note-subj">영상처리시스템</span>
-      <span class="note-title">CH02 도구를 갖추다 — 설치 4단계와 첫 회색 창</span>
+      <span class="note-title">CH02 개발 환경 구축 — 파이썬·파이참·OpenCV</span>
     </a>
     <a class="note-row" data-subj="영상처리시스템" href="영상처리시스템.html">
       <span class="note-date">2026.09.07</span>
       <span class="note-subj">영상처리시스템</span>
-      <span class="note-title">CH01 영상은 숫자다 — 사진의 정체는 숫자 행렬</span>
+      <span class="note-title">CH01 디지털 영상의 원리 — 화소·표본화·양자화</span>
     </a>
   </div>
 </section>
