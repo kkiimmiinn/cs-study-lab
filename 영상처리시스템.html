@@ -178,21 +178,21 @@ details.sol-toggle pre{margin-top:10px}
   padding:12px 18px;margin:14px 0;font-size:14.5px;color:#1c4a40}
 .ex-purpose b{color:var(--c2)}
 .ex-purpose .fname{font-family:var(--mono);font-size:12px;color:var(--mute);margin-left:8px}
-.lab3-head{display:grid;grid-template-columns:44px 1fr minmax(200px,36%);gap:0;
-  font-size:12px;color:var(--mute);padding:6px 2px;font-weight:600}
-.lab3-head span:nth-child(2){padding-left:14px}
-.lab3-head span:nth-child(3){padding-left:14px}
 .lab3{border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
-.l3row{display:grid;grid-template-columns:44px 1fr minmax(200px,36%);align-items:stretch;min-height:30px}
+.l3row{display:grid;grid-template-columns:40px 1fr minmax(200px,34%);align-items:stretch;min-height:24px}
+.l3row.head{min-height:0}
+.l3row.head .l3n{padding:7px 8px 7px 0}
+.l3row.head .l3code{background:#101820;color:#7e94a6;font-family:var(--sans);font-size:11.5px;padding:7px 12px}
+.l3row.head .l3side{background:var(--c2-soft);color:var(--c2);font-weight:800;font-size:11.5px;padding:7px 12px;border-bottom:0}
 .l3row:hover .l3code{background:#1a2733}
 .l3row.err .l3code{background:#3a1d20;box-shadow:inset 3px 0 0 #e05572}
 .l3row.err .l3n{color:#ff8fa0}
-.l3n{background:#101820;color:#4d6270;font-family:var(--mono);font-size:12.5px;
-  display:flex;align-items:center;justify-content:flex-end;padding-right:10px;user-select:none}
-.l3code{background:#141e24;font-family:var(--mono);font-size:13.5px;line-height:1.5;color:#e8eef2;
-  padding:4px 14px;white-space:pre;overflow-x:auto;display:flex;align-items:center}
-.l3side{background:var(--card);border-bottom:1px solid #f0f1ee;padding:4px 14px;
-  font-size:12.6px;line-height:1.5;display:flex;flex-direction:column;justify-content:center}
+.l3n{background:#101820;color:#4d6270;font-family:var(--mono);font-size:12px;
+  display:flex;align-items:center;justify-content:flex-end;padding-right:9px;user-select:none}
+.l3code{background:#141e24;font-family:var(--mono);font-size:13.5px;line-height:1.45;color:#e8eef2;
+  padding:1.5px 12px;white-space:pre;overflow-x:auto;display:flex;align-items:center;scrollbar-width:thin}
+.l3side{background:var(--card);border-bottom:1px solid #f0f1ee;padding:2px 12px;
+  font-size:12.3px;line-height:1.45;display:flex;flex-direction:column;justify-content:center}
 .l3side .ocm{font-family:var(--mono);font-size:12px;color:#6f9a86}
 .l3side .nt{color:var(--ink2)}
 .l3side .nt b{color:var(--ink)}
@@ -203,11 +203,12 @@ details.sol-toggle pre{margin-top:10px}
 .tk-num{color:#6897bb}                       /* 숫자 */
 .tk-op{color:#a9b7c6}
 .tk-self{color:#94558d}
-.l3code input{background:#243441;border:0;border-bottom:1.5px dashed #4a90d9;color:inherit;
-  font-family:var(--mono);font-size:13.5px;padding:0 3px;border-radius:4px;text-align:center}
-.l3code input.tk-num{color:#8ab8e0}
-.l3code input.tk-str{color:#93c47d}
-.l3code input:focus{outline:1.5px solid #4a90d9;background:#2b4257}
+.l3code input{background:rgba(74,144,217,.07);border:0;border-bottom:1px dotted #3d5b74;color:inherit;
+  font-family:var(--mono);font-size:13.5px;line-height:1.45;padding:0;margin:0;border-radius:0;text-align:left;
+  min-width:1ch;box-sizing:content-box}
+.l3code input.tk-num{color:#6897bb}
+.l3code input.tk-str{color:#6a8759}
+.l3code input:focus{outline:none;background:rgba(74,144,217,.18);border-bottom-color:#4a90d9}
 .errhint{display:none;margin-top:12px;background:#fdeef1;border-left:4px solid #e05572;
   border-radius:0 12px 12px 0;padding:14px 18px;font-size:14px;color:#7a2a3a}
 .errhint.show{display:block}
@@ -820,7 +821,6 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
   <div class="runner">
     <div class="exbtns" id="exBtns"></div>
     <div class="ex-purpose" id="exPurpose"></div>
-    <div class="lab3-head"><span>줄</span><span>코드 — <b>음영 값(숫자·문자열)만 수정 가능</b>, 문법은 잠겨 있어요</span><span>주석 · 해설</span></div>
     <div class="lab3" id="lab3"></div>
     <div style="display:flex;gap:10px;margin:14px 0;align-items:center;flex-wrap:wrap">
       <button class="btn btn-run" id="pyRun">▶ 실행</button>
@@ -1408,18 +1408,20 @@ print('1차원 변환:', a.flatten())`,
     purpose.innerHTML = '<b>' + ex.title + '</b><span class="fname">' + ex.file + '</span><br>' + ex.purpose;
     out.textContent = '실행 결과가 여기에 표시됩니다.';
     ehint.className = 'errhint';
-    var html = '';
+    var html = '<div class="l3row head"><span class="l3n">줄</span>' +
+               '<div class="l3code">코드 — 연한 밑줄 값(숫자·문자열)만 수정 가능, 문법·괄호는 잠김</div>' +
+               '<div class="l3side">주석 · 해설</div></div>';
     ex.code.split('\n').forEach(function(line, li){
       var tk = tokenizeLine(line);
       lineMeta.push(tk);
       var codeHtml = '';
       tk.segs.forEach(function(sg, si){
         if (sg.t === 'num')
-          codeHtml += '<input class="tk-num" data-l="' + li + '" data-s="' + si + '" value="' + sg.v + '" size="' + Math.max(1, sg.v.length) + '">';
+          codeHtml += '<input class="tk-num" data-l="' + li + '" data-s="' + si + '" value="' + sg.v + '" style="width:' + Math.max(1, sg.v.length) + 'ch">';
         else if (sg.t === 'str'){
           var inner = sg.v.slice(1, -1), q = sg.v[0];
           codeHtml += '<span class="tk-str">' + q + '</span>' +
-            '<input class="tk-str" data-l="' + li + '" data-s="' + si + '" value="' + esc(inner).replace(/"/g, '&quot;') + '" size="' + Math.max(1, inner.length) + '">' +
+            '<input class="tk-str" data-l="' + li + '" data-s="' + si + '" value="' + esc(inner).replace(/"/g, '&quot;') + '" style="width:' + Math.max(1, inner.length) + 'ch">' +
             '<span class="tk-str">' + q + '</span>';
         }
         else if (sg.t === 'sp') codeHtml += sg.v.replace(/ /g, '&nbsp;');
@@ -1435,7 +1437,10 @@ print('1차원 변환:', a.flatten())`,
     box.innerHTML = html;
     box.querySelectorAll('input').forEach(function(inp){
       inp.addEventListener('input', function(){
-        inp.size = Math.max(1, inp.value.length);
+        var n = 0;                                  // 한글은 2ch 폭으로 계산
+        for (var i = 0; i < inp.value.length; i++)
+          n += inp.value.charCodeAt(i) > 0x2000 ? 2 : 1;
+        inp.style.width = Math.max(1, n) + 'ch';
         clearErr();
       });
     });
