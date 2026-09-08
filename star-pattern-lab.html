@@ -1,0 +1,2593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Star Pattern Lab — 별찍기로 배우는 파이썬 문법 드릴</title>
+<meta name="description" content="파이썬 별찍기 20문제를 클릭으로 조립하며 배우는 실습실. 설치도 인터넷도 필요 없이 브라우저에서 바로 실행됩니다.">
+<meta name="color-scheme" content="dark light">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Star Pattern Lab — 파이썬 별찍기 실습실">
+<meta property="og:description" content="별찍기 20문제 · 클릭으로 코드 조립 · 식이 계산되는 과정과 오답 원인까지 보여 줍니다.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20viewBox%3D%270%200%2024%2024%27%3E%3Crect%20width%3D%2724%27%20height%3D%2724%27%20rx%3D%275%27%20fill%3D%27%230b0d10%27%2F%3E%3Cpath%20d%3D%27M12%204l2.4%205.3%205.8.6-4.3%203.9%201.2%205.7L12%2016.6%206.9%2019.5l1.2-5.7L3.8%209.9l5.8-.6z%27%20fill%3D%27%2358a6ff%27%2F%3E%3C%2Fsvg%3E">
+<style>
+:root{
+  --bg:#0b0d10; --panel:#12151a; --panel2:#161a20; --line:#222833;
+  --tx:#e6e9ef; --mu:#8a93a3; --mu2:#5c6472;
+  --ac:#58a6ff; --ac-dim:#1f3350;
+  --ok:#3fb950; --bad:#f85149; --warn:#d29922;
+  --star:#e3b341;
+  --sunk:var(--sunk); --code:#0b0d10; --faint:var(--faint); --ghost:var(--ghost); --dim:var(--dim);
+  /* 숫자와 글자는 둘 다 '값' 이므로 같은 색으로 묶는다. 보라는 반복문에만 쓴다 */
+  --s-kw:#ff7b72; --s-fn:#d2a8ff; --s-str:#a5d6ff; --s-num:#a5d6ff; --s-op:#8a93a3;
+  --note:#e3b341; --noteBg:rgba(210,153,34,.09); --noteLn:rgba(210,153,34,.26);
+  --errBg:rgba(248,81,73,.09); --errTx:#ff9d97;
+  --mono:ui-monospace,"Cascadia Mono","Consolas","D2Coding","Menlo",monospace;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  --tgtc:#9db3d0; --emptyc:#1a1f28;
+  /* 카테고리 색 — 팔레트 · 코드 · 낱말 사전이 같은 색을 쓴다 */
+  --c-out:#79c0ff; --c-loop:#d2a8ff; --c-cond:#ffa657; --c-var:#7ee787; --c-func:#ff9bce;
+  --c-op:#4dd8c0;
+  --star-solid:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 1.7l3.1 6.9 7.5.8-5.6 5.1 1.6 7.4L12 18.2 5.4 21.9 7 14.5 1.4 9.4l7.5-.8z' fill='black'/></svg>");
+  --star-line:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M12 1.7l3.1 6.9 7.5.8-5.6 5.1 1.6 7.4L12 18.2 5.4 21.9 7 14.5 1.4 9.4l7.5-.8z' fill='none' stroke='black' stroke-width='2.1' stroke-linejoin='round'/></svg>");
+}
+
+/* ===== WHITE — 밝은 종이 느낌 ===== */
+html[data-skin="light"]{
+  --bg:#f6f8fa; --panel:#ffffff; --panel2:#f0f3f6; --line:#d8dee4;
+  --tx:#1f2328; --mu:#59636e; --mu2:#8c959f;
+  --ac:#0969da; --ac-dim:rgba(9,105,218,.10);
+  --ok:#1a7f37; --bad:#cf222e; --warn:#9a6700; --star:#bf8700;
+  --tgtc:#76889c; --emptyc:#e6eaef;
+  --sunk:#f6f8fa; --code:#f0f3f6; --faint:#eaeef2; --ghost:#c3ccd6; --dim:#4c555f;
+  --s-kw:#cf222e; --s-fn:#8250df; --s-str:#0a3069; --s-num:#0a3069; --s-op:#59636e;
+  --note:#7d4e00; --noteBg:rgba(191,135,0,.10); --noteLn:rgba(191,135,0,.32);
+  --errBg:rgba(207,34,46,.07); --errTx:#a40e26;
+  --c-out:#0969da; --c-loop:#8250df; --c-cond:#bc4c00; --c-var:#1a7f37; --c-func:#bf3989;
+  --c-op:#0e7c6b;
+}
+html[data-skin="light"] .top{box-shadow:0 1px 3px rgba(31,35,40,.06)}
+
+/* ===== ASTRA — 성운과 별무리 ===== */
+html[data-skin="astra"]{
+  --bg:#07051a; --panel:#100d26; --panel2:#191333; --line:#2c2358;
+  --tx:#eae5ff; --mu:#b3a8d9; --mu2:#7a6ba8;
+  --ac:#a78bfa; --ac-dim:rgba(167,139,250,.17);
+  --ok:#67e8f9; --bad:#fb7bb5; --warn:#fcd34d; --star:#fde68a;
+  --tgtc:#7f6bd6; --emptyc:#171238;
+  --sunk:#0b0821; --code:#080618; --faint:#1d1743; --ghost:#332a63; --dim:#c3b8e8;
+  --s-kw:#f0abfc; --s-fn:#c4b5fd; --s-str:#7dd3fc; --s-num:#7dd3fc; --s-op:#9d8fc7;
+  --note:#fcd34d; --noteBg:rgba(252,211,77,.09); --noteLn:rgba(252,211,77,.28);
+  --errBg:rgba(251,123,181,.10); --errTx:#ffa8cf;
+  --c-out:#67e8f9; --c-loop:#c4b5fd; --c-cond:#fcd34d; --c-var:#86efac; --c-func:#f0abfc;
+  --c-op:#fdba74;
+}
+html[data-skin="astra"] body{
+  background:
+    radial-gradient(1100px 620px at 10% -8%, rgba(167,139,250,.26), transparent 62%),
+    radial-gradient(900px 520px at 92% 4%,  rgba(240,171,252,.17), transparent 62%),
+    radial-gradient(1000px 760px at 62% 104%, rgba(103,232,249,.13), transparent 62%),
+    var(--bg);
+  background-attachment:fixed;
+}
+html[data-skin="astra"] main{position:relative;z-index:1;background:transparent}
+html[data-skin="astra"] .top{background:rgba(16,13,38,.82);backdrop-filter:blur(12px)}
+html[data-skin="astra"] .levels{background:rgba(11,8,33,.72)}
+html[data-skin="astra"] .brief,html[data-skin="astra"] .epanel,
+html[data-skin="astra"] .result{background:rgba(16,13,38,.78)}
+html[data-skin="astra"] .brand{color:var(--ac);text-shadow:0 0 12px rgba(167,139,250,.6),0 0 26px rgba(167,139,250,.25)}
+html[data-skin="astra"] .hd{color:var(--ac);letter-spacing:.26em}
+html[data-skin="astra"] .brief h2{border-left:3px solid var(--ac);padding-left:12px;margin-left:-16px}
+html[data-skin="astra"] .lv.on{border-left:3px solid var(--ac)}
+html[data-skin="astra"] .stars{text-shadow:0 0 16px rgba(253,230,138,.55)}
+html[data-skin="astra"] .mini.pri,html[data-skin="astra"] .btn.pri{box-shadow:0 0 16px rgba(167,139,250,.3)}
+html[data-skin="astra"] .gwrap .gt{font-family:var(--mono);letter-spacing:.16em}
+html[data-skin="astra"] .gt .dots{display:inline-flex}
+html[data-skin="astra"] .gt .dots i{background:rgba(251,123,181,.5)}
+html[data-skin="astra"] .gt .dots i+i{background:rgba(103,232,249,.45)}
+html[data-skin="astra"] .cell.ok{box-shadow:0 0 7px rgba(103,232,249,.55)}
+html[data-skin="astra"] .cell.tgt{box-shadow:0 0 5px rgba(167,139,250,.25)}
+
+/* 빈칸의 별이 은은하게 깜빡인다 — 채워진 별은 건드리지 않는다 */
+html[data-skin="astra"] .cell[class="cell"]{animation:twinkle 5.5s ease-in-out infinite}
+html[data-skin="astra"] .cell[class="cell"]:nth-child(3n){animation-delay:-1.7s}
+html[data-skin="astra"] .cell[class="cell"]:nth-child(5n){animation-delay:-3.4s}
+html[data-skin="astra"] .cell[class="cell"]:nth-child(7n){animation-delay:-4.6s}
+html[data-skin="astra"] .dcell:not(.on){animation:twinkle 7s ease-in-out infinite}
+html[data-skin="astra"] .dcell:nth-child(4n){animation-delay:-2.5s}
+html[data-skin="astra"] .dcell:nth-child(6n){animation-delay:-5s}
+@keyframes twinkle{0%,100%{opacity:.42}50%{opacity:1}}
+
+/* 별무리 배경 — ASTRA 에서만 보인다 */
+.sky{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;display:none}
+html[data-skin="astra"] .sky,html[data-skin="dark"] .sky{display:block}
+html[data-skin="dark"] .sf{opacity:.16}
+
+/* ===== 통과 축하 — 별 폭탄 ===== */
+.boom{position:fixed;inset:0;pointer-events:none;z-index:90;display:none}
+.boom.on{display:block}
+.boom i{position:absolute;display:block;
+  -webkit-mask:var(--star-solid) center/contain no-repeat;mask:var(--star-solid) center/contain no-repeat;
+  animation:burst var(--bd) cubic-bezier(.15,.75,.25,1) forwards}
+@keyframes burst{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.15) rotate(0deg)}
+  10%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(20deg)}
+  100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(var(--sc)) rotate(var(--rt))}
+}
+.boomtxt{position:fixed;left:50%;top:34%;z-index:91;pointer-events:none;white-space:nowrap;text-align:center;
+  font-size:clamp(28px,6vw,52px);font-weight:800;letter-spacing:.08em;color:var(--star);
+  text-shadow:0 0 30px rgba(227,179,65,.55),0 2px 0 rgba(0,0,0,.35);
+  animation:boompop 4.6s ease-out forwards}
+.boomtxt small{display:block;font-size:.32em;font-weight:600;letter-spacing:.02em;
+  color:var(--tx);opacity:.85;margin-top:10px;text-shadow:none}
+@keyframes boompop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.5)}
+  9%{opacity:1;transform:translate(-50%,-50%) scale(1.09)}
+  16%{transform:translate(-50%,-50%) scale(1)}
+  82%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  100%{opacity:0;transform:translate(-50%,-60%) scale(1)}
+}
+@media(prefers-reduced-motion:reduce){ .boom{display:none !important} }
+.sf{position:absolute;inset:-60%;background-repeat:repeat}
+.sf1{opacity:.55;background-size:280px 220px;animation:drift 150s linear infinite;
+  background-image:
+    radial-gradient(1px 1px at 24px 32px, rgba(255,255,255,.95), transparent),
+    radial-gradient(1px 1px at 96px 76px, rgba(196,181,253,.85), transparent),
+    radial-gradient(1.6px 1.6px at 162px 128px, rgba(255,255,255,.8), transparent),
+    radial-gradient(1px 1px at 232px 44px, rgba(103,232,249,.85), transparent),
+    radial-gradient(1px 1px at 58px 176px, rgba(240,171,252,.8), transparent)}
+.sf2{opacity:.34;background-size:390px 330px;animation:drift 280s linear infinite reverse;
+  background-image:
+    radial-gradient(1px 1px at 44px 96px, rgba(255,255,255,.7), transparent),
+    radial-gradient(1.4px 1.4px at 196px 24px, rgba(253,230,138,.7), transparent),
+    radial-gradient(1px 1px at 310px 240px, rgba(167,139,250,.7), transparent)}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(-280px,200px)}}
+/* 별똥별 — 천천히 길게 흐른다. 셋을 시차를 두고 돌려 대여섯 초에 한 번씩 지나간다 */
+.shoot{position:absolute;left:-8%;width:3px;height:3px;border-radius:50%;background:#fff;
+  box-shadow:0 0 12px 3px rgba(255,255,255,.75);opacity:0;
+  animation:shoot var(--sd) linear infinite;animation-delay:var(--sdl)}
+.shoot:after{content:"";position:absolute;right:3px;top:0;width:150px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15) 40%,rgba(255,255,255,.6));
+  transform:rotate(17deg);transform-origin:right center}
+@keyframes shoot{
+  0%{opacity:0;transform:translate(0,0) scale(.5)}
+  3%{opacity:.9;transform:translate(4vw,1.3vh) scale(1)}
+  52%{opacity:.9}
+  66%{opacity:0;transform:translate(96vw,30vh) scale(.7)}
+  100%{opacity:0;transform:translate(96vw,30vh) scale(.7)}
+}
+@media(prefers-reduced-motion:reduce){
+  .sf,.shoot{animation:none}
+  html[data-skin="astra"] .cell[class="cell"],html[data-skin="astra"] .dcell{animation:none}
+}
+
+.trail{position:fixed;pointer-events:none;z-index:70;background:var(--ac);
+  -webkit-mask:var(--star-solid) center/contain no-repeat;mask:var(--star-solid) center/contain no-repeat;
+  animation:fall 950ms ease-out forwards}
+@keyframes fall{
+  0%{opacity:.7;transform:translate(-50%,-50%) scale(1) rotate(0deg)}
+  100%{opacity:0;transform:translate(-50%,26px) scale(.3) rotate(48deg)}
+}
+@media(prefers-reduced-motion:reduce){ .trail{display:none} }
+.gt .gl{display:flex;align-items:center}
+.gt .dots{display:none;gap:4px;align-items:center;margin-right:8px}
+.gt .dots i{width:7px;height:7px;border-radius:50%;display:block;background:rgba(255,180,171,.45)}
+.gt .dots i+i{background:rgba(94,212,255,.32)}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;font-size:inherit;color:inherit;background:none;border:none;cursor:pointer}
+input,textarea,select{font-family:inherit;font-size:inherit;color:inherit}
+
+/* ---------- layout ---------- */
+.top{display:flex;align-items:center;gap:24px;padding:0 18px;height:52px;border-bottom:1px solid var(--line);background:var(--panel);position:sticky;top:0;z-index:40}
+.brand{font-weight:700;letter-spacing:.14em;font-size:13px}
+.brand span{display:block;font-weight:400;letter-spacing:0;font-size:11px;color:var(--mu2);margin-top:-2px}
+.tabs{display:flex;gap:2px}
+.tabs button{padding:6px 14px;border-radius:6px;color:var(--mu);font-size:13px}
+.tabs button:hover{color:var(--tx);background:var(--panel2)}
+.tabs button.on{color:var(--tx);background:var(--ac-dim)}
+.modeseg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;font-size:12px;flex:none}
+.modeseg>*{padding:5px 14px;color:var(--mu);text-decoration:none;white-space:nowrap;display:block}
+.modeseg>a:hover{color:var(--tx);background:var(--panel2)}
+.modeseg>.on{background:var(--ac);color:var(--bg);font-weight:700}
+.plink{font-size:12px;color:var(--mu2);text-decoration:none;border:1px solid var(--line);padding:4px 10px;border-radius:6px;white-space:nowrap}
+.plink:hover{color:var(--ac);border-color:var(--ac-dim)}
+.top .sp{flex:1}
+.hstat{display:flex;gap:18px;font-size:12px;color:var(--mu)}
+.hstat b{color:var(--tx);font-weight:600;font-variant-numeric:tabular-nums}
+.hstat .sv{color:var(--star)}
+
+main{display:grid;grid-template-columns:212px minmax(0,1fr) 372px;height:calc(100% - 52px)}
+main.one{grid-template-columns:1fr}
+aside,section{min-height:0;overflow:auto}
+.levels{border-right:1px solid var(--line);background:var(--panel);padding:10px 8px}
+.work{padding:14px 16px}
+.result{border-left:1px solid var(--line);background:var(--panel);padding:14px}
+
+.hd{font-size:11px;letter-spacing:.1em;color:var(--mu2);text-transform:uppercase;margin:0 0 8px;font-weight:600}
+
+/* ---------- level list ---------- */
+.lv{display:flex;align-items:center;gap:8px;width:100%;padding:7px 9px;border-radius:6px;text-align:left;color:var(--mu);font-size:13px}
+.lv:hover{background:var(--panel2);color:var(--tx)}
+.lv.on{background:var(--ac-dim);color:var(--tx)}
+.lv .no{font-family:var(--mono);font-size:11px;color:var(--mu2);width:16px;text-align:right;flex:none}
+.lv.on .no{color:var(--ac)}
+.lv .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lv .st{font-family:var(--mono);font-size:10px;color:var(--star);letter-spacing:-1px;flex:none}
+.lv .st.no0{color:var(--mu2)}
+
+/* ---------- brief ---------- */
+.brief{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:14px 16px;margin-bottom:12px}
+.brief h2{margin:0 0 4px;font-size:16px;font-weight:650}
+.brief .tag{display:inline-block;font-size:11px;color:var(--ac);border:1px solid var(--ac-dim);background:rgba(88,166,255,.07);padding:1px 7px;border-radius:99px;margin-left:8px;vertical-align:2px}
+.brief p{margin:6px 0 0;color:var(--mu);font-size:13px}
+.brief .learn{margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:12.5px;color:var(--mu)}
+.brief .learn b{color:var(--tx);font-weight:600}
+
+/* ---------- editor ---------- */
+.epanel{display:flex;flex-direction:column;gap:10px}
+
+/* 구역을 셋으로 또렷이 나눈다: 조각 고르기 / 내 코드 / 낱말 사전 */
+.sect{border:1px solid var(--line);border-radius:8px;background:var(--panel);overflow:hidden}
+.secth{display:flex;align-items:center;gap:8px;padding:8px 10px;flex-wrap:wrap;
+  border-bottom:1px solid var(--line);background:var(--panel2);font-size:12.5px;font-weight:600}
+.secth .sn{width:18px;height:18px;border-radius:50%;flex:none;font-size:10px;font-weight:700;
+  background:var(--line);color:var(--mu);display:grid;place-items:center}
+.secth em{font-style:normal;font-weight:400;font-size:11.5px;color:var(--mu2)}
+.secth .sp{flex:1;min-width:8px}
+/* 코드 쓰는 곳은 강조색 테두리로 한눈에 구분되게 한다 */
+.sect.code{border-color:var(--ac)}
+.sect.code>.secth{background:var(--ac-dim);border-bottom-color:var(--ac)}
+.sect.code>.secth .sn{background:var(--ac);color:var(--bg)}
+.nest{display:none;align-items:center;gap:6px;margin-top:10px;padding-top:10px;
+  border-top:1px solid var(--line);font-size:12.5px;color:var(--mu)}
+.nest input{accent-color:var(--ac)}
+.nest em{font-style:normal;font-size:11.5px;color:var(--mu2)}
+.ebar{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--panel2);flex-wrap:wrap}
+.seg{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{padding:4px 12px;font-size:12px;color:var(--mu)}
+.seg button.on{background:var(--ac-dim);color:var(--tx)}
+.ebar .sp{flex:1}
+.mini{padding:4px 10px;border:1px solid var(--line);border-radius:6px;font-size:12px;color:var(--mu)}
+.mini:hover{color:var(--tx);border-color:var(--mu2)}
+.mini.pri{color:var(--ac);border-color:var(--ac-dim);background:rgba(88,166,255,.07)}
+.given{font-family:var(--mono);font-size:12px;color:var(--mu2);padding:7px 12px;border-bottom:1px solid var(--line);background:var(--sunk)}
+.given b{color:var(--ac);font-weight:600}
+
+/* palette */
+.pal{padding:10px 12px;background:var(--panel)}
+.palrow{display:flex;align-items:flex-start;gap:9px;margin-bottom:7px;
+  border-left:2px solid var(--cc);padding-left:8px}
+.palrow:last-child{margin-bottom:0}
+.pallab{font-size:11px;color:var(--cc);width:40px;flex:none;padding-top:5px;font-weight:600}
+.palchips{display:flex;flex-wrap:wrap;gap:5px;flex:1}
+.chip{font-family:var(--mono);font-size:11.5px;padding:3px 9px;border:1px solid var(--line);
+  border-left:2px solid var(--cc);border-radius:5px;color:var(--dim);background:var(--panel)}
+.chip:hover{border-color:var(--cc);color:var(--cc)}
+
+/* 낱말 사전 */
+.dictbar{padding:12px 14px 4px;display:flex;flex-direction:column;gap:10px}
+.dictbar .dl{display:none}
+.dgrp{display:flex;align-items:flex-start;gap:10px;border-left:2px solid var(--cc);padding-left:9px}
+.dgl{font-size:11px;color:var(--cc);width:48px;flex:none;padding-top:7px;font-weight:600}
+.dgt{display:flex;flex-wrap:wrap;gap:7px;flex:1}
+.dterm{font-family:var(--mono);font-size:12px;padding:6px 13px;border-radius:6px;line-height:1.3;
+  border:1px solid var(--line);border-left:2px solid var(--cc);color:var(--mu);background:var(--panel)}
+.dterm:hover{color:var(--tx);border-color:var(--mu2);border-left-color:var(--cc)}
+.dterm.on{color:var(--cc);border-color:var(--cc);background:var(--ac-dim)}
+.dictbody{padding:12px 14px 16px}
+.dcard{border-top:1px solid var(--line);padding-top:14px}
+.dcard h4{margin:0;font-size:15px;font-family:var(--mono);color:var(--cc)}
+.dcard .dw{font-size:11.5px;color:var(--mu2);margin:3px 0 11px}
+.dcard p{margin:0 0 12px;font-size:13px;line-height:1.72;color:var(--mu)}
+.dcard .form{font-family:var(--mono);font-size:12.5px;color:var(--tx);background:var(--code);
+  border:1px solid var(--line);border-left:2px solid var(--cc);border-radius:6px;padding:9px 12px;margin-bottom:12px}
+.dcard .ex{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;margin-bottom:12px}
+.dcard .ex pre{margin:0;font-family:var(--mono);font-size:12px;line-height:1.6;background:var(--code);
+  border:1px solid var(--line);border-radius:6px;padding:10px 12px;overflow:auto;color:var(--dim)}
+.dcard .ex pre.o{color:var(--tx)}
+.dcard .ex pre .sp{color:var(--ghost)}
+.dcard .ex .ar{color:var(--mu2);font-size:14px}
+.dcard .note{font-size:12.5px;line-height:1.7;color:var(--note);background:var(--noteBg);
+  border:1px solid var(--noteLn);border-radius:6px;padding:10px 12px}
+@media(max-width:620px){ .dcard .ex{grid-template-columns:1fr} .dcard .ex .ar{display:none} }
+
+/* code rows */
+.rows{padding:8px 0;min-height:140px;font-family:var(--mono);font-size:13.5px;background:var(--code)}
+.row{display:flex;align-items:center;gap:0;padding:0 8px 0 0;min-height:25px}
+.row.sel{background:rgba(88,166,255,.06)}
+.row .ln{width:30px;flex:none;text-align:right;padding-right:9px;color:var(--mu2);font-size:11px;-webkit-user-select:none;user-select:none}
+.row.sel .ln{color:var(--ac)}
+.row .code{flex:1;white-space:pre;overflow-x:auto;padding:2px 0;cursor:text;min-height:21px}
+.row .ctl{display:flex;gap:1px;opacity:0;flex:none;transition:opacity .1s}
+.row:hover .ctl,.row.sel .ctl{opacity:1}
+.row .ctl button{width:20px;height:20px;border-radius:4px;font-size:11px;color:var(--mu2);line-height:1}
+.row .ctl button:hover{background:var(--panel2);color:var(--tx)}
+.row .ctl button.del:hover{color:var(--bad)}
+.tk{border-radius:3px;padding:1px 0}
+.tk.kw{color:var(--s-kw)}.tk.fn{color:var(--s-fn)}.tk.str{color:var(--s-str)}
+.tk.num{color:var(--s-num)}.tk.name{color:var(--tx)}.tk.op{color:var(--s-op)}.tk.cmt{color:var(--mu2)}
+/* 팔레트 카테고리와 같은 색을 코드에도 입힌다 — 뒤에 두어야 위 규칙을 덮는다 */
+.tk.c-out{color:var(--c-out)}.tk.c-loop{color:var(--c-loop)}.tk.c-cond{color:var(--c-cond)}
+.tk.c-var{color:var(--c-var)}.tk.c-func{color:var(--c-func)}.tk.c-op{color:var(--c-op)}
+.tk.hot{cursor:pointer;box-shadow:inset 0 -1px 0 var(--mu2)}
+.tk.hot:hover{background:var(--ac-dim);box-shadow:inset 0 -1px 0 var(--ac)}
+.addrow{display:block;width:100%;text-align:left;padding:3px 0 3px 39px;color:var(--mu2);font-size:12px;font-family:var(--sans)}
+.addrow:hover{color:var(--ac)}
+textarea.ta{width:100%;min-height:230px;background:var(--code);border:none;outline:none;resize:vertical;padding:12px;font-family:var(--mono);font-size:13.5px;line-height:1.62;color:var(--tx);tab-size:4}
+
+.errbar{padding:7px 12px;font-size:12.5px;border-top:1px solid var(--line);display:none}
+.errbar.on{display:block;background:var(--errBg);color:var(--errTx)}
+.errbar b{font-family:var(--mono);color:var(--bad);font-weight:600;margin-right:6px}
+
+/* popover */
+.pop{position:absolute;z-index:60;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px;box-shadow:0 10px 34px rgba(0,0,0,.6);display:none}
+.pop.on{display:block}
+.pop .pl{font-size:11px;color:var(--mu2);margin-bottom:6px}
+.pop .opts{display:flex;flex-wrap:wrap;gap:4px;max-width:236px}
+.pop .opts button{font-family:var(--mono);font-size:12px;min-width:26px;padding:3px 7px;border:1px solid var(--line);border-radius:4px;color:var(--tx)}
+.pop .opts button:hover{border-color:var(--ac);color:var(--ac)}
+.pop .stp{display:flex;align-items:center;gap:6px;margin-bottom:7px}
+.pop .stp button{width:26px;height:26px;border:1px solid var(--line);border-radius:5px;font-size:14px}
+.pop .stp input{width:56px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:4px;font-family:var(--mono)}
+
+/* ---------- result ---------- */
+.nrow{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.nrow label{font-family:var(--mono);font-size:12px;color:var(--mu)}
+.nrow b{font-family:var(--mono);color:var(--ac);font-size:13px;min-width:20px;text-align:center}
+.nrow input[type=range]{flex:1;accent-color:var(--ac)}
+
+.gwrap{border:1px solid var(--line);border-radius:8px;background:var(--sunk);padding:10px;margin-bottom:12px;overflow:auto}
+.gwrap .gt{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--mu2);margin-bottom:8px;letter-spacing:.08em;text-transform:uppercase}
+.gwrap .gt .rt{letter-spacing:0;text-transform:none;font-family:var(--mono)}
+.grid{display:grid;gap:1px;justify-content:start}
+/* 셀은 정사각형이 아니라 별 모양이다. 채워진 별 / 빈 별 두 가지 마스크를 쓴다. */
+.cell,.dcell,.lgd i{
+  -webkit-mask:var(--star-line) center/100% 100% no-repeat;
+          mask:var(--star-line) center/100% 100% no-repeat;
+}
+.cell{width:var(--cs,14px);height:var(--cs,14px);background:var(--emptyc)}
+.cell.solid,.cell.tgt,.cell.ok,.cell.extra{
+  -webkit-mask-image:var(--star-solid);mask-image:var(--star-solid)}
+.cell.tgt{background:var(--tgtc)}
+.cell.ok{background:var(--ok)}
+.cell.miss{background:var(--bad)}
+.cell.extra{background:var(--bad)}
+.gtxt{font-family:var(--mono);font-size:12px;line-height:1.35;white-space:pre;color:var(--tx)}
+.gtxt .sp{color:var(--ghost)}
+.gempty{color:var(--mu2);font-size:12px;font-family:var(--mono)}
+.gnote{margin:9px 0 0;font-size:11px;line-height:1.6;color:var(--mu2)}
+.gnote b{font-family:var(--mono);color:var(--mu);font-weight:600}
+
+.lgd{display:flex;gap:12px;font-size:11px;color:var(--mu2);margin-top:8px}
+.lgd i{display:inline-block;width:12px;height:12px;margin-right:4px;vertical-align:-2px}
+.lgd i.s{-webkit-mask-image:var(--star-solid);mask-image:var(--star-solid)}
+
+/* 실행 스크러버 + 식 X-ray */
+.scrub{border:1px solid var(--line);border-radius:8px;background:var(--sunk);padding:10px 12px;margin-bottom:12px}
+.scrub .sr{display:flex;align-items:center;gap:9px}
+.scrub .sr input[type=range]{flex:1;accent-color:var(--ac)}
+.scrub .sr b{font-family:var(--mono);font-size:11px;color:var(--mu);min-width:52px;text-align:right}
+.vars{display:flex;flex-wrap:wrap;gap:4px;margin-top:9px;min-height:20px}
+.vars span{font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:4px;
+  background:var(--ac-dim);color:var(--ac);border:1px solid var(--line)}
+.vars span.n{background:transparent;color:var(--mu2)}
+.xray{margin-top:9px;font-family:var(--mono);font-size:11.5px;line-height:1.75;overflow-x:auto}
+.xray div{white-space:pre;color:var(--mu)}
+.xray div:first-child{color:var(--tx)}
+.xray div:last-child{color:var(--ac)}
+.xray div.a{color:var(--mu2)}
+.xray .lb{font-family:var(--sans);font-size:11px;color:var(--mu2);margin-bottom:4px;white-space:normal}
+.row.exec{background:var(--ac-dim);box-shadow:inset 3px 0 0 var(--ac)}
+.diag{display:none;font-size:12.5px;padding:8px 10px;border-radius:6px;margin-bottom:10px;
+  background:var(--noteBg);border:1px solid var(--noteLn);color:var(--note)}
+.diag.on{display:block}
+.diag b{display:block;font-size:11px;letter-spacing:.08em;opacity:.75;margin-bottom:2px}
+
+/* verdict */
+.verd{border:1px solid var(--line);border-radius:8px;background:var(--sunk);padding:12px;margin-bottom:12px}
+.stars{font-family:var(--mono);font-size:19px;color:var(--star);letter-spacing:2px;margin-bottom:2px}
+.stars.no0{color:var(--ghost)}
+.vsum{font-size:12.5px;color:var(--mu);margin-bottom:10px}
+.vsum.pass{color:var(--ok)}
+.chk{display:flex;gap:8px;padding:6px 0;border-top:1px solid var(--line);font-size:12.5px}
+.chk .m{flex:none;width:14px;font-family:var(--mono);font-weight:700;text-align:center}
+.chk.p .m{color:var(--ok)}.chk.f .m{color:var(--bad)}.chk.i .m{color:var(--mu2)}
+.chk.s .m{color:var(--note)}
+.chk.s .b span{color:var(--note);opacity:.9}
+.passchip{display:inline-block;vertical-align:4px;margin-left:9px;font-family:var(--sans);
+  font-size:11px;font-weight:700;letter-spacing:.06em;padding:2px 9px;border-radius:99px;
+  color:var(--ok);border:1px solid var(--ok);background:transparent;text-shadow:none}
+.chk .b{flex:1;min-width:0}
+.chk .b b{display:block;font-weight:600;color:var(--tx);font-size:12px}
+.chk .b span{color:var(--mu);font-size:12px}
+.chk.f .b span{color:var(--errTx)}
+
+table.tr{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11.5px}
+table.tr th{text-align:left;color:var(--mu2);font-weight:500;padding:3px 6px;border-bottom:1px solid var(--line)}
+table.tr td{padding:2px 6px;color:var(--mu);border-bottom:1px solid var(--faint);white-space:nowrap}
+table.tr td.o{color:var(--tx)}
+.badges{display:flex;flex-wrap:wrap;gap:5px}
+.bdg{font-size:11px;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--mu2)}
+.bdg.on{border-color:var(--ac-dim);background:rgba(88,166,255,.09);color:var(--ac)}
+.saveinfo{margin:12px 0 0;font-size:11.5px;line-height:1.65;color:var(--mu2);
+  border-top:1px solid var(--line);padding-top:10px}
+.saveinfo b{color:var(--mu);font-weight:600}
+details.acc{border:1px solid var(--line);border-radius:8px;background:var(--sunk);margin-bottom:12px}
+details.acc>summary{padding:9px 12px;font-size:12px;color:var(--mu);cursor:pointer;list-style:none}
+details.acc>summary::-webkit-details-marker{display:none}
+details.acc>summary:before{content:"+ ";color:var(--mu2)}
+details.acc[open]>summary:before{content:"− "}
+details.acc>summary:hover{color:var(--tx)}
+details.acc .bd{padding:0 12px 12px}
+pre.sol{font-family:var(--mono);font-size:12px;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:9px;overflow:auto;margin:0;color:var(--dim)}
+.hint{font-size:12.5px;color:var(--mu);padding:6px 0;border-bottom:1px solid var(--faint)}
+.hint b{color:var(--ac);font-family:var(--mono);font-size:11px;margin-right:6px}
+
+/* ---------- draw ---------- */
+.draw{padding:18px;max-width:1080px;margin:0 auto}
+.dgrid{display:grid;gap:2px;justify-content:start;-webkit-user-select:none;user-select:none}
+.dcell{width:var(--cs,22px);height:var(--cs,22px);background:var(--emptyc);cursor:pointer}
+.dcell:hover{background:#46536a}
+.dcell.on{background:var(--ac);-webkit-mask-image:var(--star-solid);mask-image:var(--star-solid)}
+.two{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start}
+.card{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:14px}
+.card h3{margin:0 0 10px;font-size:13px;font-weight:650}
+.btn{padding:6px 13px;border:1px solid var(--line);border-radius:6px;font-size:12.5px;color:var(--mu)}
+.btn:hover{color:var(--tx);border-color:var(--mu2)}
+.btn.pri{color:var(--ac);border-color:var(--ac-dim);background:rgba(88,166,255,.09)}
+.btn.pri:hover{background:rgba(88,166,255,.16)}
+.brow{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+
+/* ---------- guide ---------- */
+.guide{padding:18px;max-width:960px;margin:0 auto}
+.gsec{border:1px solid var(--line);border-radius:8px;background:var(--panel);padding:16px;margin-bottom:12px}
+.gsec h3{margin:0 0 6px;font-size:14px;font-weight:650}
+.gsec h3 span{font-family:var(--mono);font-size:12px;color:var(--ac);font-weight:400;margin-left:8px}
+.gsec p{margin:0 0 10px;color:var(--mu);font-size:13px}
+.gex{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gex pre{margin:0;font-family:var(--mono);font-size:12px;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:10px;overflow:auto;color:var(--dim)}
+.gex .out{color:var(--tx)}
+.gex .out .sp{color:var(--ghost)}
+
+@media(max-width:1180px){
+  main{grid-template-columns:180px minmax(0,1fr)}
+  .result{grid-column:1/-1;border-left:none;border-top:1px solid var(--line)}
+  .gex{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+  main{grid-template-columns:1fr}
+  .levels{max-height:150px;border-right:none;border-bottom:1px solid var(--line)}
+  .top{gap:12px;padding:0 10px}
+  .hstat{display:none}
+}
+
+/* ===== 별 커서 =====
+   반드시 스타일시트 맨 끝에 둔다. 위쪽 초기화의 button{cursor:pointer} 보다 뒤여야 이긴다.
+   커서 그림은 밝은 배경과 어두운 배경 모두에서 보이도록 진한 테두리를 넣어 하나만 쓴다.
+   (CSS 변수는 url("...") 안 문자열에서 치환되지 않아 테마별로 바꿀 수 없다) */
+body{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 26 26'><path d='M9 1.4 10.5 6.5 15.6 8 10.5 9.5 9 14.6 7.5 9.5 2.4 8 7.5 6.5Z' fill='white' stroke='%23303030' stroke-width='1' stroke-linejoin='round'/><circle cx='16.6' cy='16' r='1.6' fill='white' stroke='%23303030' stroke-width='.6' opacity='.85'/><circle cx='20.6' cy='20.6' r='1.1' fill='white' stroke='%23303030' stroke-width='.5' opacity='.55'/></svg>") 11 10, auto}
+button,.lv,.chip,.dterm,summary,.tk.hot,.dcell,label,input[type=range]{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 26 26'><path d='M9 1.4 10.5 6.5 15.6 8 10.5 9.5 9 14.6 7.5 9.5 2.4 8 7.5 6.5Z' fill='%23ffe9a8' stroke='%23303030' stroke-width='1' stroke-linejoin='round'/><circle cx='16.6' cy='16' r='2' fill='%23ffe9a8' stroke='%23303030' stroke-width='.6'/><circle cx='20.8' cy='20.8' r='1.3' fill='%23ffe9a8' stroke='%23303030' stroke-width='.5' opacity='.7'/></svg>") 11 10, pointer}
+textarea,input[type=text],input[type=number],.row .code{cursor:auto}
+</style>
+</head>
+<body>
+
+<div class="sky" aria-hidden="true">
+  <div class="sf sf1"></div><div class="sf sf2"></div>
+  <div class="shoot" style="top:6%;--sd:13s;--sdl:0s"></div>
+  <div class="shoot" style="top:34%;--sd:17s;--sdl:5.5s"></div>
+  <div class="shoot" style="top:58%;--sd:15s;--sdl:11s"></div>
+</div>
+<div class="boom" id="boom" aria-hidden="true"></div>
+
+<header class="top">
+  <div class="brand">STAR PATTERN LAB<span>별찍기로 배우는 파이썬 문법 드릴</span></div>
+  <div class="modeseg">
+    <span class="on">평면</span>
+    <a href="star-pattern-3d.html">입체</a>
+  </div>
+  <nav class="tabs" id="tabs">
+    <button data-tab="solve" class="on">문제 풀기</button>
+    <button data-tab="draw">직접 그리기</button>
+  </nav>
+  <div class="sp"></div>
+  <button class="mini" id="btnSkin">테마: 기본</button>
+  <button class="mini" id="btnReset">미션 초기화</button>
+  <a class="plink" href="privacy.html">개인정보처리방침</a>
+  <div class="hstat" title="이 브라우저에 자동 저장됩니다. 다시 들어와도 이어서 풀 수 있습니다.">
+    <div>푼 문제 <b id="hClear">0</b> / <b id="hTotal">20</b></div>
+  </div>
+</header>
+
+<main id="viewSolve">
+  <aside class="levels">
+    <p class="hd">레벨</p>
+    <div id="lvList"></div>
+  </aside>
+
+  <section class="work">
+    <div class="brief">
+      <h2 id="bTitle">—<span class="tag" id="bTag"></span></h2>
+      <p id="bGoal"></p>
+      <div class="learn" id="bLearn"></div>
+      <label class="nest" id="nestWrap">
+        <input type="checkbox" id="nestChk"> 중첩 반복으로 도전하기
+        <em>문자열 곱하기 없이 반복문만으로 풀어 봅니다</em>
+      </label>
+    </div>
+
+    <div class="epanel">
+      <div class="sect">
+        <div class="secth"><span class="sn">1</span>코드 조각<em>눌러서 아래 코드에 넣습니다</em></div>
+        <div class="pal" id="pal"></div>
+      </div>
+
+      <div class="sect code">
+        <div class="secth">
+          <span class="sn">2</span>내 코드
+          <div class="sp"></div>
+          <div class="seg" id="modeSeg">
+            <button data-mode="build" class="on">조립</button>
+            <button data-mode="type">타이핑</button>
+          </div>
+          <button class="mini" id="btnUndo">되돌리기</button>
+          <button class="mini" id="btnClear">비우기</button>
+        </div>
+        <div class="given">주어진 값 &nbsp;<b>n</b> = <b id="gN">5</b> &nbsp;<span style="color:var(--mu2)">— 오른쪽 슬라이더로 바뀝니다. 직접 정하지 마세요.</span></div>
+        <div class="rows" id="rows"></div>
+        <textarea class="ta" id="ta" spellcheck="false" style="display:none"></textarea>
+        <div class="errbar" id="err"></div>
+      </div>
+
+      <div class="sect">
+        <div class="secth"><span class="sn">3</span>낱말 사전<em>모르는 낱말을 눌러 보세요</em></div>
+        <div class="dictbar" id="dictBar"></div>
+        <div class="dictbody" id="dictBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="result">
+    <div class="nrow">
+      <label>n</label>
+      <input type="range" id="nSlider" min="1" max="15" value="5">
+      <b id="nVal">5</b>
+    </div>
+
+    <div class="gwrap">
+      <div class="gt"><span class="gl"><span class="dots"><i></i><i></i></span>목표 모양</span><span class="rt" id="tgtSize"></span></div>
+      <div id="tgtGrid"></div>
+      <p class="gnote">그림의 별 하나 = 코드에서 찍는 글자 <b>*</b> 하나입니다.
+        실제 글자로 보려면 아래 <b>텍스트로 보기</b>를 누르세요.</p>
+    </div>
+
+    <div class="gwrap">
+      <div class="gt"><span class="gl"><span class="dots"><i></i><i></i></span>내 출력</span><button class="rt" id="btnTxt" style="color:var(--mu2)">텍스트로 보기</button></div>
+      <div id="outGrid"></div>
+      <div class="lgd">
+        <span><i class="s" style="background:var(--ok)"></i>맞음</span>
+        <span><i style="background:var(--bad)"></i>빠짐</span>
+        <span><i class="s" style="background:var(--bad)"></i>더 찍음</span>
+      </div>
+    </div>
+
+    <div class="scrub" id="scrubBox">
+      <div class="sr">
+        <button class="mini" id="btnPlay2">재생</button>
+        <input type="range" id="scrub" min="0" max="0" value="0">
+        <b id="scrubN">—</b>
+      </div>
+      <div class="vars" id="scrubVars"></div>
+      <div class="xray" id="xray"></div>
+    </div>
+
+    <div class="verd">
+      <div class="stars no0" id="vStars">☆☆☆</div>
+      <div class="vsum" id="vSum">코드를 작성해 보세요.</div>
+      <div class="diag" id="vDiag"></div>
+      <div id="vChecks"></div>
+    </div>
+
+    <details class="acc"><summary>반복 추적</summary><div class="bd" id="traceBox"></div></details>
+    <details class="acc"><summary>힌트</summary><div class="bd" id="hintBox"></div></details>
+    <details class="acc"><summary>모범 답안 (스스로 풀어 본 뒤에)</summary><div class="bd"><pre class="sol" id="solBox"></pre></div></details>
+
+    <p class="hd" style="margin-top:16px">개념 배지</p>
+    <div class="badges" id="badgeBox"></div>
+    <p class="saveinfo">푼 문제 · 별 · 배지 · 작성한 코드는 <b>이 브라우저에 자동 저장</b>됩니다.
+      다시 들어오면 이어서 풀 수 있습니다. 다른 기기나 시크릿 창에서는 새로 시작합니다.
+      <a href="privacy.html" style="color:var(--ac);text-decoration:none">개인정보처리방침 보기</a></p>
+  </aside>
+</main>
+
+<div id="viewDraw" style="display:none"></div>
+<div class="pop" id="pop"></div>
+
+<script>
+/* ==================================================================
+   1. 미니 파이썬 — 토크나이저 / 파서 / 실행기
+   별찍기에 필요한 문법만 지원한다: 변수, for, while, if/elif/else,
+   range, print(sep,end), 문자열 곱하기/더하기, 사칙연산, 비교, and/or/not,
+   break/continue, len/str/int/abs/min/max
+   ================================================================== */
+function PyErr(line,msg){ this.line=line; this.msg=msg; }
+PyErr.prototype.toString=function(){ return (this.line+1)+'행: '+this.msg; };
+
+var KW=new Set(['for','in','while','if','elif','else','break','continue','and','or','not','True','False','None','def','return']);
+var BUILTIN=new Set(['print','range','len','str','int','abs','min','max','bool']);
+var OPS2=['==','!=','<=','>=','//','**','+=','-=','*='];
+var OPS1='+-*/%()<>=,:[].';
+
+function tokenize(src){
+  var lines=src.replace(/\t/g,'    ').split('\n');
+  var toks=[], stack=[0];
+  for(var ln=0;ln<lines.length;ln++){
+    var raw=lines[ln], i=0, ind=0;
+    while(i<raw.length && raw[i]===' '){ ind++; i++; }
+    var rest=raw.slice(i);
+    if(rest===''||rest[0]==='#') continue;
+    if(ind>stack[stack.length-1]){ stack.push(ind); toks.push({type:'INDENT',line:ln}); }
+    else{
+      while(ind<stack[stack.length-1]){ stack.pop(); toks.push({type:'DEDENT',line:ln}); }
+      if(ind!==stack[stack.length-1]) throw new PyErr(ln,'들여쓰기 칸 수가 위쪽 줄과 맞지 않습니다.');
+    }
+    while(i<raw.length){
+      var c=raw[i];
+      if(c===' '){ i++; continue; }
+      if(c==='#') break;
+      var st=i;
+      if(c==="'"||c==='"'){
+        var q=c; i++; var s='';
+        while(i<raw.length && raw[i]!==q){
+          if(raw[i]==='\\'&&i+1<raw.length){ var nx=raw[i+1]; s+= nx==='n'?'\n':nx==='t'?'\t':nx; i+=2; continue; }
+          s+=raw[i]; i++;
+        }
+        if(i>=raw.length) throw new PyErr(ln,'따옴표가 닫히지 않았습니다.');
+        i++; toks.push({type:'STR',value:s,line:ln,start:st,end:i}); continue;
+      }
+      if(c>='0'&&c<='9'){
+        var d=''; while(i<raw.length && raw[i]>='0' && raw[i]<='9'){ d+=raw[i]; i++; }
+        toks.push({type:'NUM',value:parseInt(d,10),line:ln,start:st,end:i}); continue;
+      }
+      if(/[A-Za-z_가-힣]/.test(c)){
+        var w=''; while(i<raw.length && /[A-Za-z0-9_가-힣]/.test(raw[i])){ w+=raw[i]; i++; }
+        toks.push({type:'NAME',value:w,line:ln,start:st,end:i}); continue;
+      }
+      var two=raw.substr(i,2);
+      if(OPS2.indexOf(two)>=0){ toks.push({type:'OP',value:two,line:ln,start:st,end:i+2}); i+=2; continue; }
+      if(OPS1.indexOf(c)>=0){ toks.push({type:'OP',value:c,line:ln,start:st,end:i+1}); i++; continue; }
+      throw new PyErr(ln,"'"+c+"' 기호는 여기서 쓸 수 없습니다.");
+    }
+    toks.push({type:'NEWLINE',line:ln});
+  }
+  while(stack.length>1){ stack.pop(); toks.push({type:'DEDENT',line:lines.length-1}); }
+  toks.push({type:'EOF',line:lines.length-1});
+  return toks;
+}
+
+function Parser(toks){ this.t=toks; this.p=0; }
+Parser.prototype={
+  pk:function(k){ return this.t[this.p+(k||0)] || this.t[this.t.length-1]; },
+  nx:function(){ return this.t[this.p++]; },
+  at:function(ty,v){ var x=this.pk(); return x.type===ty && (v===undefined||x.value===v); },
+  eat:function(ty,v){ if(this.at(ty,v)){ this.nx(); return true; } return false; },
+  bad:function(m){ throw new PyErr(this.pk().line,m); },
+  need:function(ty,v,m){ if(!this.at(ty,v)) this.bad(m); return this.nx(); },
+
+  module:function(){
+    var body=[];
+    while(!this.at('EOF')){
+      if(this.at('NEWLINE')||this.at('INDENT')||this.at('DEDENT')){ this.nx(); continue; }
+      body.push(this.stmt());
+    }
+    return {type:'Module',body:body};
+  },
+  suite:function(kw){
+    this.need('OP',':',"줄 끝에 콜론(:)이 필요합니다.");
+    if(!this.eat('NEWLINE')) this.bad('콜론 뒤에서 줄을 바꿔 주세요.');
+    if(!this.at('INDENT')) this.bad(kw+' 안에 들어갈 줄은 4칸 들여써야 합니다.');
+    this.nx();
+    var body=[];
+    while(!this.at('DEDENT') && !this.at('EOF')){
+      if(this.at('NEWLINE')){ this.nx(); continue; }
+      body.push(this.stmt());
+    }
+    this.eat('DEDENT');
+    if(!body.length) this.bad(kw+' 안이 비어 있습니다.');
+    return body;
+  },
+  endl:function(){
+    if(this.at('NEWLINE')){ this.nx(); return; }
+    if(this.at('EOF')||this.at('DEDENT')) return;
+    this.bad('줄 끝에 이해할 수 없는 내용이 있습니다.');
+  },
+  stmt:function(){
+    var t=this.pk(), line=t.line;
+    if(t.type==='NAME'){
+      if(t.value==='for')   return this.forS();
+      if(t.value==='while') return this.whileS();
+      if(t.value==='if')    return this.ifS('if');
+      if(t.value==='elif'||t.value==='else') this.bad("'"+t.value+"' 앞에 짝이 되는 if 가 없습니다.");
+      if(['import','from','class','lambda','try','except','with','global','yield','assert','del','pass','raise'].indexOf(t.value)>=0)
+        this.bad("'"+t.value+"' 은 이 실습실에서 지원하지 않습니다. 별찍기는 for, if, def, print, range 만으로 모두 만들 수 있습니다.");
+      if(t.value==='def')    return this.defS();
+      if(t.value==='return'){
+        this.nx();
+        var rv=(this.at('NEWLINE')||this.at('EOF')||this.at('DEDENT'))?null:this.expr();
+        this.endl(); return {type:'Return',value:rv,line:line};
+      }
+      if(t.value==='break'){ this.nx(); this.endl(); return {type:'Break',line:line}; }
+      if(t.value==='continue'){ this.nx(); this.endl(); return {type:'Continue',line:line}; }
+      var n1=this.pk(1);
+      if(n1.type==='OP' && n1.value==='='){
+        var nm=this.nx().value; this.nx();
+        var v=this.expr(); this.endl();
+        return {type:'Assign',name:nm,value:v,line:line};
+      }
+      if(n1.type==='OP' && ['+=','-=','*='].indexOf(n1.value)>=0){
+        var nm2=this.nx().value, op=this.nx().value.charAt(0);
+        var v2=this.expr(); this.endl();
+        return {type:'Assign',name:nm2,line:line,
+          value:{type:'Bin',op:op,left:{type:'Name',name:nm2,line:line},right:v2,line:line}};
+      }
+    }
+    var e=this.expr(); this.endl();
+    return {type:'Expr',value:e,line:line};
+  },
+  forS:function(){
+    var line=this.pk().line; this.nx();
+    if(!this.at('NAME')) this.bad('for 다음에는 변수 이름이 필요합니다. 예: for i in range(n):');
+    var v=this.nx().value;
+    if(!(this.at('NAME','in'))) this.bad("for 변수 다음에는 'in' 이 필요합니다.");
+    this.nx();
+    var it=this.expr();
+    var body=this.suite('for');
+    return {type:'For',var:v,iter:it,body:body,line:line};
+  },
+  defS:function(){
+    var line=this.pk().line; this.nx();
+    if(!this.at('NAME')) this.bad('def 다음에는 함수 이름이 필요합니다. 예: def row(a, b):');
+    var nm=this.nx().value;
+    if(!this.at('OP','(')) this.bad("함수 이름 뒤에는 괄호가 필요합니다. 예: def "+nm+"(k):");
+    this.nx();
+    var ps=[];
+    if(!this.at('OP',')')){
+      for(;;){
+        if(!this.at('NAME')) this.bad('괄호 안에는 값을 받을 이름만 적습니다. 예: def row(a, b):');
+        ps.push(this.nx().value);
+        if(!this.eat('OP',',')) break;
+      }
+    }
+    this.need('OP',')','함수 괄호가 닫히지 않았습니다.');
+    var body=this.suite('def');
+    return {type:'Def',name:nm,params:ps,body:body,line:line};
+  },
+  whileS:function(){
+    var line=this.pk().line; this.nx();
+    var test=this.expr(); var body=this.suite('while');
+    return {type:'While',test:test,body:body,line:line};
+  },
+  ifS:function(kw){
+    var line=this.pk().line; this.nx();
+    var test=this.expr(); var body=this.suite(kw); var orelse=[];
+    while(this.at('NEWLINE')) this.nx();
+    if(this.at('NAME','elif')) orelse=[this.ifS('elif')];
+    else if(this.at('NAME','else')){ this.nx(); orelse=this.suite('else'); }
+    return {type:'If',test:test,body:body,orelse:orelse,line:line};
+  },
+
+  expr:function(){ return this.orE(); },
+  orE:function(){ var l=this.andE(); while(this.at('NAME','or')){ var ln=this.nx().line; l={type:'Bool',op:'or',left:l,right:this.andE(),line:ln}; } return l; },
+  andE:function(){ var l=this.notE(); while(this.at('NAME','and')){ var ln=this.nx().line; l={type:'Bool',op:'and',left:l,right:this.notE(),line:ln}; } return l; },
+  notE:function(){ if(this.at('NAME','not')){ var t=this.nx(); return {type:'Not',value:this.notE(),line:t.line}; } return this.cmpE(); },
+  cmpE:function(){
+    var l=this.addE();
+    if(!(this.at('OP') && ['==','!=','<','>','<=','>='].indexOf(this.pk().value)>=0)) return l;
+    var ops=[],rest=[],ln=this.pk().line;
+    while(this.at('OP') && ['==','!=','<','>','<=','>='].indexOf(this.pk().value)>=0){
+      var o=this.nx(); ops.push(o.value); rest.push(this.addE());
+    }
+    if(ops.length===1) return {type:'Cmp',op:ops[0],left:l,right:rest[0],line:ln};
+    return {type:'Chain',first:l,ops:ops,rest:rest,line:ln};
+  },
+  addE:function(){
+    var l=this.mulE();
+    while(this.at('OP') && (this.pk().value==='+'||this.pk().value==='-')){
+      var o=this.nx(); l={type:'Bin',op:o.value,left:l,right:this.mulE(),line:o.line};
+    }
+    return l;
+  },
+  powE:function(){
+    var l=this.atom();
+    if(this.at('OP','**')){ var o=this.nx(); return {type:'Bin',op:'**',left:l,right:this.unE(),line:o.line}; }
+    return l;
+  },
+  mulE:function(){
+    var l=this.unE();
+    while(this.at('OP') && ['*','/','//','%'].indexOf(this.pk().value)>=0){
+      var o=this.nx(); l={type:'Bin',op:o.value,left:l,right:this.unE(),line:o.line};
+    }
+    return l;
+  },
+  unE:function(){
+    if(this.at('OP','-')){ var t=this.nx(); return {type:'Neg',value:this.unE(),line:t.line}; }
+    if(this.at('OP','+')){ this.nx(); return this.unE(); }
+    return this.powE();
+  },
+  /* '*'.center(5) 처럼 뒤에 붙는 기능 호출을 받아 준다 */
+  atom:function(){ return this.postfix(this.atomBase()); },
+  postfix:function(node){
+    while(this.at('OP','.')){
+      var dot=this.nx();
+      if(this.at('NUM')) throw new PyErr(dot.line,'소수점이 있는 숫자는 이 실습실에서 쓰지 않습니다. 나눈 몫이 필요하면 // 를 쓰세요.');
+      if(!this.at('NAME')) this.bad("'.' 다음에는 기능 이름이 와야 합니다. 예: '*'.center(5)");
+      var nm=this.nx().value;
+      if(!this.at('OP','(')) this.bad("'"+nm+"' 뒤에는 괄호가 필요합니다. 예: .center(5)");
+      this.nx();
+      var args=[];
+      if(!this.at('OP',')')){
+        for(;;){ args.push(this.expr()); if(!this.eat('OP',',')) break; if(this.at('OP',')')) break; }
+      }
+      this.need('OP',')',"'"+nm+"(' 의 괄호가 닫히지 않았습니다.");
+      node={type:'Method',obj:node,name:nm,args:args,line:dot.line};
+    }
+    return node;
+  },
+  atomBase:function(){
+    var t=this.pk();
+    if(t.type==='NUM'){ this.nx(); return {type:'Num',value:t.value,line:t.line}; }
+    if(t.type==='STR'){ this.nx(); return {type:'Str',value:t.value,line:t.line}; }
+    if(t.type==='OP'&&t.value==='('){
+      this.nx(); var e=this.expr();
+      this.need('OP',')','괄호가 닫히지 않았습니다.');
+      return e;
+    }
+    if(t.type==='OP'&&t.value==='['){
+      this.nx(); var items=[];
+      if(!this.at('OP',']')){
+        items.push(this.expr());
+        while(this.eat('OP',',')){ if(this.at('OP',']')) break; items.push(this.expr()); }
+      }
+      this.need('OP',']','대괄호가 닫히지 않았습니다.');
+      return {type:'List',items:items,line:t.line};
+    }
+    if(t.type==='NAME'){
+      if(t.value==='True'||t.value==='False'){ this.nx(); return {type:'Bool0',value:t.value==='True',line:t.line}; }
+      if(t.value==='None'){ this.nx(); return {type:'None',line:t.line}; }
+      if(KW.has(t.value)) this.bad("'"+t.value+"' 는 여기서 쓸 수 없습니다.");
+      this.nx();
+      if(this.at('OP','(')){
+        this.nx();
+        var args=[], kw={};
+        if(!this.at('OP',')')){
+          for(;;){
+            if(this.at('NAME') && this.pk(1).type==='OP' && this.pk(1).value==='='){
+              var k=this.nx().value; this.nx(); kw[k]=this.expr();
+            } else args.push(this.expr());
+            if(!this.eat('OP',',')) break;
+            if(this.at('OP',')')) break;
+          }
+        }
+        this.need('OP',')',"'"+t.value+"(' 의 괄호가 닫히지 않았습니다.");
+        return {type:'Call',name:t.value,args:args,kw:kw,line:t.line};
+      }
+      return {type:'Name',name:t.value,line:t.line};
+    }
+    if(t.type==='NEWLINE'||t.type==='EOF') this.bad('줄이 끝나지 않았습니다. 뒤에 값이 더 필요합니다.');
+    this.bad('여기서 값이 필요합니다.');
+  }
+};
+
+function parse(src){ return new Parser(tokenize(src)).module(); }
+
+/* ---------- 실행기 ---------- */
+function BreakSig(){} function ContSig(){} function RetSig(v){ this.v=v; }
+
+function pyStr(v){
+  if(typeof v==='string') return v;
+  if(typeof v==='boolean') return v?'True':'False';
+  if(v===null||v===undefined) return 'None';
+  if(Array.isArray(v)) return '['+v.map(function(x){ return typeof x==='string'?"'"+x+"'":pyStr(x); }).join(', ')+']';
+  if(v instanceof Flt) return Number.isInteger(v.v)?(String(v.v)+'.0'):String(v.v);
+  if(typeof v==='number') return String(v);
+  return String(v);
+}
+function truthy(v){
+  if(v instanceof Flt) return v.v!==0;
+  if(typeof v==='number') return v!==0;
+  if(typeof v==='string') return v.length>0;
+  if(Array.isArray(v)) return v.length>0;
+  return !!v;
+}
+/* 지역 스코프가 있어도 전역 값(n 등)까지 함께 담아 둔다 — 추적표와 식 X-ray 가 쓴다 */
+function snap(ctx){
+  var o={},k;
+  for(k in ctx.globals){ var g=ctx.globals[k]; if(isNumV(g)||typeof g==='string') o[k]=(g instanceof Flt)?g.v:g; }
+  for(k in ctx.env){ var v=ctx.env[k]; if(isNumV(v)||typeof v==='string') o[k]=(v instanceof Flt)?v.v:v; }
+  return o;
+}
+
+function execute(ast,nVal){
+  var ctx={ env:{n:nVal}, globals:null, out:[], trace:[], seg:[], funcs:{}, steps:0, chars:0, depth:0 };
+  ctx.globals=ctx.env;
+  try{ execBlock(ast.body,ctx); }
+  catch(e){ if(!(e instanceof RetSig)) throw e; }
+  return { text:ctx.out.join(''), trace:ctx.trace, seg:ctx.seg, total:ctx.chars };
+}
+function tick(ctx,line){
+  if(++ctx.steps>400000) throw new PyErr(line,'반복이 너무 많이 돌고 있습니다. 무한 반복인지 확인해 주세요.');
+}
+function execBlock(body,ctx){ for(var i=0;i<body.length;i++) execStmt(body[i],ctx); }
+
+function execStmt(s,ctx){
+  tick(ctx,s.line);
+  switch(s.type){
+    case 'Assign': ctx.env[s.name]=evalE(s.value,ctx); return;
+    case 'Expr':   evalE(s.value,ctx); return;
+    case 'Def':    ctx.funcs[s.name]=s; return;
+    case 'Return': throw new RetSig(s.value?evalE(s.value,ctx):null);
+    case 'Break':  throw new BreakSig();
+    case 'Continue': throw new ContSig();
+    case 'If':
+      if(truthy(evalE(s.test,ctx))) execBlock(s.body,ctx);
+      else if(s.orelse && s.orelse.length) execBlock(s.orelse,ctx);
+      return;
+    case 'While': {
+      var guard=0;
+      while(truthy(evalE(s.test,ctx))){
+        if(++guard>200000) throw new PyErr(s.line,'while 반복이 끝나지 않습니다. 조건을 확인해 주세요.');
+        try{ execBlock(s.body,ctx); }
+        catch(e){ if(e instanceof BreakSig) break; if(e instanceof ContSig) continue; throw e; }
+        tick(ctx,s.line);
+      }
+      return;
+    }
+    case 'For': {
+      var it=evalE(s.iter,ctx), items;
+      if(Array.isArray(it)) items=it;
+      else if(typeof it==='string') items=it.split('');
+      else throw new PyErr(s.line,'for 문 뒤에는 range(...) 처럼 여러 번 반복할 대상이 와야 합니다.');
+      for(var i=0;i<items.length;i++){
+        ctx.env[s.var]=items[i];
+        try{ execBlock(s.body,ctx); }
+        catch(e){ if(e instanceof BreakSig) break; if(e instanceof ContSig) continue; throw e; }
+        tick(ctx,s.line);
+      }
+      return;
+    }
+  }
+  throw new PyErr(s.line,'알 수 없는 문장입니다.');
+}
+
+function evalE(e,ctx){
+  switch(e.type){
+    case 'Num': case 'Str': return e.value;
+    case 'Bool0': return e.value;
+    case 'None': return null;
+    case 'List': return e.items.map(function(x){ return evalE(x,ctx); });
+    case 'Name':
+      if(e.name in ctx.env) return ctx.env[e.name];
+      if(e.name in ctx.globals) return ctx.globals[e.name];
+      throw new PyErr(e.line,"'"+e.name+"' 라는 이름을 아직 만들지 않았습니다.");
+    case 'Neg': { var v=evalE(e.value,ctx); if(typeof v!=='number') throw new PyErr(e.line,'숫자 앞에만 - 를 붙일 수 있습니다.'); return -v; }
+    case 'Not': return !truthy(evalE(e.value,ctx));
+    case 'Bool': {
+      var l=evalE(e.left,ctx);
+      if(e.op==='and') return truthy(l)?evalE(e.right,ctx):l;
+      return truthy(l)?l:evalE(e.right,ctx);
+    }
+    case 'Cmp': return cmpVal(e.op,evalE(e.left,ctx),evalE(e.right,ctx));
+    case 'Chain': {
+      /* 0 < x < n 처럼 이어진 비교. 파이썬처럼 앞에서부터 하나씩 확인한다 */
+      var prev=evalE(e.first,ctx),ci,cur;
+      for(ci=0;ci<e.ops.length;ci++){
+        cur=evalE(e.rest[ci],ctx);
+        if(!cmpVal(e.ops[ci],prev,cur)) return false;
+        prev=cur;
+      }
+      return true;
+    }
+    case 'Bin': return binOp(e,evalE(e.left,ctx),evalE(e.right,ctx));
+    case 'Call': return callF(e,ctx);
+    case 'Method': return callMethod(e,ctx);
+  }
+  throw new PyErr(e.line,'알 수 없는 식입니다.');
+}
+
+/* 파이썬의 실수(float). 자바스크립트에는 정수/실수 구분이 없어서 따로 감싸 둔다.
+   6 / 3 은 파이썬에서 2.0 이지 2 가 아니다. */
+function Flt(v){ this.v=v; }
+Flt.prototype.valueOf=function(){ return this.v; };
+/* 파이썬에서 True 는 1, False 는 0 과 같이 계산된다 */
+function toNum(v){
+  if(v instanceof Flt) return v.v;
+  return typeof v==='boolean' ? (v?1:0) : v;
+}
+function isNumV(v){ return typeof v==='number' || typeof v==='boolean' || (v instanceof Flt); }
+function isIntV(v){ return (typeof v==='number' && Number.isInteger(v)) || typeof v==='boolean'; }
+function mkNum(v,isFloat){ return isFloat ? new Flt(v) : v; }
+function cmpVal(op,a,b){
+  a=toNum(a); b=toNum(b);
+  switch(op){
+    case '==': return a===b; case '!=': return a!==b;
+    case '<': return a<b; case '>': return a>b;
+    case '<=': return a<=b; case '>=': return a>=b;
+  }
+  return false;
+}
+function binOp(e,a,b){
+  var op=e.op;
+  var fl=(a instanceof Flt)||(b instanceof Flt);
+  a=toNum(a); b=toNum(b);
+  if(op==='+'){
+    if(typeof a==='string'&&typeof b==='string') return a+b;
+    if(typeof a==='number'&&typeof b==='number') return mkNum(a+b,fl);
+    if(Array.isArray(a)&&Array.isArray(b)) return a.concat(b);
+    throw new PyErr(e.line,'글자와 숫자는 + 로 붙일 수 없습니다. 숫자는 str( ) 로 감싸 주세요.');
+  }
+  if(op==='*'){
+    if(typeof a==='string'&&typeof b==='number'){
+      if(fl||!Number.isInteger(b)) throw new PyErr(e.line,'글자는 소수 번 반복할 수 없습니다. 나눗셈은 / 대신 // 를 쓰세요.');
+      if(b>20000) throw new PyErr(e.line,'만들려는 글자가 너무 깁니다.'); return b>0?a.repeat(b):''; }
+    if(typeof a==='number'&&typeof b==='string'){
+      if(fl||!Number.isInteger(a)) throw new PyErr(e.line,'글자는 소수 번 반복할 수 없습니다. 나눗셈은 / 대신 // 를 쓰세요.');
+      if(a>20000) throw new PyErr(e.line,'만들려는 글자가 너무 깁니다.'); return a>0?b.repeat(a):''; }
+    if(typeof a==='number'&&typeof b==='number') return mkNum(a*b,fl);
+    throw new PyErr(e.line,'곱하기는 숫자끼리, 또는 글자 × 숫자만 됩니다.');
+  }
+  if(typeof a!=='number'||typeof b!=='number') throw new PyErr(e.line,"'"+op+"' 는 숫자끼리만 쓸 수 있습니다.");
+  if(op==='**'){
+    if(b<0) throw new PyErr(e.line,'거듭제곱의 지수는 0 이상이어야 합니다.');
+    if(b>40||Math.abs(a)>100000) throw new PyErr(e.line,'너무 큰 수가 됩니다.');
+    return mkNum(Math.pow(a,b),fl);
+  }
+  if(op==='-') return mkNum(a-b,fl);
+  if(op==='/'){ if(b===0) throw new PyErr(e.line,'0 으로 나눌 수 없습니다.'); return new Flt(a/b); }
+  if(op==='//'){ if(b===0) throw new PyErr(e.line,'0 으로 나눌 수 없습니다.'); return mkNum(Math.floor(a/b),fl); }
+  if(op==='%'){ if(b===0) throw new PyErr(e.line,'0 으로 나눌 수 없습니다.'); return mkNum(((a%b)+b)%b,fl); }
+  throw new PyErr(e.line,"'"+op+"' 는 지원하지 않습니다.");
+}
+
+/* 글자에 붙는 기능들. center/ljust/rjust 는 파이썬과 정확히 같은 규칙으로 맞춘다 */
+function callMethod(e,ctx){
+  var o=evalE(e.obj,ctx), A=e.args.map(function(x){ return evalE(x,ctx); }), nm=e.name;
+  if(typeof o!=='string')
+    throw new PyErr(e.line,"'"+nm+"( )' 는 글자에만 쓸 수 있습니다. 숫자에는 쓸 수 없습니다.");
+  function W(i){
+    if(!isNumV(A[i])) throw new PyErr(e.line,"'"+nm+"( )' 안에는 폭을 숫자로 넣습니다. 예: .center(7)");
+    if(!isIntV(A[i])) throw new PyErr(e.line,"'"+nm+"( )' 의 폭은 정수여야 합니다. 나눗셈은 / 대신 // 를 쓰세요.");
+    var v=Math.floor(toNum(A[i]));
+    if(v>20000) throw new PyErr(e.line,'만들려는 글자가 너무 깁니다.');
+    return v;
+  }
+  function F(i){
+    var f=A[i]===undefined?' ':A[i];
+    if(typeof f!=='string'||f.length!==1) throw new PyErr(e.line,'채울 글자는 한 글자여야 합니다.');
+    return f;
+  }
+  switch(nm){
+    case 'center': {
+      var w=W(0), f=F(1), m=w-o.length;
+      if(m<=0) return o;
+      var left=Math.floor(m/2)+(m & w & 1);   // CPython 과 동일한 계산
+      return f.repeat(left)+o+f.repeat(m-left);
+    }
+    case 'ljust': { var w1=W(0),f1=F(1); return o.length>=w1?o:o+f1.repeat(w1-o.length); }
+    case 'rjust': { var w2=W(0),f2=F(1); return o.length>=w2?o:f2.repeat(w2-o.length)+o; }
+    case 'strip':  return o.replace(/^\s+|\s+$/g,'');
+    case 'lstrip': return o.replace(/^\s+/,'');
+    case 'rstrip': return o.replace(/\s+$/,'');
+    case 'upper':  return o.toUpperCase();
+    case 'lower':  return o.toLowerCase();
+    case 'count':  {
+      if(typeof A[0]!=='string'||!A[0].length) throw new PyErr(e.line,'셀 글자를 넣어 주세요. 예: .count(\'*\')');
+      return o.split(A[0]).length-1;
+    }
+    case 'replace': return o.split(pyStr(A[0])).join(pyStr(A[1]));
+  }
+  throw new PyErr(e.line,"'"+nm+"( )' 는 이 실습실에서 지원하지 않습니다. center, ljust, rjust, strip, count, replace 를 쓸 수 있습니다.");
+}
+
+function callF(e,ctx){
+  var name=e.name, A=e.args.map(function(x){ return evalE(x,ctx); });
+  if(name==='print'){
+    var sep=e.kw.sep!==undefined?evalE(e.kw.sep,ctx):' ';
+    var end=e.kw.end!==undefined?evalE(e.kw.end,ctx):'\n';
+    var s=A.map(pyStr).join(pyStr(sep))+pyStr(end);
+    var before=ctx.chars;
+    ctx.chars+=s.length;
+    if(ctx.chars>60000) throw new PyErr(e.line,'출력이 너무 많습니다. 반복 횟수를 확인해 주세요.');
+    ctx.out.push(s);
+    var vs=snap(ctx);
+    ctx.trace.push({line:e.line,vars:vs,text:s});
+    ctx.seg.push({start:before,end:ctx.chars,line:e.line,vars:vs,node:e.args.length?e.args[0]:null});
+    return null;
+  }
+  if(name==='range'){
+    var st=0,en=0,sp=1;
+    if(A.length===1){ en=A[0]; } else if(A.length===2){ st=A[0]; en=A[1]; }
+    else if(A.length===3){ st=A[0]; en=A[1]; sp=A[2]; }
+    else throw new PyErr(e.line,'range( ) 에는 숫자를 1~3개 넣습니다. 예: range(n)');
+    for(var q=0;q<A.length;q++){
+      if(!isNumV(A[q])) throw new PyErr(e.line,'range( ) 안에는 숫자만 넣을 수 있습니다.');
+      if(!isIntV(A[q])) throw new PyErr(e.line,'range( ) 에는 소수를 넣을 수 없습니다. 나눗셈은 / 대신 // 를 쓰세요.');
+    }
+    st=toNum(st); en=toNum(en); sp=toNum(sp);
+    if(sp===0) throw new PyErr(e.line,'range 의 세 번째 값은 0 이 될 수 없습니다.');
+    var r=[],g=0;
+    if(sp>0){ for(var v=st;v<en;v+=sp){ r.push(v); if(++g>100000) break; } }
+    else{ for(var v2=st;v2>en;v2+=sp){ r.push(v2); if(++g>100000) break; } }
+    return r;
+  }
+  if(name==='len'){ var x=A[0]; if(typeof x==='string'||Array.isArray(x)) return x.length; throw new PyErr(e.line,'len( ) 은 글자나 목록의 길이를 잽니다.'); }
+  if(name==='str') return pyStr(A[0]);
+  if(name==='int'){ var y=A[0]; if(isNumV(y)) return Math.trunc(toNum(y)); var p=parseInt(y,10); if(isNaN(p)) throw new PyErr(e.line,'숫자로 바꿀 수 없습니다.'); return p; }
+  if(name==='bool') return truthy(A[0]);
+  if(name==='abs') return Math.abs(toNum(A[0]));
+  if(name==='min') return Math.min.apply(null,(A.length===1&&Array.isArray(A[0])?A[0]:A).map(toNum));
+  if(name==='max') return Math.max.apply(null,(A.length===1&&Array.isArray(A[0])?A[0]:A).map(toNum));
+
+  var fn=ctx.funcs[name];
+  if(fn){
+    if(A.length!==fn.params.length)
+      throw new PyErr(e.line,"'"+name+"' 는 값을 "+fn.params.length+"개 받는데 "+A.length+"개를 넣었습니다.");
+    if(++ctx.depth>120){ ctx.depth--; throw new PyErr(e.line,'함수가 자기 자신을 너무 깊게 부르고 있습니다.'); }
+    var scope={},i;
+    for(i=0;i<fn.params.length;i++) scope[fn.params[i]]=A[i];
+    var old=ctx.env; ctx.env=scope;
+    var ret=null;
+    try{ execBlock(fn.body,ctx); }
+    catch(er){ if(er instanceof RetSig) ret=er.v; else { ctx.env=old; ctx.depth--; throw er; } }
+    ctx.env=old; ctx.depth--;
+    return ret;
+  }
+  if(['sum','sorted','list','tuple','dict','set','input','round','pow','type','enumerate','zip','map','filter','reversed','any','all','ord','chr','float','format','repr','divmod','open','sqrt'].indexOf(name)>=0)
+    throw new PyErr(e.line,"'"+name+"( )' 는 파이썬에는 있지만 이 실습실에서는 지원하지 않습니다. 별찍기에는 쓰지 않아도 됩니다.");
+  throw new PyErr(e.line,"'"+name+"( )' 는 만든 적이 없는 함수입니다. def "+name+"( ) 로 먼저 만들었는지 보세요.");
+}
+
+/* ---------- 구조 분석 ---------- */
+function analyze(ast){
+  var info={prints:0,fors:0,whiles:0,ifs:0,strMul:0,usesN:false,assignsN:false,maxDepth:0,usesEnd:false,ranges:0,
+            defs:0,returns:0,calls:0,defNames:{}};
+  (function findDefs(body){
+    body.forEach(function(s){
+      if(s.type==='Def'){ info.defNames[s.name]=1; findDefs(s.body); }
+      else if(s.body) findDefs(s.body);
+      if(s.orelse) findDefs(s.orelse);
+    });
+  })(ast.body);
+  function ex(e,depth){
+    if(!e||typeof e!=='object') return;
+    switch(e.type){
+      case 'Name': if(e.name==='n') info.usesN=true; return;
+      case 'Bin':
+        if(e.op==='*' && (e.left.type==='Str'||e.right.type==='Str')) info.strMul++;
+        ex(e.left,depth); ex(e.right,depth); return;
+      case 'Bool': case 'Cmp': ex(e.left,depth); ex(e.right,depth); return;
+      case 'Chain': ex(e.first,depth); e.rest.forEach(function(x){ ex(x,depth); }); return;
+      case 'Neg': case 'Not': ex(e.value,depth); return;
+      case 'List': e.items.forEach(function(x){ ex(x,depth); }); return;
+      case 'Call':
+        if(e.name==='print'){ info.prints++; if(e.kw.end!==undefined) info.usesEnd=true; }
+        if(e.name==='range') info.ranges++;
+        if(info.defNames[e.name]) info.calls++;
+        e.args.forEach(function(x){ ex(x,depth); });
+        for(var k in e.kw) ex(e.kw[k],depth);
+        return;
+      case 'Method':
+        /* center/rjust 로 정렬하는 것도 '공백으로 미는' 방법이므로 같게 본다 */
+        if(['center','ljust','rjust'].indexOf(e.name)>=0) info.strMul++;
+        ex(e.obj,depth); e.args.forEach(function(x){ ex(x,depth); });
+        return;
+    }
+  }
+  function st(s,depth){
+    switch(s.type){
+      case 'Assign': if(s.name==='n') info.assignsN=true; ex(s.value,depth); return;
+      case 'Expr': ex(s.value,depth); return;
+      case 'For':
+        info.fors++; var d=depth+1; if(d>info.maxDepth) info.maxDepth=d;
+        ex(s.iter,depth); s.body.forEach(function(x){ st(x,d); }); return;
+      case 'While':
+        info.whiles++; var d2=depth+1; if(d2>info.maxDepth) info.maxDepth=d2;
+        ex(s.test,depth); s.body.forEach(function(x){ st(x,d2); }); return;
+      case 'If':
+        info.ifs++; ex(s.test,depth);
+        s.body.forEach(function(x){ st(x,depth); });
+        (s.orelse||[]).forEach(function(x){ st(x,depth); }); return;
+      case 'Def':
+        info.defs++; s.body.forEach(function(x){ st(x,depth); }); return;
+      case 'Return':
+        info.returns++; ex(s.value,depth); return;
+    }
+  }
+  ast.body.forEach(function(s){ st(s,0); });
+  return info;
+}
+/* ==================================================================
+   1-B. 식 X-ray — 식이 한 단계씩 계산되어 무너지는 과정을 만든다
+   ================================================================== */
+var PREC={'or':1,'and':2,'+':4,'-':4,'*':5,'/':5,'//':5,'%':5,'**':6};
+function precOf(n){
+  if(n.type==='Bin') return PREC[n.op]||6;
+  if(n.type==='Cmp'||n.type==='Chain') return 3;
+  if(n.type==='Bool') return n.op==='or'?1:2;
+  return 9;
+}
+function up(n){
+  if(!n) return '';
+  switch(n.type){
+    case 'Num': return String(n.value);
+    case 'Str': return "'"+n.value.replace(/ /g,'·')+"'";
+    case 'Name': return n.name;
+    case 'Bool0': return n.value?'True':'False';
+    case 'None': return 'None';
+    case 'Neg': return '-'+wrapU(n.value,n,false);
+    case 'Not': return 'not '+up(n.value);
+    case 'Bin': return wrapU(n.left,n,false)+' '+n.op+' '+wrapU(n.right,n,true);
+    case 'Cmp': case 'Bool': return wrapU(n.left,n,false)+' '+n.op+' '+wrapU(n.right,n,true);
+    case 'Chain': return up(n.first)+n.ops.map(function(o,i){ return ' '+o+' '+up(n.rest[i]); }).join('');
+    case 'Call': return n.name+'('+n.args.map(up).join(', ')+')';
+    case 'Method': return up(n.obj)+'.'+n.name+'('+n.args.map(up).join(', ')+')';
+    case 'List': return '['+n.items.map(up).join(', ')+']';
+  }
+  return '?';
+}
+function wrapU(child,parent,isRight){
+  if(!child) return '';
+  var s=up(child), pc=precOf(child), pp=precOf(parent);
+  if(pc<pp || (pc===pp && isRight && child.type==='Bin')) return '('+s+')';
+  return s;
+}
+function isLit(n){ return n && (n.type==='Num'||n.type==='Str'); }
+function litOf(v){ return typeof v==='string'?{type:'Str',value:v}:{type:'Num',value:v}; }
+
+/* 한 번에 하나의 '가장 안쪽' 계산만 수행한다. 그래야 단계가 눈에 보인다. */
+function reduceOnce(n){
+  if(!n||typeof n!=='object') return {node:n,ch:false};
+  if(n.type==='Bin'){
+    var L=reduceOnce(n.left), R=reduceOnce(n.right);
+    n.left=L.node; n.right=R.node;
+    if(L.ch||R.ch) return {node:n,ch:true};
+    if(isLit(n.left)&&isLit(n.right)){
+      try{ return {node:litOf(binOp({op:n.op,line:0},n.left.value,n.right.value)),ch:true}; }catch(err){}
+    }
+    return {node:n,ch:false};
+  }
+  if(n.type==='Neg'){
+    var V=reduceOnce(n.value); n.value=V.node;
+    if(V.ch) return {node:n,ch:true};
+    if(isLit(n.value)&&typeof n.value.value==='number') return {node:litOf(-n.value.value),ch:true};
+  }
+  /* 함수에 넘기는 값도 한 단계씩 계산해서 보여준다: row(4 - 1 - 3, 2 * 3 + 1) → row(0, 7) */
+  if((n.type==='Call'||n.type==='Method')&&n.args){
+    if(n.type==='Method'){
+      var O=reduceOnce(n.obj); n.obj=O.node;
+      if(O.ch) return {node:n,ch:true};
+    }
+    for(var i=0;i<n.args.length;i++){
+      var A=reduceOnce(n.args[i]); n.args[i]=A.node;
+      if(A.ch) return {node:n,ch:true};
+    }
+  }
+  return {node:n,ch:false};
+}
+function xray(node,vars){
+  if(!node) return [];
+  var cur=JSON.parse(JSON.stringify(node)), steps=[up(cur)], subbed=false;
+  (function sub(n){
+    if(!n||typeof n!=='object') return;
+    ['left','right','value'].forEach(function(k){
+      if(!n[k]||typeof n[k]!=='object') return;
+      if(n[k].type==='Name'&&(n[k].name in vars)){ n[k]=litOf(vars[n[k].name]); subbed=true; }
+      else sub(n[k]);
+    });
+    if(n.args) n.args.forEach(function(a,i){
+      if(a.type==='Name'&&(a.name in vars)){ n.args[i]=litOf(vars[a.name]); subbed=true; }
+      else sub(a);
+    });
+  })(cur);
+  if(cur.type==='Name'&&(cur.name in vars)){ cur=litOf(vars[cur.name]); subbed=true; }
+  if(subbed) steps.push(up(cur));
+  for(var r=0;r<30;r++){
+    var res=reduceOnce(cur);
+    cur=res.node;
+    if(!res.ch) break;
+    steps.push(up(cur));
+  }
+  var out=[];
+  steps.forEach(function(s){ if(!out.length||out[out.length-1]!==s) out.push(s); });
+  return out;
+}
+
+/* ==================================================================
+   1-C. 오답 진단 — 뒤집기·밀기·한 칸 차이를 대입해 원인에 이름을 붙인다
+   ================================================================== */
+function eqL(a,b){ if(a.length!==b.length) return false; for(var i=0;i<a.length;i++) if(a[i]!==b[i]) return false; return true; }
+function maxW(L){ var m=0; L.forEach(function(l){ if(l.length>m) m=l.length; }); return m; }
+function rstripL(L){ return L.map(function(l){ return l.replace(/\s+$/,''); }); }
+function lead(l){ return l.length-l.replace(/^ +/,'').length; }
+function nstar(l){ return (l.match(/\*/g)||[]).length; }
+
+function diagnose(mine,want,lv,n){
+  if(!mine.length||!want.length) return null;
+  if(eqL(mine,want)) return null;
+
+  if(eqL(mine,want.slice().reverse()))
+    return '위아래가 뒤집혔습니다. i 를 쓰는 자리에 n - 1 - i 를 넣으면 순서가 뒤집힙니다.';
+
+  var w=Math.max(maxW(mine),maxW(want));
+  var flipped=rstripL(want.map(function(l){ return (l+rep(' ',w-l.length)).split('').reverse().join(''); }));
+  if(eqL(mine,flipped))
+    return '좌우가 뒤집혔습니다. 공백을 별 앞이 아니라 뒤에 붙이지 않았는지 보세요.';
+
+  /* 왼쪽 정렬 도형에서는 '왼쪽으로 밀림' 과 '별이 모자람' 이 같은 말이 된다.
+     그럴 때는 아래의 별 개수 진단이 더 도움이 되므로 여기서는 건너뛴다. */
+  var hasLead=false;
+  for(var q=0;q<want.length;q++) if(lead(want[q])>0){ hasLead=true; break; }
+  for(var k=1;k<=10;k++){
+    if(eqL(mine,want.map(function(l){ return rep(' ',k)+l; })))
+      return '모양 전체가 '+k+'칸 오른쪽으로 밀렸습니다. 앞 공백을 '+k+'개 줄이세요.';
+    if(hasLead && eqL(mine,rstripL(want.map(function(l){ return l.slice(k); }))))
+      return '모양 전체가 '+k+'칸 왼쪽으로 밀렸습니다. 앞 공백을 '+k+'개 더 붙이세요.';
+  }
+
+  if(mine.length===want.length-1){
+    if(eqL(mine,want.slice(0,-1))) return '마지막 줄이 빠졌습니다. range( ) 의 끝 값을 하나 늘려 보세요.';
+    if(eqL(mine,want.slice(1)))    return '첫 줄이 빠졌습니다. range( ) 의 시작 값을 확인하세요.';
+  }
+  if(mine.length===want.length+1){
+    if(eqL(mine.slice(0,-1),want)) return '줄이 하나 더 나왔습니다. range( ) 의 끝 값을 하나 줄여 보세요.';
+    if(eqL(mine.slice(1),want))    return '맨 위에 줄이 하나 더 붙었습니다. range( ) 의 시작 값을 확인하세요.';
+  }
+
+  if(mine.length===want.length){
+    var d=null, ok=true;
+    for(var i=0;i<mine.length;i++){
+      if(lead(mine[i])!==lead(want[i])){ ok=false; break; }
+      var diff=nstar(mine[i])-nstar(want[i]);
+      if(d===null) d=diff; else if(d!==diff){ ok=false; break; }
+    }
+    if(ok&&d)
+      return '모든 줄의 별이 '+Math.abs(d)+'개씩 '+(d<0?'모자랍니다':'많습니다')+
+             '. 별 개수 식을 '+(d<0?'+ '+Math.abs(d):'- '+d)+' 만큼 조정해 보세요.';
+
+    var flat=true;
+    for(i=1;i<mine.length;i++) if(mine[i]!==mine[0]){ flat=false; break; }
+    var wantFlat=true;
+    for(i=1;i<want.length;i++) if(want[i]!==want[0]){ wantFlat=false; break; }
+    if(flat&&!wantFlat)
+      return '모든 줄이 똑같이 나왔습니다. 줄마다 달라지려면 반복 변수 i 를 개수 계산에 넣어야 합니다.';
+  }
+
+  if(lv.usesN){
+    for(var v=lv.minN;v<=lv.maxN;v++){
+      if(v!==n && eqL(mine,norm(lv.target(v))))
+        return '이건 n = '+v+' 일 때의 모양입니다. 지금 n 은 '+n+' 입니다. 숫자를 고정해 쓰지 않았는지 보세요.';
+    }
+  }
+  return null;
+}
+
+/* ==================================================================
+   2. 레벨 정의 + 채점 엔진
+   ================================================================== */
+function rep(c,k){ return k>0?c.repeat(k):''; }
+function rows(k,f){ var a=[]; for(var i=0;i<k;i++) a.push(f(i)); return a.join('\n'); }
+
+var BADGES=[
+  {id:'print', name:'print 출력'},
+  {id:'strmul',name:'문자열 곱하기'},
+  {id:'for',   name:'for 반복'},
+  {id:'range', name:'range 범위'},
+  {id:'space', name:'공백 정렬'},
+  {id:'if',    name:'조건문'},
+  {id:'nest',  name:'중첩 반복'},
+  {id:'end',   name:"end='' 이어쓰기"},
+  {id:'def',   name:'함수 정의'},
+  {id:'param', name:'매개변수'},
+  {id:'return',name:'반환값'}
+];
+
+var LEVELS=[
+{ id:1, title:'별 하나', concept:'print',
+  goal:'별 한 개를 화면에 출력합니다.',
+  learn:'화면에 무언가를 내보낼 때는 <b>print</b> 를 씁니다. 글자는 반드시 따옴표로 감쌉니다.',
+  usesN:false, minN:1, maxN:1, defN:1,
+  target:function(){ return '*'; },
+  require:{}, par:1, badges:['print'],
+  hints:["print( ) 안에 넣은 것이 화면에 나옵니다.","별은 글자이므로 따옴표로 감쌉니다: '*'","print('*')"],
+  sol:"print('*')" },
+
+{ id:2, title:'가로 한 줄', concept:'문자열 곱하기',
+  goal:'별 n 개를 가로로 이어 한 줄에 출력합니다.',
+  learn:"글자에 숫자를 곱하면 그만큼 반복됩니다. <b>'*' * 5</b> 는 <b>*****</b> 가 됩니다.",
+  usesN:true, minN:1, maxN:15, defN:5,
+  target:function(n){ return rep('*',n); },
+  require:{maxPrints:1}, par:1, badges:['print','strmul'],
+  hints:["별을 n 번 반복하면 됩니다.","글자 × 숫자 로 반복할 수 있습니다.","print('*' * n)"],
+  sol:"print('*' * n)" },
+
+{ id:3, title:'세로 한 줄', concept:'for 반복',
+  goal:'별 한 개짜리 줄을 n 줄 출력합니다.',
+  learn:'<b>for i in range(n):</b> 은 아래 들여쓴 줄을 n 번 되풀이합니다. print 는 한 번 부를 때마다 줄이 하나 늘어납니다.',
+  usesN:true, minN:1, maxN:15, defN:5,
+  target:function(n){ return rows(n,function(){ return '*'; }); },
+  require:{minDepth:1}, par:2, badges:['for','range','print'],
+  hints:["같은 줄을 n 번 반복해야 합니다.","for 문 안에 print 를 넣으세요.","for i in range(n):\n    print('*')"],
+  sol:"for i in range(n):\n    print('*')" },
+
+{ id:4, title:'정사각형', concept:'반복 + 곱하기',
+  goal:'가로 n, 세로 n 인 꽉 찬 정사각형을 만듭니다.',
+  learn:'세로 반복은 <b>for</b>, 가로 반복은 <b>문자열 곱하기</b> 로 나눠 생각하면 쉽습니다.',
+  usesN:true, minN:1, maxN:15, defN:5, nestable:true,
+  target:function(n){ return rows(n,function(){ return rep('*',n); }); },
+  require:{minDepth:1}, par:2, badges:['for','range','strmul'],
+  hints:["줄 수도 n, 한 줄의 별 수도 n 입니다.","for 로 n 줄을 만들고, 각 줄은 '*' * n 입니다.","for i in range(n):\n    print('*' * n)"],
+  sol:"for i in range(n):\n    print('*' * n)" },
+
+{ id:5, title:'직각삼각형', concept:'반복 변수 활용',
+  goal:'첫 줄 1개, 다음 줄 2개… 마지막 줄 n 개인 삼각형을 만듭니다.',
+  learn:'<b>i</b> 는 0, 1, 2 … 로 늘어납니다. 줄마다 개수가 달라질 때 이 <b>i</b> 를 계산에 씁니다.',
+  usesN:true, minN:1, maxN:15, defN:5, nestable:true,
+  target:function(n){ return rows(n,function(i){ return rep('*',i+1); }); },
+  require:{minDepth:1}, par:2, badges:['for','range','strmul'],
+  hints:["i 가 0 일 때 별은 1개여야 합니다.","별 개수 = i + 1 입니다.","for i in range(n):\n    print('*' * (i + 1))"],
+  sol:"for i in range(n):\n    print('*' * (i + 1))" },
+
+{ id:6, title:'역직각삼각형', concept:'거꾸로 세기',
+  goal:'첫 줄 n 개에서 시작해 한 개씩 줄여 마지막 줄이 1개가 되게 합니다.',
+  learn:'늘어나는 <b>i</b> 로 줄어드는 수를 만들려면 <b>n - i</b> 처럼 빼면 됩니다.',
+  usesN:true, minN:1, maxN:15, defN:5, nestable:true,
+  target:function(n){ return rows(n,function(i){ return rep('*',n-i); }); },
+  require:{minDepth:1}, par:2, badges:['for','range','strmul'],
+  hints:["i 가 0 일 때 별은 n 개여야 합니다.","별 개수 = n - i 입니다.","for i in range(n):\n    print('*' * (n - i))"],
+  sol:"for i in range(n):\n    print('*' * (n - i))" },
+
+{ id:7, title:'오른쪽 정렬 삼각형', concept:'공백으로 밀기',
+  goal:'삼각형을 오른쪽에 붙입니다. 왼쪽은 공백으로 채웁니다.',
+  learn:"모양을 오른쪽으로 밀 때는 앞에 <b>' ' * 개수</b> 를 붙입니다. 공백도 글자라서 똑같이 곱할 수 있습니다.",
+  usesN:true, minN:1, maxN:15, defN:5, nestable:true,
+  target:function(n){ return rows(n,function(i){ return rep(' ',n-1-i)+rep('*',i+1); }); },
+  require:{minDepth:1}, par:2, badges:['for','space','strmul'],
+  hints:["한 줄의 전체 길이는 항상 n 입니다.","공백 = n - 1 - i, 별 = i + 1 입니다.","for i in range(n):\n    print(' ' * (n - 1 - i) + '*' * (i + 1))"],
+  sol:"for i in range(n):\n    print(' ' * (n - 1 - i) + '*' * (i + 1))" },
+
+{ id:8, title:'오른쪽 정렬 역삼각형', concept:'공백 + 거꾸로',
+  goal:'오른쪽에 붙은 채로 별이 한 개씩 줄어드는 삼각형을 만듭니다.',
+  learn:'공백과 별의 개수를 각각 따로 식으로 세우면, 두 식의 합이 항상 n 이 됩니다.',
+  usesN:true, minN:1, maxN:15, defN:5, nestable:true,
+  target:function(n){ return rows(n,function(i){ return rep(' ',i)+rep('*',n-i); }); },
+  require:{minDepth:1}, par:2, badges:['for','space','strmul'],
+  hints:["공백이 0개에서 한 개씩 늘어납니다.","공백 = i, 별 = n - i 입니다.","for i in range(n):\n    print(' ' * i + '*' * (n - i))"],
+  sol:"for i in range(n):\n    print(' ' * i + '*' * (n - i))" },
+
+{ id:9, title:'피라미드', concept:'가운데 정렬',
+  goal:'가운데를 기준으로 좌우 대칭인 삼각형을 만듭니다.',
+  learn:'가운데 정렬은 <b>홀수 개의 별</b>이 핵심입니다. 별 개수는 1, 3, 5 … 즉 <b>2 × i + 1</b> 입니다.',
+  usesN:true, minN:1, maxN:12, defN:5, nestable:true,
+  target:function(n){ return rows(n,function(i){ return rep(' ',n-1-i)+rep('*',2*i+1); }); },
+  require:{minDepth:1}, par:2, badges:['for','space','strmul'],
+  hints:["별 개수가 1, 3, 5, 7 로 늘어납니다.","공백 = n - 1 - i, 별 = 2 * i + 1 입니다.","for i in range(n):\n    print(' ' * (n - 1 - i) + '*' * (2 * i + 1))"],
+  sol:"for i in range(n):\n    print(' ' * (n - 1 - i) + '*' * (2 * i + 1))" },
+
+{ id:10, title:'역피라미드', concept:'대칭 뒤집기',
+  goal:'피라미드를 위아래로 뒤집은 모양을 만듭니다.',
+  learn:'피라미드 식에서 <b>i</b> 자리에 <b>n - 1 - i</b> 를 넣으면 위아래가 뒤집힙니다.',
+  usesN:true, minN:1, maxN:12, defN:5, nestable:true,
+  target:function(n){ return rows(n,function(i){ return rep(' ',i)+rep('*',2*(n-i)-1); }); },
+  require:{minDepth:1}, par:2, badges:['for','space','strmul'],
+  hints:["첫 줄이 가장 넓고 마지막 줄이 별 1개입니다.","공백 = i, 별 = 2 * (n - i) - 1 입니다.","for i in range(n):\n    print(' ' * i + '*' * (2 * (n - i) - 1))"],
+  sol:"for i in range(n):\n    print(' ' * i + '*' * (2 * (n - i) - 1))" },
+
+{ id:11, title:'다이아몬드', concept:'반복문 두 번',
+  goal:'피라미드 아래에 역피라미드를 붙여 마름모를 만듭니다. 가운데 줄은 한 번만 나옵니다.',
+  learn:'하나의 그림이 두 부분으로 나뉘면 <b>for 문을 두 번</b> 쓰면 됩니다. 두 번째는 <b>range(n - 2, -1, -1)</b> 로 거꾸로 셉니다.',
+  usesN:true, minN:1, maxN:10, defN:5,
+  target:function(n){ var a=[],i; for(i=0;i<n;i++) a.push(rep(' ',n-1-i)+rep('*',2*i+1)); for(i=n-2;i>=0;i--) a.push(rep(' ',n-1-i)+rep('*',2*i+1)); return a.join('\n'); },
+  require:{minDepth:1}, par:4, badges:['for','space','strmul','range'],
+  hints:["윗부분은 9레벨 피라미드와 똑같습니다.","아랫부분은 가운데 줄을 빼고 거꾸로 반복합니다.","두 번째 반복: for i in range(n - 2, -1, -1)"],
+  sol:"for i in range(n):\n    print(' ' * (n - 1 - i) + '*' * (2 * i + 1))\nfor i in range(n - 2, -1, -1):\n    print(' ' * (n - 1 - i) + '*' * (2 * i + 1))" },
+
+{ id:12, title:'속 빈 사각형', concept:'조건문',
+  goal:'테두리만 별로 채우고 안쪽은 비운 정사각형을 만듭니다.',
+  learn:'줄마다 다르게 행동해야 하면 <b>if</b> 로 나눕니다. 첫 줄과 마지막 줄만 꽉 채우고, 나머지는 양 끝에만 별을 둡니다.',
+  usesN:true, minN:2, maxN:15, defN:6,
+  target:function(n){ return rows(n,function(i){ return (i===0||i===n-1)?rep('*',n):('*'+rep(' ',n-2)+'*'); }); },
+  require:{minDepth:1,requiresIf:true}, par:5, badges:['for','if','space','strmul'],
+  hints:["첫 줄과 마지막 줄은 꽉 찬 줄입니다.","가운데 줄은 별, 공백 여러 개, 별 순서입니다.","if i == 0 or i == n - 1: 로 나누세요."],
+  sol:"for i in range(n):\n    if i == 0 or i == n - 1:\n        print('*' * n)\n    else:\n        print('*' + ' ' * (n - 2) + '*')" },
+
+{ id:13, title:'속 빈 삼각형', concept:'조건 세 갈래',
+  goal:'직각삼각형의 테두리만 남깁니다.',
+  learn:'조건이 셋 이상이면 <b>if — elif — else</b> 로 이어 붙입니다. 위에서부터 차례로 검사해 처음 맞는 것 하나만 실행됩니다.',
+  usesN:true, minN:2, maxN:15, defN:6,
+  target:function(n){ return rows(n,function(i){ return i===n-1?rep('*',n):(i===0?'*':('*'+rep(' ',i-1)+'*')); }); },
+  require:{minDepth:1,requiresIf:true}, par:7, badges:['for','if','space','strmul'],
+  hints:["맨 아랫줄만 꽉 찬 줄입니다.","맨 윗줄은 별 1개뿐입니다.","가운데 줄: '*' + ' ' * (i - 1) + '*'"],
+  sol:"for i in range(n):\n    if i == n - 1:\n        print('*' * n)\n    elif i == 0:\n        print('*')\n    else:\n        print('*' + ' ' * (i - 1) + '*')" },
+
+{ id:14, title:'모래시계', concept:'대칭 조합',
+  goal:'역피라미드 아래에 피라미드를 붙여 모래시계를 만듭니다.',
+  learn:'다이아몬드와 순서만 반대입니다. 넓은 쪽에서 좁아졌다가 다시 넓어집니다.',
+  usesN:true, minN:2, maxN:10, defN:5,
+  target:function(n){ var a=[],i; for(i=0;i<n;i++) a.push(rep(' ',i)+rep('*',2*(n-i)-1)); for(i=n-2;i>=0;i--) a.push(rep(' ',i)+rep('*',2*(n-i)-1)); return a.join('\n'); },
+  require:{minDepth:1}, par:4, badges:['for','space','strmul','range'],
+  hints:["윗부분은 10레벨 역피라미드와 같습니다.","아랫부분은 그것을 거꾸로 반복한 것입니다.","두 번째 반복: for i in range(n - 2, -1, -1)"],
+  sol:"for i in range(n):\n    print(' ' * i + '*' * (2 * (n - i) - 1))\nfor i in range(n - 2, -1, -1):\n    print(' ' * i + '*' * (2 * (n - i) - 1))" },
+
+{ id:15, title:'속 빈 다이아몬드', concept:'모든 개념 종합',
+  goal:'마름모의 테두리만 남깁니다. 지금까지 배운 것을 모두 씁니다.',
+  learn:'변수에 중간 계산을 담아 두면 식이 훨씬 읽기 쉬워집니다. <b>w = 2 * i + 1</b> 처럼 이름을 붙여 보세요.',
+  usesN:true, minN:2, maxN:10, defN:5,
+  target:function(n){
+    var a=[],i;
+    function row(i){ var w=2*i+1, lead=rep(' ',n-1-i); return lead+(w===1?'*':('*'+rep(' ',w-2)+'*')); }
+    for(i=0;i<n;i++) a.push(row(i));
+    for(i=n-2;i>=0;i--) a.push(row(i));
+    return a.join('\n');
+  },
+  require:{minDepth:1,requiresIf:true}, par:13, badges:['for','if','space','strmul','range'],
+  hints:["다이아몬드에서 안쪽 별만 공백으로 바꾼 모양입니다.","한 줄의 별 개수 w 가 1 이면 별 하나, 아니면 양 끝에만 별입니다.","w = 2 * i + 1 을 먼저 변수에 담아 두세요."],
+  sol:"for i in range(n):\n    w = 2 * i + 1\n    if w == 1:\n        print(' ' * (n - 1 - i) + '*')\n    else:\n        print(' ' * (n - 1 - i) + '*' + ' ' * (w - 2) + '*')\nfor i in range(n - 2, -1, -1):\n    w = 2 * i + 1\n    if w == 1:\n        print(' ' * (n - 1 - i) + '*')\n    else:\n        print(' ' * (n - 1 - i) + '*' + ' ' * (w - 2) + '*')" },
+
+{ id:16, title:'X자 모양', concept:'중첩 반복 + 조건',
+  goal:'대각선 두 개가 엇갈리는 X자를 만듭니다. 지금까지와 달리 한 줄 안에서도 별과 공백이 번갈아 나옵니다.',
+  learn:'이 모양은 문자열 곱하기로 한 번에 만들 수 없습니다. 칸을 <b>하나하나</b> 돌면서 별을 놓을지 말지 정해야 합니다. 세로줄은 <b>i</b>, 가로칸은 <b>j</b> 로 돌고, 칸마다 <b>print(\'*\', end=\'\')</b> 로 이어 붙인 뒤 한 줄이 끝나면 빈 <b>print( )</b> 로 줄을 바꿉니다.',
+  usesN:true, minN:3, maxN:15, defN:5,
+  target:function(n){
+    return rows(n,function(i){
+      var s='';
+      for(var j=0;j<n;j++) s+=(j===i||j===n-1-i)?'*':' ';
+      return s.replace(/ +$/,'');
+    });
+  },
+  require:{minDepth:2,requiresIf:true}, par:7, badges:['for','nest','if','end','range'],
+  hints:["세로 i, 가로 j 로 n × n 칸을 모두 돌아 보세요.","왼쪽 위에서 내려오는 대각선은 j 와 i 가 같은 칸입니다.","오른쪽 위에서 내려오는 대각선은 j + i 가 n - 1 인 칸, 즉 j == n - 1 - i 입니다."],
+  sol:"for i in range(n):\n    for j in range(n):\n        if j == i or j == n - 1 - i:\n            print('*', end='')\n        else:\n            print(' ', end='')\n    print()" },
+
+/* ---------- 함수 트랙 ---------- */
+{ id:17, title:'함수 만들기', concept:'def',
+  goal:'별 2개, 4개, 6개짜리 줄을 차례로 출력합니다. 단, print 는 딱 한 번만 씁니다.',
+  learn:'<b>def 이름(값):</b> 으로 나만의 명령을 만들 수 있습니다. 만들어 두면 <b>이름(값)</b> 으로 몇 번이든 다시 부를 수 있습니다. 같은 일을 여러 번 할 때 코드를 베껴 쓰지 않아도 됩니다.',
+  usesN:false, minN:1, maxN:1, defN:1,
+  target:function(){ return '**\n****\n******'; },
+  require:{requiresDef:1,minCalls:3,maxPrints:1}, par:5, badges:['def','param','print'],
+  hints:["별을 k 개 찍는 명령을 하나 만들어 두세요.","def line(k): 안에 print('*' * k) 를 넣습니다.","만든 뒤 line(2), line(4), line(6) 을 차례로 부릅니다."],
+  sol:"def line(k):\n    print('*' * k)\n\nline(2)\nline(4)\nline(6)" },
+
+{ id:18, title:'함수로 삼각형', concept:'함수 안의 반복',
+  goal:'크기 3 삼각형과 크기 5 삼각형을 이어서 출력합니다.',
+  learn:'함수 안에 반복문을 통째로 넣을 수 있습니다. 한 번 만들어 두면 크기만 바꿔 가며 몇 번이든 부를 수 있습니다. 이것이 함수를 쓰는 진짜 이유입니다.',
+  usesN:false, minN:1, maxN:1, defN:1,
+  target:function(){
+    var a=[],i;
+    for(i=0;i<3;i++) a.push(rep('*',i+1));
+    for(i=0;i<5;i++) a.push(rep('*',i+1));
+    return a.join('\n');
+  },
+  require:{requiresDef:1,minCalls:2,minDepth:1}, par:5, badges:['def','param','for','range'],
+  hints:["5레벨 직각삼각형 코드를 함수 안에 넣으면 됩니다.","def tri(k): 안에서 for i in range(k): 를 돕니다.","tri(3) 과 tri(5) 를 차례로 부릅니다."],
+  sol:"def tri(k):\n    for i in range(k):\n        print('*' * (i + 1))\n\ntri(3)\ntri(5)" },
+
+{ id:19, title:'값을 두 개 받기', concept:'매개변수',
+  goal:'공백 수와 별 수를 받아 한 줄을 그리는 함수를 만들고, 그것으로 피라미드를 쌓습니다.',
+  learn:'값을 여러 개 받으려면 <b>def row(a, b):</b> 처럼 쉼표로 나눕니다. 부를 때도 <b>row(2, 5)</b> 처럼 같은 순서로 넣습니다. 어떤 도형이든 결국 이 한 줄 함수의 반복입니다.',
+  usesN:true, minN:1, maxN:10, defN:5,
+  target:function(n){ return rows(n,function(i){ return rep(' ',n-1-i)+rep('*',2*i+1); }); },
+  require:{requiresDef:1,minCalls:1,minDepth:1}, par:4, badges:['def','param','for','space'],
+  hints:["한 줄을 그리는 함수부터 만드세요: def row(a, b):","함수 안은 print(' ' * a + '*' * b) 한 줄이면 됩니다.","반복문에서 row(n - 1 - i, 2 * i + 1) 을 부릅니다."],
+  sol:"def row(a, b):\n    print(' ' * a + '*' * b)\n\nfor i in range(n):\n    row(n - 1 - i, 2 * i + 1)" },
+
+{ id:20, title:'값을 돌려주기', concept:'return',
+  goal:'글자를 만들어 돌려주는 함수로 다이아몬드를 만듭니다.',
+  learn:'<b>return</b> 은 함수가 계산한 값을 밖으로 돌려줍니다. 함수가 직접 출력하지 않고 글자만 돌려주면, 그 값을 print 하든 이어 붙이든 마음대로 쓸 수 있어 훨씬 쓸모가 많아집니다.',
+  usesN:true, minN:1, maxN:8, defN:4,
+  target:function(n){ var a=[],i; for(i=0;i<n;i++) a.push(rep(' ',n-1-i)+rep('*',2*i+1)); for(i=n-2;i>=0;i--) a.push(rep(' ',n-1-i)+rep('*',2*i+1)); return a.join('\n'); },
+  require:{requiresDef:1,requiresReturn:true,minCalls:1}, par:6, badges:['def','param','return','range'],
+  hints:["함수 안에서 print 하지 말고 return 으로 글자를 돌려주세요.","def row(a, b): 안에 return ' ' * a + '*' * b","부를 때는 print(row(...)) 처럼 감싸서 출력합니다."],
+  sol:"def row(a, b):\n    return ' ' * a + '*' * b\n\nfor i in range(n):\n    print(row(n - 1 - i, 2 * i + 1))\nfor i in range(n - 2, -1, -1):\n    print(row(n - 1 - i, 2 * i + 1))" }
+];
+
+/* ---------- 출력 비교 ---------- */
+function norm(t){
+  var L=String(t==null?'':t).split('\n').map(function(l){ return l.replace(/[ \t]+$/,''); });
+  while(L.length && L[L.length-1]==='') L.pop();
+  return L;
+}
+function sameOut(a,b){
+  var A=norm(a),B=norm(b);
+  if(A.length!==B.length) return false;
+  for(var i=0;i<A.length;i++) if(A[i]!==B[i]) return false;
+  return true;
+}
+function firstDiff(mine,want){
+  var A=norm(mine),B=norm(want);
+  var k=Math.max(A.length,B.length);
+  for(var r=0;r<k;r++){
+    var a=A[r]===undefined?null:A[r], b=B[r]===undefined?null:B[r];
+    if(a===null) return {row:r,col:0,msg:(r+1)+'번째 줄이 아예 없습니다. 줄이 '+B.length+'줄 나와야 합니다.'};
+    if(b===null) return {row:r,col:0,msg:(r+1)+'번째 줄은 없어야 합니다. 줄이 '+B.length+'줄만 나와야 합니다.'};
+    if(a!==b){
+      var c=0; while(c<a.length&&c<b.length&&a[c]===b[c]) c++;
+      var want1=b[c]===undefined?'아무것도 없어야':(b[c]==='*'?'별이':'공백이');
+      var got1 =a[c]===undefined?'아무것도 없습니다':(a[c]==='*'?'별입니다':'공백입니다');
+      return {row:r,col:c,msg:(r+1)+'번째 줄 '+(c+1)+'번째 칸부터 다릅니다. '+want1+' 할 자리인데 '+got1+'.'};
+    }
+  }
+  return null;
+}
+
+/* ---------- 채점 ---------- */
+function grade(code,lv,n,nested){
+  var res={ok:false,stars:0,checks:[],out:'',trace:[],seg:[],total:0,err:null,info:null,diag:null};
+  var ast;
+  try{ ast=parse(code); }
+  catch(e){ res.err=(e instanceof PyErr)?e:new PyErr(0,'코드를 읽을 수 없습니다.'); return res; }
+  if(!ast.body.length){ res.err=null; res.checks=null; return res; }
+
+  var info=analyze(ast); res.info=info;
+  try{ var r=execute(ast,n); res.out=r.text; res.trace=r.trace; res.seg=r.seg; res.total=r.total; }
+  catch(e){ res.err=(e instanceof PyErr)?e:new PyErr(0,'실행 중 문제가 생겼습니다.'); return res; }
+
+  var want=lv.target(n);
+
+  // 1. 출력 일치
+  var c1=sameOut(res.out,want);
+  var d=c1?null:firstDiff(res.out,want);
+  res.checks.push({k:'출력 일치',pass:c1,msg:c1?'목표 모양과 완전히 같습니다.':(d?d.msg:'모양이 다릅니다.')});
+  if(!c1) res.diag=diagnose(norm(res.out),norm(want),lv,n);
+
+  // 2. 일반화
+  var g={pass:true,msg:''};
+  if(!lv.usesN){ g.msg='이 레벨은 크기가 고정이라 자동 통과입니다.'; }
+  else{
+    var tests=[], cand=[lv.minN,3,4,7,Math.min(lv.maxN,12)];
+    for(var q=0;q<cand.length;q++){
+      var v=cand[q];
+      if(v>=lv.minN && v<=lv.maxN && v!==n && tests.indexOf(v)<0) tests.push(v);
+    }
+    tests=tests.slice(0,4);
+    var failN=[];
+    for(var q2=0;q2<tests.length;q2++){
+      var tv=tests[q2];
+      try{
+        var rr=execute(ast,tv);
+        if(!sameOut(rr.text,lv.target(tv))) failN.push(tv);
+      }catch(e){ failN.push(tv); }
+    }
+    if(!c1){ g.pass=false; g.msg='먼저 지금 크기부터 맞춰 주세요.'; }
+    else if(failN.length){
+      g.pass=false;
+      g.msg='n = '+failN.join(', ')+' 에서 무너집니다. '+(info.assignsN?'코드 안에서 n 을 직접 정했기 때문입니다. 그 줄을 지우세요.':(info.usesN?'개수를 n 으로 계산했는지 다시 보세요.':'개수를 숫자로 고정하지 말고 n 으로 계산하세요.'));
+    } else g.msg='n = '+tests.join(', ')+' 에서도 모두 맞습니다.';
+  }
+  res.checks.push({k:'일반화',pass:g.pass,msg:g.msg});
+
+  // 3. 구조 요구
+  var req=nested?{minDepth:2,forbidStrMul:true}:(lv.require||{});
+  var f=[];
+  if(req.minDepth && info.maxDepth<req.minDepth) f.push(req.minDepth>=2?'반복문 안에 반복문을 한 번 더 넣어야 합니다.':'반복문(for)을 사용해야 합니다.');
+  if(req.maxPrints && info.prints>req.maxPrints) f.push('print 는 '+req.maxPrints+'번만 쓸 수 있습니다. 지금은 '+info.prints+'번입니다.');
+  if(req.requiresIf && !info.ifs) f.push('조건문(if)을 사용해야 합니다.');
+  if(req.forbidStrMul && info.strMul) f.push("문자열 곱하기를 쓰지 않고, 반복문과 print('*', end='') 만으로 만들어야 합니다.");
+  if(req.requiresDef && info.defs<req.requiresDef) f.push('def 로 함수를 '+req.requiresDef+'개 만들어야 합니다.');
+  if(req.minCalls && info.calls<req.minCalls) f.push('만든 함수를 '+req.minCalls+'번 이상 불러야 합니다. 지금은 '+info.calls+'번입니다.');
+  if(req.requiresReturn && !info.returns) f.push('함수 안에서 print 하지 말고 return 으로 값을 돌려줘야 합니다.');
+  var reqTxt=[];
+  if(req.minDepth) reqTxt.push(req.minDepth>=2?'중첩 반복':'반복문');
+  if(req.maxPrints) reqTxt.push('print '+req.maxPrints+'번');
+  if(req.requiresIf) reqTxt.push('조건문');
+  if(req.forbidStrMul) reqTxt.push('문자열 곱하기 금지');
+  if(req.requiresDef) reqTxt.push('함수 정의');
+  if(req.minCalls) reqTxt.push('호출 '+req.minCalls+'번');
+  if(req.requiresReturn) reqTxt.push('return');
+  res.checks.push({k:'구조 요구',pass:f.length===0,
+    msg:f.length?f.join(' '):(reqTxt.length?'요구 조건('+reqTxt.join(', ')+')을 만족합니다.':'특별한 조건이 없는 레벨입니다.')});
+
+  // 4. 간결성 (참고용)
+  var used=code.split('\n').filter(function(l){ var t=l.trim(); return t&&t[0]!=='#'; }).length;
+  var par=nested?(lv.par+2):lv.par;
+  res.checks.push({k:'간결성',info:true,pass:used<=par+2,
+    msg:'내 코드 '+used+'줄 · 모범 답안 '+par+'줄'+(used>par+2?' — 더 짧게 줄일 수 있습니다.':(used<par?' — 아주 간결합니다.':' — 적당합니다.'))});
+
+  res.ok=c1;
+  res.stars = c1 ? (g.pass ? (f.length===0?3:2) : 1) : 0;
+  return res;
+}
+/* ==================================================================
+   3. 상태 · 조립 에디터 · 그리드 렌더링
+   ================================================================== */
+var $=function(s){ return document.querySelector(s); };
+var SAVE='spl.v1';
+var S={ tab:'solve', lvi:0, mode:'build', code:'', n:5, sel:0, nested:false,
+        textView:false, undo:[], custom:null };
+var DB={ stars:{}, badges:{}, code:{} };
+
+try{ var raw=localStorage.getItem(SAVE); if(raw){ var o=JSON.parse(raw); DB.stars=o.stars||{}; DB.badges=o.badges||{}; DB.code=o.code||{}; DB.skin=o.skin||'dark'; } }catch(e){}
+function save(){ try{ localStorage.setItem(SAVE,JSON.stringify(DB)); }catch(e){} }
+
+function LV(){ return S.custom || LEVELS[S.lvi]; }
+function key(){ return S.custom ? 'custom' : ('L'+LV().id); }
+
+function setCode(t,noUndo){
+  if(!noUndo){ S.undo.push(S.code); if(S.undo.length>60) S.undo.shift(); }
+  S.code=t;
+  DB.code[key()]=t; save();
+  render();
+}
+
+/* 어떤 낱말이 어느 카테고리인지 — 팔레트·코드·사전이 공유한다 */
+var CATOF={
+  print:'c-out', len:'c-out', str:'c-out', int:'c-out', abs:'c-out', min:'c-out', max:'c-out',
+  'for':'c-loop', 'in':'c-loop', range:'c-loop', 'while':'c-loop', 'break':'c-loop', 'continue':'c-loop',
+  'if':'c-cond', elif:'c-cond', 'else':'c-cond', and:'c-cond', or:'c-cond', not:'c-cond',
+  True:'c-cond', False:'c-cond', None:'c-cond',
+  def:'c-func', 'return':'c-func'
+};
+var ARITH=['+','-','*','/','//','%','==','!=','<','>','<=','>='];
+
+/* ---------- 표시용 줄 토크나이저 ---------- */
+function lineToks(line){
+  var out=[], i=0;
+  while(i<line.length){
+    var c=line[i], s=i;
+    if(c===' '){ while(i<line.length&&line[i]===' ') i++; out.push({t:'ws',x:line.slice(s,i),s:s,e:i}); continue; }
+    if(c==='#'){ out.push({t:'cmt',x:line.slice(i),s:s,e:line.length}); break; }
+    if(c==="'"||c==='"'){ var q=c; i++; while(i<line.length&&line[i]!==q) i++; i=Math.min(i+1,line.length); out.push({t:'str',x:line.slice(s,i),s:s,e:i}); continue; }
+    if(c>='0'&&c<='9'){ while(i<line.length&&line[i]>='0'&&line[i]<='9') i++; out.push({t:'num',x:line.slice(s,i),s:s,e:i}); continue; }
+    if(/[A-Za-z_가-힣]/.test(c)){
+      while(i<line.length&&/[A-Za-z0-9_가-힣]/.test(line[i])) i++;
+      var w=line.slice(s,i);
+      out.push({t:KW.has(w)?'kw':(BUILTIN.has(w)?'fn':'name'),c:CATOF[w]||'',x:w,s:s,e:i}); continue;
+    }
+    var two=line.substr(i,2);
+    if(OPS2.indexOf(two)>=0) i+=2; else i++;
+    var sym=line.slice(s,i);
+    /* 계산·비교 기호만 연산자 색을 준다. 괄호·쉼표·콜론은 그대로 둔다 */
+    out.push({t:'op',c:ARITH.indexOf(sym)>=0?'c-op':'',x:sym,s:s,e:i});
+  }
+  return out;
+}
+
+/* ---------- 팔레트 ---------- */
+var PAL=[
+ {lab:'출력', cc:'--c-out', items:[
+   {c:"print('*')"},{c:"print('*' * n)"},{c:"print(' ' * n + '*' * n)"},
+   {c:"print('*', end='')"},{c:"print()"} ]},
+ {lab:'반복', cc:'--c-loop', items:[
+   {c:"for i in range(n):"},{c:"for j in range(n):"},
+   {c:"for i in range(1, n + 1):"},{c:"for i in range(n - 2, -1, -1):"} ]},
+ {lab:'조건', cc:'--c-cond', items:[
+   {c:"if i == 0:"},{c:"elif i == n - 1:"},{c:"else:"} ]},
+ {lab:'변수', cc:'--c-var', items:[
+   {c:"w = 2 * i + 1"},{c:"s = ''"},{c:"k = 0"} ]},
+ {lab:'함수', cc:'--c-func', items:[
+   {c:"def line(k):"},{c:"def row(a, b):"},
+   {c:"return ' ' * a + '*' * b"},{c:"line(3)"},{c:"row(2, 5)"} ]}
+];
+
+function buildPal(){
+  var p=$('#pal'); p.innerHTML='';
+  PAL.forEach(function(g){
+    var row=document.createElement('div'); row.className='palrow';
+    row.style.setProperty('--cc','var('+g.cc+')');
+    var l=document.createElement('div'); l.className='pallab'; l.textContent=g.lab; row.appendChild(l);
+    var box=document.createElement('div'); box.className='palchips';
+    g.items.forEach(function(it){
+      var b=document.createElement('button'); b.className='chip'; b.textContent=it.c;
+      b.onclick=function(){ insertStmt(it.c); };
+      box.appendChild(b);
+    });
+    row.appendChild(box); p.appendChild(row);
+  });
+}
+
+/* ---------- 낱말 사전 ---------- */
+var DICT=[
+{ g:'출력', t:'print', cc:'--c-out', w:'화면에 내보내기',
+  d:'괄호 안의 값을 화면에 내보냅니다. 부를 때마다 줄이 하나씩 늘어납니다.',
+  f:"print( 내보낼 값 )",
+  code:"print('*' * 3)\nprint('*' * 5)", out:"***\n*****",
+  note:"줄을 바꾸지 않고 옆으로 이어 붙이려면 print('*', end='') 처럼 씁니다. 이어 붙이다가 줄을 바꾸고 싶으면 빈 print( ) 를 한 번 부릅니다." },
+
+{ g:'출력', t:"한 줄 만들기", cc:'--c-out', w:"' ' * 공백수 + '*' * 별수",
+  d:'별찍기의 거의 모든 줄은 “공백 몇 개 + 별 몇 개” 하나로 만들어집니다. 두 수를 각각 따로 계산해서 + 로 이어 붙입니다.',
+  f:"' ' * 공백수 + '*' * 별수",
+  code:"for i in range(3):\n    print(' ' * (2 - i) + '*' * (i + 1))", out:"  *\n **\n***",
+  note:"가운데 정렬 도형은 모두 이 방법입니다. 한 줄의 전체 길이가 일정한지 확인하면 식이 맞는지 금방 알 수 있습니다." },
+
+{ g:'연산자', t:'+', cc:'--c-op', w:'이어 붙이기 · 더하기',
+  d:'글자끼리 쓰면 앞뒤로 이어 붙이고, 숫자끼리 쓰면 더합니다.',
+  f:"글자 + 글자      숫자 + 숫자",
+  code:"print('  ' + '***')\nprint(2 + 3)", out:"  ***\n5",
+  note:"글자와 숫자를 섞어 + 하면 오류가 납니다. 숫자를 글자에 붙이려면 str(3) 처럼 감싸서 글자로 바꿔야 합니다." },
+
+{ g:'연산자', t:'-', cc:'--c-op', w:'빼기',
+  d:'숫자끼리만 뺍니다. 늘어나는 i 로 줄어드는 수를 만들 때 씁니다.',
+  f:"숫자 - 숫자",
+  code:"for i in range(3):\n    print('*' * (5 - i))", out:"*****\n****\n***",
+  note:"글자에는 뺄 수 없습니다. 별을 줄이고 싶으면 별 글자를 빼는 게 아니라, 곱할 개수를 줄여야 합니다." },
+
+{ g:'연산자', t:'*', cc:'--c-op', w:'곱하기 · 반복하기',
+  d:'숫자끼리 쓰면 곱합니다. 글자에 숫자를 곱하면 그 수만큼 이어 붙습니다. 별을 여러 개 찍는 가장 기본적인 방법입니다.',
+  f:"'*' * 개수      숫자 * 숫자",
+  code:"print('*' * 5)\nprint('ab' * 3)", out:"*****\nababab",
+  note:"0 을 곱하면 빈 글자가 됩니다. 음수를 곱해도 빈 글자입니다. 그래서 계산 결과가 음수가 되면 그 줄이 조용히 사라져 버립니다." },
+
+{ g:'연산자', t:'// %', cc:'--c-op', w:'몫과 나머지',
+  d:'// 는 나눈 몫, % 는 나머지입니다. 한가운데를 찾거나 한 줄 걸러 다르게 할 때 씁니다.',
+  f:"숫자 // 숫자      숫자 % 숫자",
+  code:"print(7 // 2)\nprint(7 % 2)\nprint(4 % 2)", out:"3\n1\n0",
+  note:"/ 를 하나만 쓰면 3.5 같은 소수가 나와서 별 개수로 쓸 수 없습니다. 딱 떨어지는 수가 필요할 땐 반드시 // 를 씁니다." },
+
+{ g:'연산자', t:'( )', cc:'--c-op', w:'계산 순서 바꾸기',
+  d:'곱하기가 더하기보다 먼저 계산됩니다. 순서를 바꾸고 싶으면 괄호로 묶습니다.',
+  f:"'*' * (i + 1)      ← 괄호가 없으면 뜻이 달라진다",
+  code:"print(2 + 3 * 2)\nprint((2 + 3) * 2)", out:"8\n10",
+  note:"별찍기에서 가장 자주 나는 실수입니다. '*' * (i + 1) 에서 괄호를 빼면, 별을 i 개 만든 다음 거기에 숫자 1 을 더하려다 오류가 납니다." },
+
+{ g:'연산자', t:'== < >', cc:'--c-op', w:'비교하기',
+  d:'두 값을 견주어 맞으면 참, 아니면 거짓이 됩니다. if 의 조건 자리에 씁니다.',
+  f:"==   !=   <   >   <=   >=",
+  code:"for i in range(3):\n    if i < 2:\n        print('*')\n    else:\n        print('***')", out:"*\n*\n***",
+  note:"같은지 물을 때는 = 하나가 아니라 == 두 개입니다. = 하나는 값을 담는 뜻이라 조건 자리에 쓰면 오류가 납니다." },
+
+{ g:'반복', t:'for … in', cc:'--c-loop', w:'되풀이하기',
+  d:'뒤에 오는 것들을 하나씩 꺼내 와서, 아래에 들여쓴 줄들을 그만큼 되풀이합니다.',
+  f:"for 변수 in 범위:",
+  code:"for i in range(3):\n    print('*' * (i + 1))", out:"*\n**\n***",
+  note:"줄 끝의 콜론(:)을 빠뜨리기 쉽습니다. 되풀이할 줄은 4칸 들여써야 하고, 들여쓰지 않은 줄은 반복에서 빠집니다." },
+
+{ g:'반복', t:'range', cc:'--c-loop', w:'수의 범위 만들기',
+  d:'수를 차례로 만들어 냅니다. for 와 짝을 이뤄 몇 번 반복할지를 정합니다.',
+  f:"range(끝)   range(시작, 끝)   range(시작, 끝, 증가)",
+  code:"for i in range(2, 5):\n    print(i)", out:"2\n3\n4",
+  note:"끝 숫자는 포함되지 않습니다. range(5) 는 0 1 2 3 4 다섯 개입니다. 거꾸로 세려면 range(4, -1, -1) 처럼 증가를 -1 로 줍니다." },
+
+{ g:'반복', t:'i, j', cc:'--c-loop', w:'지금 몇 번째인지',
+  d:'반복할 때마다 회차가 담기는 변수입니다. 0부터 셉니다. 바깥 반복은 i, 안쪽 반복은 j 를 쓰는 것이 관례입니다.',
+  f:"for i in range(n):      for j in range(n):",
+  code:"for i in range(3):\n    print(i)", out:"0\n1\n2",
+  note:"i, j 는 파이썬이 정한 말이 아니라 관례입니다. for 층 in range(n): 처럼 다른 이름도 됩니다. 첫 회차가 1 이 아니라 0 이라는 점만 늘 기억하세요." },
+
+{ g:'반복', t:'중첩 반복', cc:'--c-loop', w:'반복 안의 반복',
+  d:'바깥 반복이 한 번 돌 때마다 안쪽 반복이 처음부터 끝까지 다 돕니다. 칸을 하나하나 채워야 하는 모양에 씁니다.',
+  f:"for i in …:\n    for j in …:",
+  code:"for i in range(2):\n    for j in range(3):\n        print('*', end='')\n    print()", out:"***\n***",
+  note:"안쪽에서 end='' 로 옆으로 붙이다가, 한 줄이 끝나면 바깥 반복 안에서 빈 print( ) 로 줄을 바꿉니다. 이 빈 print( ) 의 들여쓰기 위치가 핵심입니다." },
+
+{ g:'조건', t:'if / elif / else', cc:'--c-cond', w:'경우 나누기',
+  d:'조건이 맞을 때만 아래 줄을 실행합니다. 위에서부터 검사해 처음 맞는 하나만 실행합니다.',
+  f:"if 조건:      elif 다른 조건:      else:",
+  code:"for i in range(3):\n    if i == 1:\n        print('***')\n    else:\n        print('*')", out:"*\n***\n*",
+  note:"같은지 물을 때는 = 하나가 아니라 == 두 개입니다. else 뒤에는 조건을 적지 않습니다. 두 조건을 한꺼번에 보려면 or 나 and 로 묶습니다." },
+
+{ g:'변수', t:'변수', cc:'--c-var', w:'값에 이름 붙이기',
+  d:'값에 이름을 붙여 담아 두는 상자입니다. 복잡한 식에 이름을 붙이면 코드가 훨씬 읽기 쉬워집니다.',
+  f:"이름 = 값",
+  code:"w = 2 * 3 + 1\nprint('*' * w)", out:"*******",
+  note:"이 실습실에서 n 은 앱이 정해 줍니다. 코드 안에서 n = 5 처럼 직접 담으면, 크기를 바꿔 검사할 때 틀리게 됩니다." },
+
+{ g:'변수', t:'n', cc:'--c-var', w:'이 실습실이 정해 주는 크기',
+  d:'도형의 크기입니다. 오른쪽 슬라이더로 앱이 정해 주므로, 코드에서는 그냥 갖다 쓰기만 하면 됩니다.',
+  f:"'*' * n      range(n)",
+  code:"print('*' * n)\nprint('*' * (n - 2))", out:"*****\n***",
+  note:"코드 안에서 n = 5 처럼 직접 담으면 안 됩니다. 채점할 때 몰래 크기를 바꿔 보는데, n 을 고정해 두면 그때 틀리게 됩니다." },
+
+{ g:'함수', t:'def', cc:'--c-func', w:'나만의 명령 만들기',
+  d:'여러 줄짜리 일에 이름을 붙입니다. 한 번 만들면 값만 바꿔 가며 몇 번이든 부를 수 있습니다.',
+  f:"def 이름(받을 값):",
+  code:"def line(k):\n    print('*' * k)\n\nline(2)\nline(4)", out:"**\n****",
+  note:"만들기만 해서는 아무 일도 일어나지 않습니다. 반드시 이름(값) 으로 불러야 실행됩니다. 넣는 값의 개수는 만들 때 정한 개수와 같아야 합니다." },
+
+{ g:'함수', t:'return', cc:'--c-func', w:'값을 돌려주기',
+  d:'함수가 계산한 값을 밖으로 돌려줍니다. 돌려받은 값은 출력하든 이어 붙이든 마음대로 쓸 수 있습니다.',
+  f:"return 돌려줄 값",
+  code:"def row(a, b):\n    return ' ' * a + '*' * b\n\nprint(row(2, 3))", out:"  ***",
+  note:"print 는 보여 주고 끝, return 은 값을 넘겨줍니다. return 을 만나면 함수는 그 자리에서 바로 끝납니다." },
+
+{ g:'함수', t:'line, row', cc:'--c-func', w:'내가 지은 이름',
+  d:'이 둘은 파이썬 문법이 아닙니다. 팔레트에 예시로 넣은 함수 이름일 뿐, 특별한 뜻은 없습니다.',
+  f:"def 아무이름(k):      ← 이름은 내 마음대로",
+  code:"def star(k):\n    print('*' * k)\n\nstar(3)", out:"***",
+  note:"print, for, range, if, def 는 파이썬이 정한 말이라 바꿀 수 없습니다. 내가 만든 함수와 변수 이름은 마음대로 정하되, 무엇을 하는지 드러나는 이름이 좋습니다." }
+];
+var dictSel=0;
+function buildDict(){
+  var bar=$('#dictBar'); bar.innerHTML='';
+  var lab=document.createElement('div'); lab.className='dl';
+  lab.textContent='낱말 사전'; bar.appendChild(lab);
+  var groups=[],map={};
+  DICT.forEach(function(e,i){
+    if(!map[e.g]){ map[e.g]={g:e.g,cc:e.cc,items:[]}; groups.push(map[e.g]); }
+    map[e.g].items.push(i);
+  });
+  groups.forEach(function(gr){
+    var row=document.createElement('div'); row.className='dgrp';
+    row.style.setProperty('--cc','var('+gr.cc+')');
+    var l=document.createElement('div'); l.className='dgl'; l.textContent=gr.g; row.appendChild(l);
+    var box=document.createElement('div'); box.className='dgt';
+    gr.items.forEach(function(i){
+      var e=DICT[i];
+      var b=document.createElement('button');
+      b.className='dterm'+(i===dictSel?' on':'');
+      b.style.setProperty('--cc','var('+e.cc+')');
+      b.textContent=e.t;
+      b.onclick=function(){ dictSel=i; buildDict(); };
+      box.appendChild(b);
+    });
+    row.appendChild(box); bar.appendChild(row);
+  });
+  showDict();
+}
+function showDict(){
+  var e=DICT[dictSel], b=$('#dictBody');
+  b.innerHTML='';
+  var c=document.createElement('div'); c.className='dcard';
+  c.style.setProperty('--cc','var('+e.cc+')');
+  var h=document.createElement('h4'); h.textContent=e.t; c.appendChild(h);
+  var w=document.createElement('div'); w.className='dw'; w.textContent=e.w; c.appendChild(w);
+  var p=document.createElement('p'); p.textContent=e.d; c.appendChild(p);
+  var f=document.createElement('div'); f.className='form'; f.textContent=e.f; c.appendChild(f);
+  var ex=document.createElement('div'); ex.className='ex';
+  var pre=document.createElement('pre'); pre.textContent=e.code; ex.appendChild(pre);
+  var ar=document.createElement('div'); ar.className='ar'; ar.textContent='→'; ex.appendChild(ar);
+  var o=document.createElement('pre'); o.className='o'; o.innerHTML=dots(e.out); ex.appendChild(o);
+  c.appendChild(ex);
+  var nt=document.createElement('div'); nt.className='note'; nt.textContent=e.note; c.appendChild(nt);
+  b.appendChild(c);
+}
+
+function insertStmt(text){
+  var L=S.code.split('\n');
+  if(S.code.trim()===''){ setCode(text); S.sel=text.split('\n').length-1; render(); return; }
+  var idx=Math.min(Math.max(S.sel,0),L.length-1);
+  var cur=L[idx]||'';
+  var ind=(cur.match(/^ */)||[''])[0].length;
+  if(/:\s*(#.*)?$/.test(cur)) ind+=4;
+  else if(/^\s*(else|elif)\b/.test(text)) ind=Math.max(0,ind-0);
+  var add=text.split('\n').map(function(t){ return rep(' ',ind)+t; });
+  L.splice.apply(L,[idx+1,0].concat(add));
+  S.sel=idx+add.length;
+  setCode(L.join('\n'));
+}
+
+function rowOp(i,op){
+  var L=S.code.split('\n');
+  if(op==='del'){ L.splice(i,1); if(!L.length) L=['']; S.sel=Math.min(i,L.length-1); }
+  if(op==='up'&&i>0){ var t=L[i]; L[i]=L[i-1]; L[i-1]=t; S.sel=i-1; }
+  if(op==='down'&&i<L.length-1){ var t2=L[i]; L[i]=L[i+1]; L[i+1]=t2; S.sel=i+1; }
+  if(op==='in'){ L[i]='    '+L[i]; S.sel=i; }
+  if(op==='out'){ L[i]=L[i].replace(/^ {1,4}/,''); S.sel=i; }
+  setCode(L.join('\n'));
+}
+
+/* ---------- 토큰 클릭 편집 ---------- */
+function varNames(){
+  var set={n:1,i:1,j:1};
+  S.code.split('\n').forEach(function(l){
+    var m=l.match(/^\s*([A-Za-z_가-힣][A-Za-z0-9_가-힣]*)\s*=/); if(m) set[m[1]]=1;
+    var f=l.match(/^\s*for\s+([A-Za-z_가-힣][A-Za-z0-9_가-힣]*)/); if(f) set[f[1]]=1;
+  });
+  return Object.keys(set);
+}
+function replaceTok(li,tk,val){
+  var L=S.code.split('\n');
+  L[li]=L[li].slice(0,tk.s)+val+L[li].slice(tk.e);
+  S.sel=li; setCode(L.join('\n'));
+}
+function openPop(ev,li,tk){
+  var p=$('#pop'); p.innerHTML=''; p.className='pop on';
+  var lab=document.createElement('div'); lab.className='pl'; p.appendChild(lab);
+  var opts=document.createElement('div'); opts.className='opts';
+
+  function addBtns(list){
+    list.forEach(function(v){
+      var b=document.createElement('button'); b.textContent=v;
+      b.onclick=function(){ closePop(); replaceTok(li,tk,v); };
+      opts.appendChild(b);
+    });
+  }
+  if(tk.t==='num'){
+    lab.textContent='숫자 바꾸기';
+    var cur=parseInt(tk.x,10);
+    var stp=document.createElement('div'); stp.className='stp';
+    var minus=document.createElement('button'); minus.textContent='−';
+    var inp=document.createElement('input'); inp.value=cur;
+    var plus=document.createElement('button'); plus.textContent='+';
+    minus.onclick=function(){ inp.value=parseInt(inp.value||0,10)-1; };
+    plus.onclick=function(){ inp.value=parseInt(inp.value||0,10)+1; };
+    inp.onkeydown=function(e){ if(e.key==='Enter'){ closePop(); replaceTok(li,tk,String(parseInt(inp.value||0,10))); } };
+    stp.appendChild(minus); stp.appendChild(inp); stp.appendChild(plus);
+    var ok=document.createElement('button'); ok.textContent='적용'; ok.style.padding='0 10px';
+    ok.onclick=function(){ closePop(); replaceTok(li,tk,String(parseInt(inp.value||0,10))); };
+    stp.appendChild(ok);
+    p.appendChild(stp);
+    addBtns(['0','1','2','3','4','5','6','7','8','9','10']);
+  } else if(tk.t==='name'){
+    lab.textContent='변수 바꾸기'; addBtns(varNames());
+  } else if(tk.t==='str'){
+    lab.textContent='글자 바꾸기'; addBtns(["'*'","' '","''"]);
+  } else if(tk.t==='op'){
+    lab.textContent='기호 바꾸기';
+    if(['==','!=','<','>','<=','>='].indexOf(tk.x)>=0) addBtns(['==','!=','<','>','<=','>=']);
+    else addBtns(['+','-','*','//','%']);
+  } else { closePop(); return; }
+
+  p.appendChild(opts);
+  document.body.appendChild(p);
+  var r=ev.target.getBoundingClientRect();
+  p.style.left=Math.min(r.left,window.innerWidth-260)+'px';
+  p.style.top=(r.bottom+window.scrollY+6)+'px';
+}
+function closePop(){ var p=$('#pop'); p.className='pop'; }
+document.addEventListener('mousedown',function(e){
+  if(!e.target.closest('#pop') && !e.target.closest('.tk.hot')) closePop();
+});
+
+/* ---------- 코드 영역 렌더 ---------- */
+function renderRows(){
+  var box=$('#rows'); box.innerHTML='';
+  var L=S.code.split('\n');
+  if(S.code.trim()===''){
+    var e=document.createElement('div');
+    e.style.cssText='padding:14px 39px;color:var(--mu2);font-family:var(--sans);font-size:12.5px';
+    e.textContent='위의 조각을 눌러 코드를 만들어 보세요. 숫자와 변수는 만든 뒤에 눌러서 바꿀 수 있습니다.';
+    box.appendChild(e); return;
+  }
+  L.forEach(function(line,i){
+    var row=document.createElement('div'); row.className='row'+(i===S.sel?' sel':'');
+    var ln=document.createElement('div'); ln.className='ln'; ln.textContent=i+1; row.appendChild(ln);
+    var code=document.createElement('div'); code.className='code';
+    code.onclick=function(){ S.sel=i; renderRows(); };
+    var toks=lineToks(line);
+    if(!toks.length){ code.appendChild(document.createTextNode(' ')); }
+    toks.forEach(function(tk){
+      var sp=document.createElement('span');
+      sp.className='tk '+(tk.t==='ws'?'':tk.t)+(tk.c?' '+tk.c:'')+(['num','name','str','op'].indexOf(tk.t)>=0?' hot':'');
+      sp.textContent=tk.x;
+      if(['num','name','str','op'].indexOf(tk.t)>=0){
+        sp.onclick=function(ev){ ev.stopPropagation(); S.sel=i; renderRows(); openPop(ev,i,tk); };
+      }
+      code.appendChild(sp);
+    });
+    row.appendChild(code);
+    var ctl=document.createElement('div'); ctl.className='ctl';
+    [['◀','out','내어쓰기'],['▶','in','들여쓰기'],['▲','up','위로'],['▼','down','아래로'],['✕','del','삭제']].forEach(function(a){
+      var b=document.createElement('button'); b.textContent=a[0]; b.title=a[2];
+      if(a[1]==='del') b.className='del';
+      b.onclick=function(ev){ ev.stopPropagation(); closePop(); rowOp(i,a[1]); };
+      ctl.appendChild(b);
+    });
+    row.appendChild(ctl);
+    box.appendChild(row);
+  });
+  var add=document.createElement('button'); add.className='addrow';
+  add.textContent='+ 마지막 줄 선택';
+  add.onclick=function(){ S.sel=L.length-1; renderRows(); };
+  box.appendChild(add);
+}
+
+/* ---------- 그리드 ---------- */
+function gridEl(lines,cmp,maxW){
+  var cols=maxW||0, r;
+  for(r=0;r<lines.length;r++) cols=Math.max(cols,lines[r].length);
+  cols=Math.max(cols,1);
+  var wrap=document.createElement('div');
+  var cs=Math.max(10,Math.min(22,Math.floor(336/cols)));
+  var g=document.createElement('div'); g.className='grid';
+  g.style.gridTemplateColumns='repeat('+cols+',var(--cs))';
+  g.style.setProperty('--cs',cs+'px');
+  var nr=Math.max(lines.length, cmp?cmp.length:0);
+  for(r=0;r<nr;r++){
+    for(var c=0;c<cols;c++){
+      var cell=document.createElement('div');
+      var mine=(lines[r]||'')[c]==='*';
+      if(!cmp){ cell.className='cell'+(mine?' tgt':''); }
+      else{
+        var want=(cmp[r]||'')[c]==='*';
+        cell.className='cell'+(mine&&want?' ok':(want&&!mine?' miss':(mine&&!want?' extra':'')));
+      }
+      g.appendChild(cell);
+    }
+  }
+  wrap.appendChild(g);
+  return wrap;
+}
+function textEl(lines){
+  var pre=document.createElement('div'); pre.className='gtxt';
+  lines.forEach(function(l){
+    var d=document.createElement('div');
+    for(var i=0;i<l.length;i++){
+      var s=document.createElement('span');
+      if(l[i]===' '){ s.className='sp'; s.textContent='·'; } else s.textContent=l[i];
+      d.appendChild(s);
+    }
+    if(!l.length) d.appendChild(document.createTextNode(' '));
+    pre.appendChild(d);
+  });
+  if(!lines.length){ var e=document.createElement('div'); e.className='gempty'; e.textContent='(출력 없음)'; pre.appendChild(e); }
+  return pre;
+}
+/* ==================================================================
+   4. 판정 패널 · 레벨 목록 · 직접 그리기 · 개념 정리 · 연결
+   ================================================================== */
+var lastRes=null;
+
+function render(){
+  var lv=LV();
+  $('#bTitle').firstChild.nodeValue=(S.custom?'내가 그린 모양':(lv.id+'. '+lv.title));
+  $('#bTag').textContent=lv.concept||'';
+  $('#bGoal').textContent=lv.goal;
+  $('#bLearn').innerHTML=lv.learn||'';
+  $('#gN').textContent=S.n;
+  $('#nVal').textContent=S.n;
+
+  var sl=$('#nSlider');
+  sl.min=lv.minN; sl.max=lv.maxN; sl.value=S.n;
+  sl.disabled=!lv.usesN;
+  sl.style.opacity=lv.usesN?1:.35;
+
+  $('#nestWrap').style.display=(lv.nestable&&!S.custom)?'flex':'none';
+  $('#nestChk').checked=S.nested;
+
+  if(S.mode==='build'){ $('#rows').style.display=''; $('#ta').style.display='none'; $('#pal').style.display=''; renderRows(); }
+  else{ $('#rows').style.display='none'; $('#pal').style.display='none'; var ta=$('#ta'); ta.style.display=''; if(ta.value!==S.code) ta.value=S.code; }
+
+  var want=norm(lv.target(S.n));
+  $('#tgtSize').textContent=want.length+'줄 × 최대 '+Math.max.apply(null,want.map(function(l){return l.length;}).concat([0]))+'칸';
+  var tg=$('#tgtGrid'); tg.innerHTML='';
+  tg.appendChild(S.textView?textEl(want):gridEl(want,null));
+
+  var res=grade(S.code,lv,S.n,S.nested);
+  lastRes=res;
+
+  var eb=$('#err');
+  if(res.err){ eb.className='errbar on'; eb.innerHTML='<b>'+(res.err.line+1)+'행</b>'+res.err.msg; }
+  else eb.className='errbar';
+
+  var mine=res.err?[]:norm(res.out);
+  var og=$('#outGrid'); og.innerHTML='';
+  og.appendChild(S.textView?textEl(mine):gridEl(mine,want,want.length?Math.max.apply(null,want.map(function(l){return l.length;})):1));
+
+  // 스크러버 — 코드가 바뀌면 항상 끝(전체 출력)으로 되돌린다
+  if(playing){ clearInterval(playing); playing=null; setPlayLabel(false); }
+  var sc=$('#scrub'), tot=res.err?0:(res.total||0);
+  sc.max=tot; sc.value=tot; sc.disabled=!tot;
+  $('#scrubBox').style.opacity=tot?1:.45;
+  if(tot) scrubTo(tot,true); else { $('#scrubN').textContent='—'; $('#scrubVars').innerHTML=''; $('#xray').innerHTML='<div class="lb">코드를 실행하면 식이 계산되는 과정이 여기에 나옵니다.</div>'; }
+
+  renderVerdict(res,lv);
+  renderTrace(res);
+  renderHints(lv);
+  $('#solBox').textContent=lv.sol||'(내가 그린 모양은 정해진 답이 없습니다)';
+  renderLevels(); renderBadges(); renderHeader();
+
+  if(res.ok && !S.custom){
+    var k='L'+lv.id, was=DB.stars[k]||0;
+    if(was<res.stars){ DB.stars[k]=res.stars; }
+    var bl=(S.nested?['nest','end']:[]).concat(lv.badges||[]);
+    if(res.info){
+      if(res.info.strMul) bl.push('strmul');
+      if(res.info.maxDepth>=2) bl.push('nest');
+      if(res.info.usesEnd) bl.push('end');
+      if(res.info.ifs) bl.push('if');
+      if(res.info.defs) bl.push('def');
+      if(res.info.returns) bl.push('return');
+    }
+    bl.forEach(function(b){ DB.badges[b]=1; });
+    save();
+    /* 처음 통과했거나 별을 더 받았을 때만 폭죽을 터뜨린다 */
+    if(res.stars>was){
+      renderLevels(); renderHeader(); renderBadges();
+      var done=0; LEVELS.forEach(function(l){ if((DB.stars['L'+l.id]||0)>0) done++; });
+      celebrate(done>=LEVELS.length?'전부 완성!':'통과!',
+        done>=LEVELS.length?'평면 20문제를 모두 풀었습니다':(lv.id+'번 '+lv.title+' 성공 · '+done+' / '+LEVELS.length+' 완료'));
+    }
+  }
+}
+
+function renderVerdict(res,lv){
+  var st=$('#vStars'), sum=$('#vSum'), box=$('#vChecks'), dg=$('#vDiag');
+  box.innerHTML=''; dg.className='diag';
+  if(res.diag){ dg.className='diag on'; dg.innerHTML='<b>진단</b>'; dg.appendChild(document.createTextNode(res.diag)); }
+  if(!S.code.trim()){ st.textContent='☆☆☆'; st.className='stars no0'; sum.className='vsum'; sum.textContent='코드를 작성해 보세요.'; return; }
+  if(res.err){ st.textContent='☆☆☆'; st.className='stars no0'; sum.className='vsum'; sum.textContent='코드에 문제가 있어 아직 채점할 수 없습니다.'; return; }
+  st.innerHTML='';
+  var sp=document.createElement('span');
+  sp.textContent=rep('★',res.stars)+rep('☆',3-res.stars);
+  st.appendChild(sp);
+  /* 출력만 맞으면 통과다. 나머지 검사는 더 잘 푸는 방법을 알려 줄 뿐 통과를 막지 않는다 */
+  if(res.ok){
+    var pc=document.createElement('span'); pc.className='passchip'; pc.textContent='통과';
+    st.appendChild(pc);
+  }
+  st.className='stars'+(res.stars?'':' no0');
+  sum.className='vsum'+(res.ok?' pass':'');
+  sum.textContent=res.stars===3?'통과. 크기가 바뀌어도 되고 요구 조건까지 모두 만족합니다.'
+    :res.stars===2?'통과. 크기가 바뀌어도 됩니다. 구조 요구까지 만족하면 별 세 개입니다.'
+    :res.stars===1?'통과. 다만 지금 크기에서만 맞습니다. n 으로 계산하면 별이 늘어납니다.'
+    :'아직 목표 모양과 다릅니다.';
+  (res.checks||[]).forEach(function(c,i){
+    var d=document.createElement('div');
+    /* 통과한 뒤의 일반화·구조 검사는 실패가 아니라 '더 해 볼 것' 으로 보여 준다 */
+    var soft=res.ok && !c.pass && !c.info && i>0;
+    d.className='chk '+(c.info?'i':(c.pass?'p':(soft?'s':'f')));
+    d.innerHTML='<div class="m">'+(c.info?'·':(c.pass?'✓':(soft?'↗':'✕')))+'</div><div class="b"><b>'+c.k+(soft?' — 더 해 보기':'')+'</b><span></span></div>';
+    d.querySelector('span').textContent=c.msg;
+    box.appendChild(d);
+  });
+}
+
+function renderTrace(res){
+  var b=$('#traceBox'); b.innerHTML='';
+  if(!res.trace||!res.trace.length){ b.innerHTML='<span class="gempty">아직 출력이 없습니다.</span>'; return; }
+  var t=document.createElement('table'); t.className='tr';
+  t.innerHTML='<tr><th>회차</th><th>변수</th><th>출력</th><th>별</th></tr>';
+  res.trace.slice(0,40).forEach(function(ev,i){
+    var vs=[]; for(var k in ev.vars) if(typeof ev.vars[k]==='number') vs.push(k+'='+ev.vars[k]);
+    var txt=ev.text.replace(/\n/g,'').replace(/ /g,'·');
+    var stars=(ev.text.match(/\*/g)||[]).length;
+    var tr=document.createElement('tr');
+    tr.style.cursor='pointer'; tr.title='이 회차로 이동';
+    tr.innerHTML='<td>'+(i+1)+'</td><td>'+vs.slice(0,4).join(' ')+'</td><td class="o">'+(txt||'—')+'</td><td>'+stars+'</td>';
+    tr.onclick=function(){ if(res.seg[i]) scrubTo(res.seg[i].end); };
+    t.appendChild(tr);
+  });
+  b.appendChild(t);
+  if(res.trace.length>40){ var m=document.createElement('div'); m.className='gempty'; m.style.marginTop='6px'; m.textContent='… 이하 '+(res.trace.length-40)+'개 생략'; b.appendChild(m); }
+}
+
+function renderHints(lv){
+  var b=$('#hintBox'); b.innerHTML='';
+  (lv.hints||[]).forEach(function(h,i){
+    var d=document.createElement('div'); d.className='hint';
+    d.innerHTML='<b>'+(i+1)+'단계</b>';
+    d.appendChild(document.createTextNode(h));
+    b.appendChild(d);
+  });
+  if(!(lv.hints||[]).length) b.innerHTML='<span class="gempty">이 모양에는 힌트가 없습니다.</span>';
+}
+
+function renderLevels(){
+  var box=$('#lvList'); box.innerHTML='';
+  LEVELS.forEach(function(lv,i){
+    var s=DB.stars['L'+lv.id]||0;
+    var b=document.createElement('button');
+    b.className='lv'+(!S.custom&&i===S.lvi?' on':'');
+    b.title=s?'푼 문제':'아직 풀지 않음';
+    b.innerHTML='<span class="no">'+lv.id+'</span><span class="nm"></span><span class="st'+(s?'':' no0')+'">'+(s?'★':'☆')+'</span>';
+    b.querySelector('.nm').textContent=lv.title;
+    b.onclick=function(){ selectLevel(i); };
+    box.appendChild(b);
+  });
+  if(S.custom){
+    var c=document.createElement('button'); c.className='lv on';
+    c.innerHTML='<span class="no">＊</span><span class="nm">내가 그린 모양</span>';
+    box.appendChild(c);
+  }
+}
+function renderBadges(){
+  var b=$('#badgeBox'); b.innerHTML='';
+  BADGES.forEach(function(x){
+    var d=document.createElement('span'); d.className='bdg'+(DB.badges[x.id]?' on':'');
+    d.textContent=x.name; b.appendChild(d);
+  });
+}
+function renderHeader(){
+  var cl=0,sv=0;
+  LEVELS.forEach(function(l){ var s=DB.stars['L'+l.id]||0; if(s>0) cl++; sv+=s; });
+  $('#hClear').textContent=cl; $('#hTotal').textContent=LEVELS.length;
+}
+
+/* ---------- 통과 축하: 별 폭탄 5초 ---------- */
+var BOOMC=['var(--star)','var(--ac)','var(--ok)','var(--c-func)','var(--c-op)'];
+function boomWave(box){
+  var cx=window.innerWidth*(0.22+Math.random()*0.56);
+  var cy=window.innerHeight*(0.24+Math.random()*0.42);
+  var k=24+Math.floor(Math.random()*10);
+  for(var i=0;i<k;i++){
+    var ang=(Math.PI*2*i/k)+Math.random()*0.35;
+    var dist=120+Math.random()*250;
+    var sz=9+Math.random()*20;
+    var d=document.createElement('i');
+    d.style.cssText='left:'+cx+'px;top:'+cy+'px;width:'+sz+'px;height:'+sz+'px;background:'+BOOMC[i%BOOMC.length];
+    d.style.setProperty('--dx',Math.round(Math.cos(ang)*dist)+'px');
+    d.style.setProperty('--dy',Math.round(Math.sin(ang)*dist+110)+'px');
+    d.style.setProperty('--sc',(0.25+Math.random()*0.5).toFixed(2));
+    d.style.setProperty('--rt',Math.round(Math.random()*720-360)+'deg');
+    d.style.setProperty('--bd',(1500+Math.random()*1000)+'ms');
+    box.appendChild(d);
+  }
+}
+var boomTimer=null;
+function celebrate(msg,sub){
+  var box=$('#boom'); if(!box) return;
+  if(boomTimer) clearTimeout(boomTimer);
+  box.className='boom on'; box.innerHTML='';
+  var t=document.createElement('div'); t.className='boomtxt'; t.textContent=msg;
+  if(sub){ var s=document.createElement('small'); s.textContent=sub; t.appendChild(s); }
+  box.appendChild(t);
+  var w=0;
+  (function wave(){ if(w>=6) return; boomWave(box); w++; setTimeout(wave,780); })();
+  boomTimer=setTimeout(function(){ box.className='boom'; box.innerHTML=''; boomTimer=null; },5200);
+}
+
+/* ---------- 미션 초기화 ---------- */
+function resetAll(){
+  if(!window.confirm('푼 문제, 별, 배지, 작성한 코드를 모두 지우고 1번 문제부터 다시 시작합니다.\n계속할까요?')) return;
+  try{ localStorage.removeItem(SAVE); }catch(e){}
+  DB.stars={}; DB.badges={}; DB.code={};
+  save();
+  S.undo=[]; S.custom=null; S.mode='build'; S.nested=false; dictSel=0;
+  buildDict(); setTab('solve'); selectLevel(0);
+  celebrate('처음부터 다시!','1번 문제로 돌아왔습니다');
+}
+
+function selectLevel(i){
+  S.custom=null; S.lvi=i; S.nested=false;
+  var lv=LEVELS[i];
+  S.n=lv.defN; S.sel=0; S.undo=[];
+  S.code=DB.code['L'+lv.id]||'';
+  render();
+}
+
+/* ---------- 실행 스크러버 ---------- */
+var playing=null;
+
+/* 출력 도중의 부분 문자열도 격자로 그린다 (norm 과 달리 빈 줄을 지우지 않는다) */
+function partLines(t){ return t.split('\n').map(function(l){ return l.replace(/[ \t]+$/,''); }); }
+
+function scrubTo(p,skipSlider){
+  var res=lastRes; if(!res||res.err) return;
+  var lv=LV(), want=norm(lv.target(S.n));
+  var W=want.length?Math.max.apply(null,want.map(function(l){return l.length;})):1;
+  var full=res.out, total=res.total||full.length;
+  p=Math.max(0,Math.min(p,total));
+  S.scrub=p;
+  if(!skipSlider) $('#scrub').value=p;
+
+  var lines=(p>=total)?norm(full):partLines(full.slice(0,p));
+  var og=$('#outGrid'); og.innerHTML='';
+  og.appendChild(S.textView?textEl(lines):gridEl(lines,want,W));
+
+  // 지금 실행 중인 print 구간 찾기
+  var cur=null,idx=-1;
+  for(var i=0;i<res.seg.length;i++){
+    var s=res.seg[i];
+    if(p>s.start && p<=s.end){ cur=s; idx=i; break; }
+  }
+  if(!cur && res.seg.length){ cur=res.seg[p<=0?0:res.seg.length-1]; idx=p<=0?0:res.seg.length-1; }
+
+  $('#scrubN').textContent = res.seg.length ? ((idx+1)+' / '+res.seg.length) : '—';
+
+  // 실행 중인 코드 줄 강조
+  Array.prototype.forEach.call(document.querySelectorAll('.row.exec'),function(r){ r.className=r.className.replace(' exec',''); });
+  if(cur && p<total && p>0){
+    var rowEl=document.querySelectorAll('#rows .row')[cur.line];
+    if(rowEl) rowEl.className+=' exec';
+  }
+
+  // 변수 칩
+  var vb=$('#scrubVars'); vb.innerHTML='';
+  if(cur){
+    var order=['n','i','j','k','a','b','w'],seen={},keys=[];
+    order.forEach(function(k2){ if(k2 in cur.vars){ keys.push(k2); seen[k2]=1; } });
+    for(var k3 in cur.vars) if(!seen[k3]) keys.push(k3);
+    keys.slice(0,8).forEach(function(k4){
+      var v=cur.vars[k4];
+      var sp=document.createElement('span');
+      if(k4==='n') sp.className='n';
+      sp.textContent=k4+' = '+(typeof v==='string'?("'"+v.replace(/ /g,'·')+"'"):v);
+      vb.appendChild(sp);
+    });
+  }
+
+  // 식 X-ray
+  var xb=$('#xray'); xb.innerHTML='';
+  var lb=document.createElement('div'); lb.className='lb';
+  if(cur && cur.node){
+    var steps=xray(cur.node,cur.vars);
+    lb.textContent=(cur.line+1)+'행의 식이 계산되는 과정';
+    xb.appendChild(lb);
+    steps.forEach(function(s,i){
+      var d=document.createElement('div');
+      if(i>0&&i<steps.length-1) d.className='a';
+      d.textContent=(i?'= ':'  ')+s;
+      xb.appendChild(d);
+    });
+  } else {
+    lb.textContent='출력이 있으면 여기에 식이 계산되는 과정이 한 단계씩 나옵니다.';
+    xb.appendChild(lb);
+  }
+}
+
+function play(){
+  if(playing){ clearInterval(playing); playing=null; setPlayLabel(false); return; }
+  if(!lastRes||lastRes.err||!lastRes.seg.length) return;
+  var res=lastRes, i=0;
+  setPlayLabel(true);
+  scrubTo(0);
+  playing=setInterval(function(){
+    if(i>=res.seg.length){ clearInterval(playing); playing=null; setPlayLabel(false); scrubTo(res.total); return; }
+    scrubTo(res.seg[i].end); i++;
+  },300);
+}
+function setPlayLabel(on){ $('#btnPlay2').textContent=on?'정지':'재생'; }
+
+/* ---------- 직접 그리기 ---------- */
+var D={ size:9, cells:{} };
+function buildDraw(){
+  var v=$('#viewDraw');
+  v.innerHTML=
+   '<div class="draw"><div class="two">'+
+   '<div class="card"><h3>격자를 눌러 별 모양을 그려 보세요</h3>'+
+   '<div id="dGrid"></div>'+
+   '<div class="brow">'+
+   '<button class="btn" id="dClear">지우기</button>'+
+   '<button class="btn" id="dMirror">좌우 대칭으로 채우기</button>'+
+   '<button class="btn" id="dMinus">작게</button>'+
+   '<button class="btn" id="dPlus">크게</button>'+
+   '<button class="btn pri" id="dGo">이 모양으로 도전하기</button>'+
+   '</div></div>'+
+   '<div class="card"><h3>모양 분석</h3>'+
+   '<p style="color:var(--mu);font-size:12.5px;margin:0 0 10px">각 줄을 &nbsp;<span style="font-family:var(--mono)">공백 × a + 별 × b</span>&nbsp; 로 나타낼 수 있는지 확인합니다. 모든 줄이 이렇게 표현되면, a 와 b 를 i 로 계산하는 식만 찾으면 코드가 완성됩니다.</p>'+
+   '<div id="dAnalyze"></div></div>'+
+   '</div></div>';
+  $('#dClear').onclick=function(){ D.cells={}; drawGrid(); };
+  $('#dPlus').onclick=function(){ D.size=Math.min(20,D.size+1); drawGrid(); };
+  $('#dMinus').onclick=function(){ D.size=Math.max(3,D.size-1); drawGrid(); };
+  $('#dMirror').onclick=function(){
+    var c={}; for(var k in D.cells){ var p=k.split(','); c[k]=1; c[p[0]+','+(D.size-1-parseInt(p[1],10))]=1; }
+    D.cells=c; drawGrid();
+  };
+  $('#dGo').onclick=function(){
+    var t=drawnText();
+    if(!t.trim()){ return; }
+    S.custom={ id:'C', title:'내가 그린 모양', concept:'자유 도전',
+      goal:'왼쪽 격자에 직접 그린 모양을 코드로 똑같이 만들어 보세요.',
+      learn:'정답 코드는 하나가 아닙니다. 줄마다 앞 공백 수와 별 수가 어떻게 변하는지 규칙을 찾는 것이 핵심입니다.',
+      usesN:false, minN:1, maxN:1, defN:1,
+      target:function(){ return t; }, require:{}, par:4, badges:[], hints:[], sol:'' };
+    S.n=1; S.code=DB.code['custom']||''; S.sel=0;
+    setTab('solve'); render();
+  };
+  drawGrid();
+}
+function drawnText(){
+  var L=[];
+  for(var r=0;r<D.size;r++){
+    var s='';
+    for(var c=0;c<D.size;c++) s+= D.cells[r+','+c]?'*':' ';
+    L.push(s.replace(/ +$/,''));
+  }
+  while(L.length&&L[L.length-1]==='') L.pop();
+  return L.join('\n');
+}
+var painting=false, paintVal=1;
+function drawGrid(){
+  var box=$('#dGrid'); box.innerHTML='';
+  var cs=Math.max(12,Math.min(26,Math.floor(420/D.size)));
+  var g=document.createElement('div'); g.className='dgrid';
+  g.style.gridTemplateColumns='repeat('+D.size+',var(--cs))';
+  g.style.setProperty('--cs',cs+'px');
+  for(var r=0;r<D.size;r++) for(var c=0;c<D.size;c++){
+    (function(r,c){
+      var k=r+','+c;
+      var d=document.createElement('div'); d.className='dcell'+(D.cells[k]?' on':'');
+      d.onmousedown=function(e){ e.preventDefault(); painting=true; paintVal=D.cells[k]?0:1; if(paintVal) D.cells[k]=1; else delete D.cells[k]; drawGrid(); };
+      d.onmouseenter=function(){ if(!painting) return; if(paintVal) D.cells[k]=1; else delete D.cells[k]; d.className='dcell'+(D.cells[k]?' on':''); };
+      g.appendChild(d);
+    })(r,c);
+  }
+  box.appendChild(g);
+  analyzeDrawn();
+}
+document.addEventListener('mouseup',function(){ if(painting){ painting=false; analyzeDrawn(); } });
+
+function analyzeDrawn(){
+  var box=$('#dAnalyze'); if(!box) return;
+  var L=drawnText().split('\n'); box.innerHTML='';
+  if(!drawnText().trim()){ box.innerHTML='<span class="gempty">아직 그린 것이 없습니다.</span>'; return; }
+  var t=document.createElement('table'); t.className='tr';
+  t.innerHTML='<tr><th>i</th><th>앞 공백</th><th>별</th><th>모양</th></tr>';
+  var simple=true;
+  L.forEach(function(l,i){
+    var a=l.length-l.replace(/^ +/,'').length;
+    var body=l.trim();
+    var contig=/^\**$/.test(body);
+    if(!contig) simple=false;
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td>'+i+'</td><td>'+a+'</td><td>'+(body.match(/\*/g)||[]).length+'</td><td class="o">'+(contig?"' ' * "+a+" + '*' * "+(body.length):'중간에 빈칸이 있어 두 덩이 이상입니다')+'</td>';
+    t.appendChild(tr);
+  });
+  box.appendChild(t);
+  var note=document.createElement('p');
+  note.style.cssText='color:'+(simple?'var(--ok)':'var(--warn)')+';font-size:12px;margin:10px 0 0';
+  note.textContent=simple?'모든 줄이 공백 + 별 한 덩이입니다. for 문 하나로 풀 수 있습니다.'
+    :'별이 떨어져 있는 줄이 있습니다. if 로 줄을 나누거나, 여러 조각을 + 로 이어 붙여야 합니다.';
+  box.appendChild(note);
+}
+
+function esc(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+function dots(s){ return esc(s).replace(/ /g,'<span class="sp">·</span>'); }
+
+/* ---------- 탭 ---------- */
+function setTab(t){
+  S.tab=t;
+  $('#viewSolve').style.display=t==='solve'?'':'none';
+  $('#viewDraw').style.display=t==='draw'?'':'none';
+  Array.prototype.forEach.call($('#tabs').children,function(b){ b.className=b.dataset.tab===t?'on':''; });
+  if(t==='draw') drawGrid();
+}
+
+/* ---------- 이벤트 ---------- */
+$('#btnReset').onclick=resetAll;
+$('#tabs').onclick=function(e){ var b=e.target.closest('button'); if(b) setTab(b.dataset.tab); };
+$('#modeSeg').onclick=function(e){
+  var b=e.target.closest('button'); if(!b) return;
+  S.mode=b.dataset.mode;
+  Array.prototype.forEach.call($('#modeSeg').children,function(x){ x.className=x.dataset.mode===S.mode?'on':''; });
+  render();
+};
+$('#ta').addEventListener('input',function(){ S.code=this.value; DB.code[key()]=S.code; save(); render(); });
+$('#ta').addEventListener('keydown',function(e){
+  if(e.key==='Tab'){ e.preventDefault(); var s=this.selectionStart; this.value=this.value.slice(0,s)+'    '+this.value.slice(this.selectionEnd); this.selectionStart=this.selectionEnd=s+4; S.code=this.value; render(); }
+});
+$('#nSlider').addEventListener('input',function(){ S.n=parseInt(this.value,10); render(); });
+$('#btnUndo').onclick=function(){ if(S.undo.length){ S.code=S.undo.pop(); DB.code[key()]=S.code; save(); render(); } };
+$('#btnClear').onclick=function(){ setCode(''); };
+$('#btnPlay2').onclick=play;
+$('#scrub').addEventListener('input',function(){
+  if(playing){ clearInterval(playing); playing=null; setPlayLabel(false); }
+  scrubTo(parseInt(this.value,10),true);
+});
+$('#btnTxt').onclick=function(){ S.textView=!S.textView; this.textContent=S.textView?'격자로 보기':'텍스트로 보기'; render(); };
+$('#nestChk').onchange=function(){ S.nested=this.checked; render(); };
+
+/* ---------- 테마 — 누를 때마다 White → Dark → Astra 순으로 바뀐다 ---------- */
+var SKINS=['light','dark','astra'];
+var SKINNAME={light:'White',dark:'Dark',astra:'Astra'};
+function setSkin(s){
+  if(SKINS.indexOf(s)<0) s='dark';
+  document.documentElement.setAttribute('data-skin',s);
+  $('#btnSkin').textContent='테마: '+SKINNAME[s];
+  $('#btnSkin').className='mini'+(s==='astra'?' pri':'');
+  DB.skin=s; save();
+  if(S.tab==='draw') drawGrid();
+}
+$('#btnSkin').onclick=function(){
+  var cur=document.documentElement.getAttribute('data-skin');
+  setSkin(SKINS[(SKINS.indexOf(cur)+1)%SKINS.length]);
+};
+
+/* ---------- 커서를 따라 흘러내리는 별 ---------- */
+(function(){
+  var last=0, live=0;
+  var reduce=window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) return;
+  document.addEventListener('mousemove',function(e){
+    var now=Date.now();
+    if(now-last<60 || live>=20) return;
+    last=now; live++;
+    var d=document.createElement('div'); d.className='trail';
+    var sz=5+Math.random()*6;
+    d.style.width=sz+'px'; d.style.height=sz+'px';
+    d.style.left=(e.clientX+(Math.random()*12-6))+'px';
+    d.style.top=(e.clientY+(Math.random()*8-4))+'px';
+    document.body.appendChild(d);
+    setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); live--; },950);
+  },{passive:true});
+})();
+
+/* ---------- 시작 ---------- */
+buildPal(); buildDict(); buildDraw(); setSkin(DB.skin||'dark'); selectLevel(0);
+</script>
+</body>
+</html>
