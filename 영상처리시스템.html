@@ -54,9 +54,7 @@ p,li,td,.tip,.warnb,.c p,.glance p,.formula .d{text-wrap:pretty}
 .tabs button{border:0;background:none;font-size:14.5px;color:var(--ink2);white-space:nowrap;
   padding:15px 16px;cursor:pointer;border-bottom:3px solid transparent}
 .tabs button.on{font-weight:800}
-.tabs button[data-t="t1"].on{color:var(--c1);border-bottom-color:var(--c1)}
-.tabs button[data-t="t2"].on{color:var(--c2);border-bottom-color:var(--c2)}
-.tabs button[data-t="t3"].on{color:var(--c3);border-bottom-color:var(--c3)}
+.tabs button[data-t="tn"].on{color:var(--c1);border-bottom-color:var(--c1)}
 .tabs button[data-t="tv"].on{color:var(--navy);border-bottom-color:var(--navy)}
 .tabs button[data-t="tp"].on{color:var(--c2);border-bottom-color:var(--c2)}
 .tabs button[data-t="tq"].on{color:var(--form);border-bottom-color:var(--form)}
@@ -83,6 +81,72 @@ p,li,td,.tip,.warnb,.c p,.glance p,.formula .d{text-wrap:pretty}
 .btn-run{background:var(--c2);color:#fff}
 .btn-run:hover{background:#12967f}
 .btn-run:disabled{background:#9dbcb4;cursor:wait}
+
+/* ══ v3 디자인 보강 (뒤에 선언해 앞의 값을 덮어쓴다) ══ */
+body{font-size:16px}
+.top h1{font-size:38px}
+.top p{font-size:15.5px;max-width:660px}
+h2.sec{font-size:24.5px;margin-top:56px;padding-top:26px;border-top:1.5px dashed var(--line)}
+h2.sec:first-of-type{border-top:0;padding-top:0}
+.sec-sub{font-size:13.5px}
+.c p{font-size:14.8px}
+.c h3{font-size:16.5px}
+td{font-size:14.6px;padding:11px 15px}
+th{font-size:13.5px}
+.tip,.warnb{font-size:14.8px;padding:16px 22px}
+.glance p{font-size:16.5px}
+pre{font-size:13.5px}
+.c:hover{transform:translateY(-3px);box-shadow:0 6px 14px rgba(28,32,40,.1),0 16px 40px rgba(28,32,40,.12)}
+.lab:hover{box-shadow:0 6px 14px rgba(28,32,40,.08),0 16px 40px rgba(28,32,40,.1)}
+.sim-code{white-space:pre}
+.lab canvas.free{width:auto !important;height:auto !important;max-width:100%}
+/* 챕터 선택 바 — 챕터가 몇 개가 되어도 격자로 줄바꿈된다 */
+.chbar{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin:0 0 34px}
+.chbar button{border:1.5px solid var(--line);background:var(--card);border-radius:14px;
+  padding:14px 16px;cursor:pointer;text-align:left;transition:all .18s}
+.chbar button .num{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;
+  border-radius:11px;font-family:var(--mono);font-size:16px;font-weight:800;color:#fff;margin-bottom:9px}
+.chbar button .tt{display:block;font-size:14px;font-weight:700;color:var(--ink);line-height:1.4}
+.chbar button[data-ch="t1"] .num{background:var(--c1)}
+.chbar button[data-ch="t2"] .num{background:var(--c2)}
+.chbar button[data-ch="t3"] .num{background:var(--c3)}
+.chbar button:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.chbar button.on[data-ch="t1"]{border-color:var(--c1);background:var(--c1-soft)}
+.chbar button.on[data-ch="t2"]{border-color:var(--c2);background:var(--c2-soft)}
+.chbar button.on[data-ch="t3"]{border-color:var(--c3);background:var(--c3-soft)}
+/* 실습실 에디터 — 줄 번호 + 코드 + 우측 해설 */
+.ed-wrap{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.ed-left{flex:1.25;min-width:320px}
+.ed-box{display:flex;background:#141e24;border-radius:12px;overflow:hidden}
+.ed-gutter{padding:16px 10px 16px 14px;text-align:right;color:#4d6270;font-family:var(--mono);
+  font-size:13.5px;line-height:1.6;user-select:none;background:#101820;white-space:pre;overflow:hidden}
+.ed-box textarea{flex:1;min-height:340px;background:transparent;color:#e8eef2;font-family:var(--mono);
+  font-size:13.5px;line-height:1.6;border:0;padding:16px 16px 16px 8px;resize:vertical;white-space:pre;overflow:auto}
+.ed-box textarea:focus{outline:none}
+.ed-box:focus-within{outline:2px solid var(--c2)}
+.notes-pane{flex:1;min-width:280px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  box-shadow:var(--shadow);max-height:420px;overflow-y:auto}
+.notes-pane .np-h{position:sticky;top:0;background:var(--c2-soft);color:var(--c2);font-size:12.5px;
+  font-weight:800;padding:10px 16px;letter-spacing:.06em}
+.np-row{display:flex;gap:12px;padding:8px 16px;border-top:1px solid #f0f1ee;font-size:13.2px;line-height:1.55}
+.np-row:hover{background:#f7faf9}
+.np-row .ln{font-family:var(--mono);color:var(--c2);font-weight:700;min-width:26px;text-align:right}
+.np-row .tx{color:var(--ink2)}
+.np-row .tx b{color:var(--ink)}
+.star{color:#e8930c;font-weight:800}
+/* 문제 파라미터 입력 */
+.qparam{width:74px;padding:4px 8px;border:1.5px solid #d8cfe8;border-radius:7px;
+  font-family:var(--mono);font-size:15px;text-align:center;color:var(--form);font-weight:700;background:#faf8fd}
+.qparam:focus{border-color:var(--form);outline:none}
+.handcode{background:#fbfaf6;border:1px dashed #cfc7b4;border-radius:11px;padding:14px 18px;margin-top:14px;
+  font-family:var(--mono);font-size:13.5px;white-space:pre-wrap;color:#4a4a3a}
+.qcard textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:13.5px;line-height:1.6;
+  border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;resize:vertical}
+.qcard textarea:focus{border-color:var(--form);outline:none}
+details.sol-toggle{margin-top:12px}
+details.sol-toggle summary{cursor:pointer;font-size:14px;font-weight:700;color:var(--form)}
+details.sol-toggle pre{margin-top:10px}
+@media(max-width:760px){.term::after{max-width:210px}}
 .tabs button:hover{color:var(--ink)}
 
 .wrap{max-width:1040px;margin:0 auto;padding:40px 28px 90px}
@@ -233,8 +297,7 @@ footer{border-top:1px solid var(--line);margin-top:30px}
     <a class="back" href="index.html">← CS STUDY LAB</a>
     <div class="kicker">Subject 01 · Image Processing Systems</div>
     <h1>영상처리시스템</h1>
-    <p>챕터별 핵심 정리 · 강의 슬라이드 미리보기 · 직접 조작하는 실험 · 수치를 바꿔 가며 푸는 문제 연습.
-    한 페이지짜리 스터디 랩입니다.</p>
+    <p>핵심 정리, 슬라이드, 직접 조작하는 실험, 그리고 문제 연습까지 — 공부에 필요한 것을 한곳에 모았습니다.</p>
     <div class="top-actions">
       <a class="btn btn-primary" href="ips/영상처리시스템_CH01.pptx" download>PPT · CH01</a>
       <a class="btn btn-primary" href="ips/영상처리시스템_CH02.pptx" download>PPT · CH02</a>
@@ -248,16 +311,20 @@ footer{border-top:1px solid var(--line);margin-top:30px}
 
 <nav class="tabs" aria-label="탭 선택">
   <div class="tabs-inner">
-    <button class="on" data-t="t1">CH01 영상처리 개요</button>
-    <button data-t="t2">CH02 OpenCV와 파이썬</button>
-    <button data-t="t3">CH03 파이썬 둘러보기</button>
+    <button class="on" data-t="tn">강의 노트</button>
     <button data-t="tv">슬라이드</button>
-    <button data-t="tp">실습실</button>
+    <button data-t="tp">파이썬 실습실</button>
     <button data-t="tq">문제 연습</button>
   </div>
 </nav>
 
 <main class="wrap">
+
+<div class="chbar" id="chBar">
+  <button class="on" data-ch="t1"><span class="num">01</span><span class="tt">영상처리 개요</span></button>
+  <button data-ch="t2"><span class="num">02</span><span class="tt">OpenCV와 파이썬</span></button>
+  <button data-ch="t3"><span class="num">03</span><span class="tt">파이썬 둘러보기</span></button>
+</div>
 
 <!-- ═══════════════════ CH01 ═══════════════════ -->
 <section class="panel on t1" id="t1">
@@ -479,7 +546,7 @@ cv2.destroyAllWindows()</pre>
         <input type="range" id="cvF" min="0" max="255" step="5" value="200" style="width:100%;accent-color:var(--c2)">
         <div style="margin-top:16px;border:1px solid var(--line);border-radius:10px;overflow:hidden;display:inline-block;max-width:100%">
           <div style="background:#e8e8ec;color:#333;font-size:12px;padding:5px 12px;font-family:var(--sans)">Window title</div>
-          <canvas id="cvWin" width="400" height="300" style="display:block;max-width:100%"></canvas>
+          <canvas id="cvWin" class="free" width="400" height="300" style="display:block;max-width:100%"></canvas>
         </div>
       </div>
     </div>
@@ -616,9 +683,9 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
   <div class="sec-sub">챕터를 고르고 ← → 방향키, 좌우 클릭, 아래 바로 넘겨 보세요</div>
   <div class="viewer">
     <div class="jump" style="margin:0 0 16px">
-      <button data-deck="1" class="on" style="border-color:#7c93f5;color:#fff">CH01 개요 (16장)</button>
-      <button data-deck="2">CH02 OpenCV (17장)</button>
-      <button data-deck="3">CH03 파이썬 (16장)</button>
+      <button data-deck="1" class="on" style="border-color:#7c93f5;color:#fff">CH01 영상처리 개요</button>
+      <button data-deck="2">CH02 OpenCV와 파이썬</button>
+      <button data-deck="3">CH03 파이썬 둘러보기</button>
     </div>
     <div class="frame">
       <img id="slideImg" src="ips/s1/01.jpg" alt="강의 슬라이드 1번">
@@ -639,21 +706,34 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
 <!-- ═══════════════════ 파이썬 실습실 ═══════════════════ -->
 <section class="panel t2" id="tp">
   <h2 class="sec" style="margin-top:0">파이썬 실습실 — 코드를 고쳐서 바로 실행</h2>
-  <div class="sec-sub">수업 실습 파일이 그대로 들어 있습니다. 값을 바꾸고 [실행]을 누르면 진짜 파이썬이 브라우저 안에서 돌아갑니다 (첫 실행 시 엔진 로딩 20~30초, 인터넷 필요)</div>
+  <div class="sec-sub">교재 2~3장 예제 전체가 들어 있습니다. <span class="star">★</span>는 수업 시간에 실제로 실습한 파일.
+  값을 바꾸고 [실행]하면 진짜 파이썬이 브라우저 안에서 돌아갑니다 (첫 실행만 엔진 로딩 20~30초, 인터넷 필요)</div>
   <div class="runner">
     <div class="exbtns" id="exBtns"></div>
-    <textarea id="pyCode" spellcheck="false" aria-label="파이썬 코드 입력"></textarea>
-    <div style="display:flex;gap:10px;margin:12px 0;align-items:center;flex-wrap:wrap">
-      <button class="btn btn-run" id="pyRun">▶ 실행</button>
-      <span id="pyStatus" style="font-size:13px;color:var(--mute)"></span>
+    <div class="ed-wrap">
+      <div class="ed-left">
+        <div class="ed-box">
+          <div class="ed-gutter" id="edGutter">1</div>
+          <textarea id="pyCode" spellcheck="false" wrap="off" aria-label="파이썬 코드 입력"></textarea>
+        </div>
+        <div style="display:flex;gap:10px;margin:12px 0;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-run" id="pyRun">▶ 실행</button>
+          <button class="btn" id="pyReset" style="background:var(--card);border:1.5px solid var(--line);color:var(--ink2)">↺ 초기화</button>
+          <span id="pyStatus" style="font-size:13px;color:var(--mute)"></span>
+        </div>
+        <div class="out" id="pyOut">실행 결과가 여기에 표시됩니다.</div>
+      </div>
+      <div class="notes-pane">
+        <div class="np-h">줄별 해설 — 원본 예제 기준</div>
+        <div id="npRows"></div>
+      </div>
     </div>
-    <div class="out" id="pyOut">실행 결과가 여기에 표시됩니다.</div>
   </div>
   <div class="tip" style="margin-top:20px"><span class="tag">이렇게 써 보세요</span>
-    07.for.py에서 점수 리스트를 바꾸면 합계가 어떻게 변하는지, 04.slice에서 대괄호 숫자를 바꾸면
-    어떤 원소가 뽑히는지 — <b>숫자를 하나씩 바꿔 가며</b> 실행해 보는 게 최고의 공부입니다.</div>
-  <div class="warnb"><b>참고</b> — cv2(OpenCV)는 브라우저 파이썬에서 지원되지 않아, 02.opencvtest.py는
-    CH02 탭의 <b>회색 창 시뮬레이터</b>로 대신 실습합니다. numpy는 여기서 그대로 돌아갑니다.</div>
+    Tab 키로 들여쓰기가 되고, 엔터를 치면 이전 줄의 들여쓰기가 유지됩니다(파이참처럼).
+    숫자를 하나씩 바꿔 가며 실행해 보는 게 최고의 공부예요 — 망가뜨려도 [초기화]로 언제든 원본으로 돌아옵니다.</div>
+  <div class="warnb"><b>참고</b> — cv2(OpenCV)는 브라우저 파이썬이 지원하지 않아, 02.opencvtest.py는
+    CH02 탭의 <b>회색 창 시뮬레이터</b>로 실습합니다. numpy는 여기서 그대로 돌아갑니다.</div>
 </section>
 
 <!-- ═══════════════════ 문제 연습 ═══════════════════ -->
@@ -661,9 +741,12 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
   <div class="quiz-head">
     <div>
       <h2 class="sec" style="margin:0">문제 연습</h2>
-      <div class="sec-sub">수치가 매번 바뀝니다 — 답을 직접 계산해 입력하고, 채점 후 [새 문제]로 반복 연습하세요.</div>
+      <div class="sec-sub">수치가 매번 바뀌고, 문제 속 <b>보라색 숫자를 직접 고치면</b> 그 값 기준으로 채점됩니다.</div>
     </div>
-    <span class="score" id="score">0 / 0 정답</span>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn" id="makePdf" style="background:var(--form);color:#fff">🖨 문제지 만들기 (인쇄·PDF)</button>
+      <span class="score" id="score">0 / 0 정답</span>
+    </div>
   </div>
   <div class="qcats" id="qcats">
     <button class="on" data-q="storage">저장 공간 계산</button>
@@ -672,6 +755,7 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
     <button data-q="slice">슬라이스 결과</button>
     <button data-q="op">연산자</button>
     <button data-q="mc">OpenCV 상식</button>
+    <button data-q="hand">✍ 손코딩</button>
   </div>
   <div class="qcard" id="qcard"></div>
 </section>
@@ -691,14 +775,27 @@ a.flatten()                        <span class="cm"># 다차원 → 1차원</spa
 </footer>
 
 <script>
-/* ── 탭 ── */
+/* ── 탭: 메인 4탭 + 강의 노트 안의 챕터 선택 ── */
+var curChapter = 't1';
 function showTab(id){
   document.querySelectorAll('.tabs button').forEach(function(x){ x.classList.toggle('on', x.dataset.t === id); });
-  document.querySelectorAll('.panel').forEach(function(p){ p.classList.toggle('on', p.id === id); });
+  var isNote = (id === 'tn');
+  document.getElementById('chBar').style.display = isNote ? '' : 'none';
+  document.querySelectorAll('.panel').forEach(function(p){
+    p.classList.toggle('on', isNote ? p.id === curChapter : p.id === id);
+  });
   scrollTo({top:0});
 }
 document.querySelectorAll('.tabs button').forEach(function(b){
   b.addEventListener('click', function(){ showTab(b.dataset.t); });
+});
+document.querySelectorAll('#chBar button').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('#chBar button').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    curChapter = b.dataset.ch;
+    showTab('tn');
+  });
 });
 document.getElementById('goViewer').addEventListener('click', function(){ showTab('tv'); });
 document.getElementById('goLab').addEventListener('click', function(){ showTab('tp'); });
@@ -877,34 +974,413 @@ function sceneGray(x, y){
 
 /* ── 파이썬 실습실 (Pyodide) ── */
 (function(){
+  // ★ = 수업 시간에 실제 실습한 파일 (파이참 폴더에 있는 내 코드 그대로)
+  // 나머지는 교재 예제를 오탈자 없이 정리한 것 — 수업에서 건너뛰었어도 공부는 여기서!
   var EX = {
-    '07.for.py':
-'# 리스트 원소합 구하기 — 내 실습 파일 그대로\nkor = [70, 80, 90, 40, 50]\neng = [90, 80, 70, 70, 60]\n\nsum1, sum2, sum3, sum4 = 0, 0, 0, 0\n\nfor i in range(0, 5):\n    sum1 = sum1 + kor[i] + eng[i]\n\nfor k in kor:\n    sum2 = sum2 + k\nfor e in eng:\n    sum2 = sum2 + e\n\nfor i, k in enumerate(kor):\n    sum3 = sum3 + k + eng[i]\n\nfor k, e in zip(kor, eng):\n    sum4 = sum4 + k + e\n\nprint(\'sum1 = \', sum1), print(\'sum2 = \', sum2)\nprint(\'sum3 = \', sum3), print(\'sum4 = \', sum4)',
-    '04.slice_operater.py':
-'a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n\nprint(a)\nprint(a[:2])\nprint(a[4:-1])\nprint(a[2::2])\nprint(a[::-1])\nprint(a[1::-1])\nprint(a[7:1:-2])\nprint(a[:-4:-1])',
-    '02.list.py':
-'list1 = [1, 2, 3, 4]\nlist2 = [1, 1.5, \'a\', \'a\', \'문자열\']\n\ntuple1 = (1, 2)\ntuple2 = (1, 1.5, \'b\', \'b\', \'문자열\')\n\ndict1 = {\'name\':\'김민\', \'email\':\'naver.com\'}\nset1, set2 = set(list2), set(tuple2)\n\nlist1[0] = 5\nlist2.insert(3, \'b\')\n# tuple1[0] = 5   # 에러 발생 - 튜플은 원소 변경 불가\n\nprint(\'list1\', list1, type(list1))\nprint(\'list2\', list2, type(list2))\nprint(\'tuple1\', tuple1, type(tuple1))\nprint(\'dict1\', dict1, type(dict1))\nprint(\'set1\', set1, type(set1))\nprint(\'intersection\', set1 & set2)',
-    '12.numpy2.py':
-'import numpy as np\n\na = np.zeros((2, 5), int)\nb = np.ones((3, 1), np.uint8)\nc = np.empty((1, 5), float)\nd = np.full(5, 15, np.float32)\n\nprint(type(a), type(a[0]), type(a[0][0]))\nprint(\'c 형태:\', c.shape, \'d 형태:\', d.shape)\nprint(a), print(b)\nprint(c), print(d)',
-    '윤년 검사 (교재 3.4.1)':
-'year = 2020   # 2100, 2000, 2024 로 바꿔서 실행해 보세요\n\nif (year % 4==0) and (year % 100 != 0):\n    print(year, "는 윤년입니다.")\nelif year % 400==0:\n    print(year, "는 윤년입니다.")\nelse:\n    print(year, "는 윤년이 아닙니다.")',
+'01.hello.py': { star: true, ch: 'chap_02', code:
+`print('hello')`,
+  notes: [[1, "<b>print()</b> — 괄호 안의 내용을 화면(콘솔)에 출력하는 내장함수. 따옴표로 감싼 글자는 '문자열'이다."]] },
+
+'01.variable.py': { star: false, ch: 'chap_03', code:
+`variable1 = 100                  # 정수 변수 선언
+variable2 = 3.14                 # 실수 변수 선언
+variable3 = -200
+variable4 = 1.2 + 3.4j           # 복소수 변수 선언
+variable5 = 'This is Python'     # 문자열 변수 선언
+
+variable6 = True                 # bool 변수 선언
+variable7 = float(variable1)     # 자료형 변경: 정수 -> 실수
+variable8 = int(variable2)       # 자료형 변경: 실수 -> 정수
+
+print('variable1 =', variable1, type(variable1))
+print('variable2 =', variable2, type(variable2))
+print('variable4 =', variable4, type(variable4))
+print('variable5 =', variable5, type(variable5))
+print('variable6 =', variable6, type(variable6))
+print('variable7 =', variable7, type(variable7))
+print('variable8 =', variable8, type(variable8))`,
+  notes: [
+   [1, "= 는 '같다'가 아니라 <b>오른쪽 값을 왼쪽 이름에 담아라</b>는 뜻. 파이썬은 자료형을 미리 적지 않는다(동적 타입)."],
+   [4, "복소수는 수학의 i 대신 <b>j</b>를 쓴다. 1.2+3.4j"],
+   [8, "float() — 정수 100을 실수 100.0으로. 소수점이 붙는다."],
+   [9, "int() — 3.14가 <b>3</b>이 된다. 반올림이 아니라 <b>버림</b>! 시험 포인트."],
+   [11, "type() — 그 값의 자료형을 알려 주는 내장함수. int, float, str 등으로 표시된다."]] },
+
+'02.list.py': { star: true, ch: 'chap_03', code:
+`list1 = [1, 2, 3, 4]
+list2 = [1, 1.5, 'a', 'a', '문자열']
+
+tuple1 = (1, 2)
+tuple2 = (1, 1.5, 'b', 'b', '문자열')
+
+dict1 = {'name':'김민', 'email':'naver.com'}
+set1, set2 = set(list2), set(tuple2)   # 한 행에 두 개 변수 선언
+
+list1[0] = 5   # 0번 원소 값 변경
+list2.insert(3, 'b')   # 원소 삽입
+# tuple1[0] = 5   # 에러 발생 - 튜플은 원소 변경 불가
+
+dict1['email'] = 'naver.com'   # 킷값으로 접근
+
+print('list1', list1, type(list1))
+print('list2', list2, type(list2))
+print('tuple1', tuple1, type(tuple1))
+print('dict1', dict1, type(dict1))
+print('set1', set1, type(set1))
+print('set2', set2, type(set2))
+print('intersection', set1 & set2)   # 교집합 구함`,
+  notes: [
+   [1, "대괄호 [ ] = <b>리스트</b>. 넣고 빼고 바꾸는 게 전부 자유로운 그릇."],
+   [4, "소괄호 ( ) = <b>튜플</b>. 한번 만들면 절대 못 바꾸는 '잠긴 리스트'."],
+   [7, "중괄호 {키:값} = <b>사전(dict)</b>. 이름표(키)로 값을 찾는 서랍."],
+   [8, "set() = <b>집합</b>. 중복된 원소('a' 두 개)를 자동으로 하나만 남긴다."],
+   [10, "리스트는 0번부터 센다. list1[0]=5 → 첫 원소가 1에서 5로 바뀐다."],
+   [11, "insert(3,'b') — 3번 자리에 'b'를 끼워 넣는다. 뒤 원소들은 한 칸씩 밀린다."],
+   [12, "주석을 풀고 실행해 보라 — TypeError가 난다. 튜플 불변을 눈으로 확인!"],
+   [22, "& 는 교집합. | 합집합, - 차집합도 해 보자."]] },
+
+'03.command_line.py': { star: false, ch: 'chap_03', code:
+`title = '서기 1년 1월 1일부터' \\
+        '오늘까지' \\
+        '일수 구하기'
+months = [31, 28, 31, 30, 31, 30,
+          31, 31, 30, 31, 30, 31]
+year, month = 2020, 1            # 여러개 변수 한행에 선언
+day = 7; ratio = 365.2425        # 2개 논리적 명령행
+
+days = (year -1) * ratio + \\
+       sum(months[:month-1]) + day
+
+print(title), print(' - 년:', year), print(' - 월:', month)
+print(' - 일:', day); print(' * 일수 총합:', int(days))`,
+  notes: [
+   [1, "행 끝의 <b>역슬래시(\\)</b> — '이 명령은 다음 줄로 이어진다'는 표시. 세 줄이 한 문장이 된다."],
+   [4, "리스트의 원소를 나열할 때는 역슬래시 <b>없이도</b> 여러 줄로 쓸 수 있다."],
+   [6, "쉼표 다중 할당 — year에 2020, month에 1이 동시에 담긴다."],
+   [7, "<b>세미콜론(;)</b> — 한 줄에 두 명령. 자주 쓰진 않지만 문법은 알아 두자."],
+   [9, "1년 평균 365.2425일(그레고리력) × 지난 연수 + 이번 해 지난 날수."],
+   [13, "실행하면 737431일 — 서기 1년부터 2020년 1월 7일까지의 총일수다."]] },
+
+'04.slice_operater.py': { star: true, ch: 'chap_03', code:
+`a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+print(a)
+print(a[:2])       # 처음부터 1번까지 (2는 미포함)
+print(a[4:-1])     # 4번부터 뒤에서 두 번째까지
+print(a[2::2])     # 2번부터 2칸씩
+print(a[::-1])     # 전체 역순 - 자주 쓴다!
+print(a[1::-1])    # 1번부터 거꾸로
+print(a[7:1:-2])   # 7번부터 2칸씩 감소
+print(a[:-4:-1])   # 끝에서 3개, 역순`,
+  notes: [
+   [4, "규칙은 <b>[시작:끝:간격]</b> 하나. 끝 인덱스는 <b>포함되지 않는다</b> — [:2]는 0,1번만."],
+   [5, "-1은 '마지막 원소'라는 뜻. 끝 미포함 규칙 때문에 8까지만 나온다."],
+   [7, "간격이 <b>음수</b>면 거꾸로 간다. 시작을 생략하면 마지막(9)부터 출발."],
+   [10, "영상처리 예고 — image[::-1]이 사진 상하 반전, image[100:200, 50:150]이 잘라내기다."]] },
+
+'05.if.py': { star: false, ch: 'chap_03', code:
+`year = 2020    # 2100, 2000, 2024 로 바꿔 보자
+
+if (year % 4==0) and (year % 100 != 0):
+    print(year, "는 윤년입니다.")
+elif year % 400==0:
+    print(year, "는 윤년입니다.")
+else:
+    print(year, "는 윤년이 아닙니다.")`,
+  notes: [
+   [3, "% 는 나머지 연산. year%4==0 → 4의 배수. <b>and</b>는 두 조건이 모두 참일 때만 참."],
+   [3, "조건 뒤에는 반드시 <b>콜론(:)</b>, 실행할 내용은 <b>들여쓰기</b> — 파이썬 블록의 규칙."],
+   [5, "elif = '아니면 만약'. 위 조건이 거짓일 때만 검사한다. 여러 번 이어 쓸 수 있다."],
+   [7, "else = '그도 아니면'. 2100으로 바꾸면 여기로 온다 — 2100년은 평년!"]] },
+
+'06.while.py': { star: false, ch: 'chap_03', code:
+`# 원본 예제는 input()으로 키보드 입력을 받지만,
+# 브라우저 실습실에서는 입력 대신 리스트로 재현한다.
+inputs = [1, 2, 3, 4]    # 키보드로 칠 값들 (0을 넣어 보자!)
+idx = 0
+
+n = 3
+while n >= 0:
+    m = inputs[idx]; idx = idx + 1
+    print('Enter a integer:', m)
+    if int(m) == 0: break    # 0이면 while 문을 벗어남
+    n = n - 1
+else:
+    print('4 inputs.')`,
+  notes: [
+   [3, "inputs 중간에 0을 넣으면 break가 걸려 else가 실행되지 않는 것을 볼 수 있다."],
+   [7, "while 조건: — 조건이 참인 동안 들여쓴 블록을 반복한다."],
+   [10, "<b>break</b> — 반복을 즉시 탈출. 이때는 아래 else가 실행되지 <b>않는다</b>."],
+   [12, "파이썬 특유의 <b>while-else</b> — break 없이 조건이 거짓이 되어 끝났을 때만 실행. 시험 포인트!"]] },
+
+'07.for.py': { star: true, ch: 'chap_03', code:
+`# 리스트 원소합 구하기
+# for 변수 in 리스트(또는 range(), zip()) - 순회
+kor = [70, 80, 90, 40, 50]   # 리스트 선언
+eng = [90, 80, 70, 70, 60]
+
+sum1, sum2, sum3, sum4 = 0, 0, 0, 0   # 누적 변수 초기화
+
+for i in range(0, 5):   # range() 함수로 범위지정
+    sum1 = sum1 + kor[i] + eng[i]
+
+for k in kor:   # 리스트 원소 순회
+    sum2 = sum2 + k
+for e in eng:
+    sum2 = sum2 + e
+
+for i, k in enumerate(kor):   # 리스트의 인덱스와 원소로 순회
+    sum3 = sum3 + k + eng[i]
+
+for k, e in zip(kor, eng):   # 여러 객체 동시 순회
+    sum4 = sum4 + k + e
+
+print('sum1 = ', sum1), print('sum2 = ', sum2)
+print('sum3 = ', sum3), print('sum4 = ', sum4)`,
+  notes: [
+   [8, "방법① range(0,5) — 0,1,2,3,4 번호를 만들어 <b>번호로</b> 원소에 접근."],
+   [11, "방법② 원소 직접 순회 — 번호가 필요 없으면 이게 제일 깔끔하다."],
+   [16, "방법③ <b>enumerate</b> — 번호(i)와 원소(k)를 <b>동시에</b> 준다."],
+   [19, "방법④ <b>zip</b> — 두 리스트를 나란히 묶어 한 쌍씩 꺼낸다."],
+   [22, "네 방법 모두 합계는 700 — 결과는 같아도 상황에 맞는 것을 고르는 게 파이썬답게 쓰는 길."]] },
+
+'08.def.py': { star: false, ch: 'chap_03', code:
+`def calc_area(type, a, b, c=None):   # c는 기본값 인수
+    if type == 1:                    # 사각형
+        result = a * b
+        msg = '사각형'
+    elif type == 2:                  # 삼각형
+        result = a * b / 2
+        msg = '삼각형'
+    elif type == 3:                  # 사다리꼴
+        result = (a + b) * c / 2
+        msg = '사다리꼴'
+    return result, msg               # 반환값 2개 -> 튜플
+
+def say():                           # 인수, 반환값 없는 함수
+    print('넓이를 구해요')
+
+def write(result, msg):              # 반환값 없는 함수
+    print(msg, '넓이는', result, 'm2 입니다.')
+
+say()
+ret = calc_area(type=1, a=5, b=5)    # 튜플로 받기
+area, msg = calc_area(2, 5, 5)       # 풀어서 받기
+area2, _ = calc_area(3, 10, 7, 5)    # 안 쓸 값은 _ 로 버림
+
+print(type(ret))
+write(ret[0], ret[1])
+write(area, msg)
+write(area2, '사다리꼴')`,
+  notes: [
+   [1, "<b>def</b>로 함수를 만든다. c=None은 '안 넘기면 None으로 하겠다'는 <b>기본값 인수</b>."],
+   [9, "(윗변+아랫변)×높이÷2 = <b>사다리꼴</b> 공식. (교재 원문엔 '평행사변형'으로 표기 — 수식 기준으로 바로잡음)"],
+   [11, "값을 <b>두 개</b> 돌려주면 자동으로 튜플이 된다. 파이썬의 큰 편리함."],
+   [20, "이름을 붙여 호출(type=1, a=5) — 순서를 안 외워도 되는 <b>키워드 인수</b>."],
+   [21, "튜플을 area, msg 두 변수로 풀어서 받는다(언패킹)."],
+   [22, "안 쓸 반환값은 <b>_</b> 라는 이름으로 버리는 게 파이썬 관례."]] },
+
+'09.module.py': { star: false, ch: 'chap_03', code:
+`# 원본 예제는 함수들을 header_area.py 파일로 저장한 뒤
+#   import chap03.header_area as mod
+#   from chap03.header_area import write
+# 로 불러온다. 브라우저 실습실은 파일이 하나라 직접 정의해 재현한다.
+
+def calc_area(type, a, b, c=None):
+    if type == 1:
+        return a * b, '사각형'
+
+def say():
+    print('넓이를 구해요')
+
+def write(result, msg):
+    print(msg, '넓이는', result, 'm2 입니다.')
+
+say()
+area, msg = calc_area(type=1, a=5, b=5)
+write(area, msg)`,
+  notes: [
+   [2, "<b>모듈</b> = 함수를 모아 둔 .py 파일. import 파일명 as 별명 으로 불러온다."],
+   [3, "from 파일 import 함수 — 특정 함수만 콕 집어 가져와 바로 이름으로 쓴다."],
+   [4, "import cv2, import numpy as np 가 정확히 이 문법이다 — 남이 만든 모듈을 빌려 쓰는 것."]] },
+
+'10.inner_fuction.py': { star: false, ch: 'chap_03', code:
+`a = [1.5, 2, 3, 4, 5]            # 리스트 생성
+b = map(float, a)                # 모든 원소를 실수로
+c = divmod(5, 3)                 # 몫과 나머지를 한 번에
+
+print('최댓값:', max(a), ' 최솟값:', min(a))
+print('몫과 나머지:', c)
+print('c의 자료형:', type(c), type(c[0]), type(c[1]))
+
+print('2의 4제곱:', pow(2, 4))
+print('절댓값:', abs(-4))`,
+  notes: [
+   [2, "<b>map(함수, 객체)</b> — 모든 원소에 같은 함수를 적용한다. list(b)로 감싸면 결과가 보인다."],
+   [3, "<b>divmod(5,3)</b> — 몫 1과 나머지 2를 튜플 (1, 2)로 한 번에 돌려준다."],
+   [5, "max/min — 가장 큰/작은 원소. 전부 파이썬이 <b>미리 만들어 둔 내장함수</b>다."],
+   [9, "pow(2,4) = 2⁴ = 16. 연산자 2**4와 같다."]] },
+
+'11.numpy.py': { star: false, ch: 'chap_03', code:
+`import numpy as np
+
+list1, list2 = [1, 2, 3], [4, 5.0, 6]
+a, b = np.array(list1), np.array(list2)   # 리스트 -> ndarray
+
+c = a + b        # 원소끼리 덧셈
+d = a - b
+e = a * b
+f = a / b
+g = a * 2        # 스칼라 곱
+h = b + 2
+
+print('a 자료형:', type(a), type(a[0]))
+print('b 자료형:', type(b), type(b[0]))
+print('c 자료형:', type(c), type(c[0]))
+print(c, d, e)
+print(f, g, h)`,
+  notes: [
+   [1, "as np — numpy를 np라는 짧은 별명으로. 전 세계 공통 관례다."],
+   [4, "<b>np.array()</b> — 리스트를 ndarray(넘파이 배열)로 바꾼다. OpenCV 영상이 바로 이것."],
+   [6, "반복문 없이 <b>모든 원소가 한 번에</b> 계산된다 — 넘파이의 힘."],
+   [10, "배열 × 숫자 — 모든 원소에 2를 곱한다. '영상 전체 2배 밝게'가 이 한 줄."],
+   [13, "a는 정수라 int32, b는 5.0 때문에 float64. 섞어 계산하면 <b>float64로 승격</b>된다."]] },
+
+'12.numpy2.py': { star: true, ch: 'chap_03', code:
+`# 라이브러리 > 패키지 > 모듈 > 함수
+
+import numpy as np   # 넘파이 모듈 임포트
+
+a = np.zeros((2, 5), int)      # 원소값 0 행렬 - 2행 5열
+b = np.ones((3, 1), np.uint8)  # 원소값 1 행렬 - 3행 1열, 부호 없는 8비트
+c = np.empty((1, 5), float)    # 값 없음 행렬 - 1행 5열
+d = np.full(5, 15, np.float32) # 원소값 15, 1차원 행렬
+
+print(type(a), type(a[0]), type(a[0][0]))
+print(type(b), type(b[0]), type(b[0][0]))
+print(type(c), type(c[0]), type(c[0][0]))
+print(type(d), type(d[0]))
+print('c 형태:', c.shape, 'd 형태:', d.shape)
+print(a), print(b)
+print(c), print(d)`,
+  notes: [
+   [5, "<b>zeros((2,5))</b> — 0으로 채운 2행 5열. (행, 열) 순서를 꼭 기억!"],
+   [6, "<b>uint8</b> = 0~255 정수 = 8비트 양자화. 2장의 회색 창이 이 자료형이었다."],
+   [7, "<b>empty</b>는 초기화를 안 해서 쓰레기값이 보인다 — 실행할 때마다 달라질 수 있음(정상!)."],
+   [14, "<b>shape</b> 읽기 — (1,5)는 2차원 1행 5열, (5,)는 1차원 5개. 둘은 다르다!"],
+   [3, "교재의 np.int·np.float는 최신 넘파이에서 삭제됨 — int, float, np.int32처럼 쓰는 게 맞다."]] },
+
+'13.numpy3.py': { star: false, ch: 'chap_03', code:
+`import numpy as np
+
+np.random.seed(10)               # 시드 고정 - 매번 같은 난수
+a = np.random.rand(2, 3)         # 0~1 균등분포
+b = np.random.randn(3, 2)        # 표준정규분포
+c = np.random.rand(6)
+d = np.random.randint(1, 100, 6) # 1~99 정수 6개
+c = np.reshape(c, (2, 3))        # 모양 바꾸기
+d = d.reshape(2, -1)             # -1 = 자동 계산
+
+print('a 형태:', a.shape); print(a)
+print('d 형태:', d.shape); print(d)
+
+print('다차원 객체 1차원 변환')
+print('a =', a.flatten())
+print('b =', np.ravel(b))
+print('c =', np.reshape(c, (-1,)))
+print('d =', d.reshape(-1,))`,
+  notes: [
+   [3, "<b>seed(10)</b> — 난수의 '시작점'을 고정. 실행할 때마다 같은 값이 나와 실험 재현이 가능하다."],
+   [7, "randint(1, 100, 6) — 1 이상 <b>100 미만</b>의 정수 6개. 끝 미포함은 여기서도!"],
+   [9, "reshape(2, <b>-1</b>) — '-1은 알아서 계산해'라는 뜻. 6개면 자동으로 (2,3)."],
+   [15, "<b>flatten()</b> — 몇 차원이든 한 줄(1차원)로 펴 준다. ravel, reshape(-1,)도 같은 일."]] },
+
+'02.opencvtest.py': { star: true, ch: 'chap_02', code:
+`import numpy as np    # pip install numpy
+import cv2            # pip install opencv-python
+
+image = np.zeros((300, 400), np.uint8)
+image.fill(255)       # 혹은 image[:] = 200  (0~255 정수)
+
+cv2.imshow("Window title", image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()`,
+  notes: [
+   [4, "300행 400열의 0(검정) 행렬 = 검은 영상 한 장. uint8이라 화소값은 0~255."],
+   [5, "fill(255) — 모든 화소를 255(흰색)로. 수업 때 나는 255로 바꿔 실습했다."],
+   [7, "imshow — 행렬을 창에 영상으로 표시. <b>브라우저에서는 실행 불가</b> → CH02 탭의 시뮬레이터로!"],
+   [8, "waitKey(0) — 키를 누를 때까지 창을 유지. 이게 없으면 창이 바로 사라진다."]] },
   };
+
   var ta = document.getElementById('pyCode'), out = document.getElementById('pyOut'),
       run = document.getElementById('pyRun'), st = document.getElementById('pyStatus'),
-      bar = document.getElementById('exBtns');
-  Object.keys(EX).forEach(function(name, i){
-    var b = document.createElement('button');
-    b.textContent = name;
-    if (i === 0) b.classList.add('on');
-    b.addEventListener('click', function(){
-      bar.querySelectorAll('button').forEach(function(x){ x.classList.remove('on'); });
-      b.classList.add('on');
-      ta.value = EX[name];
-      out.textContent = '실행 결과가 여기에 표시됩니다.';
+      bar = document.getElementById('exBtns'), gut = document.getElementById('edGutter'),
+      np_ = document.getElementById('npRows');
+  var curName = '07.for.py';
+
+  function renderGutter(){
+    var n = ta.value.split('\n').length;
+    var s = '';
+    for (var i = 1; i <= n; i++) s += i + '\n';
+    gut.textContent = s;
+  }
+  ta.addEventListener('input', renderGutter);
+  ta.addEventListener('scroll', function(){ gut.scrollTop = ta.scrollTop; });
+
+  // Tab = 4칸 들여쓰기, Shift+Tab = 내어쓰기, Enter = 이전 줄 들여쓰기 유지 (파이참처럼)
+  ta.addEventListener('keydown', function(e){
+    var s = ta.selectionStart, epos = ta.selectionEnd, v = ta.value;
+    if (e.key === 'Tab'){
+      e.preventDefault();
+      if (e.shiftKey){
+        var ls = v.lastIndexOf('\n', s - 1) + 1;
+        if (v.substr(ls, 4) === '    '){
+          ta.value = v.slice(0, ls) + v.slice(ls + 4);
+          ta.selectionStart = ta.selectionEnd = Math.max(ls, s - 4);
+        }
+      } else {
+        ta.value = v.slice(0, s) + '    ' + v.slice(epos);
+        ta.selectionStart = ta.selectionEnd = s + 4;
+      }
+      renderGutter();
+    } else if (e.key === 'Enter'){
+      e.preventDefault();
+      var ls2 = v.lastIndexOf('\n', s - 1) + 1;
+      var indent = (v.slice(ls2).match(/^ */) || [''])[0];
+      var line = v.slice(ls2, s);
+      if (/:\s*$/.test(line)) indent += '    ';        // 콜론으로 끝나면 한 단계 더
+      ta.value = v.slice(0, s) + '\n' + indent + v.slice(epos);
+      ta.selectionStart = ta.selectionEnd = s + 1 + indent.length;
+      renderGutter();
+    }
+  });
+
+  function load(name){
+    curName = name;
+    ta.value = EX[name].code;
+    out.textContent = '실행 결과가 여기에 표시됩니다.';
+    renderGutter();
+    var html = '';
+    EX[name].notes.forEach(function(nrow){
+      html += '<div class="np-row"><span class="ln">' + nrow[0] + '</span><span class="tx">' + nrow[1] + '</span></div>';
     });
+    np_.innerHTML = html || '<div class="np-row"><span class="tx">해설 준비 중</span></div>';
+    bar.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x.dataset.name === name); });
+  }
+
+  Object.keys(EX).sort(function(a, b){
+    var ca = EX[a].ch, cb = EX[b].ch;
+    return ca === cb ? a.localeCompare(b) : ca.localeCompare(cb);
+  }).forEach(function(name){
+    var b = document.createElement('button');
+    b.dataset.name = name;
+    b.innerHTML = (EX[name].star ? '<span class="star">★</span> ' : '') + name;
+    b.title = EX[name].star ? '수업 시간에 실제 실습한 파일' : '교재 예제 (수업에서는 건너뜀 — 여기서 공부!)';
+    b.addEventListener('click', function(){ load(name); });
     bar.appendChild(b);
   });
-  ta.value = EX['07.for.py'];
+  load('07.for.py');
+  document.getElementById('pyReset').addEventListener('click', function(){ load(curName); });
 
   var pyodide = null, loading = false;
   function ensureEngine(){
@@ -927,6 +1403,12 @@ function sceneGray(x, y){
     return loading;
   }
   run.addEventListener('click', function(){
+    if (/^\s*import\s+cv2/m.test(ta.value)){
+      out.textContent = 'ℹ cv2(OpenCV)는 브라우저 파이썬에서 지원되지 않습니다.\n' +
+        '이 예제는 CH02 탭의 [회색 창 시뮬레이터]에서 값을 바꿔 가며 실습하세요.\n' +
+        '(내 컴퓨터의 파이참에서는 그대로 실행됩니다)';
+      return;
+    }
     ensureEngine().then(function(py){
       st.textContent = '';
       run.disabled = false;
@@ -950,84 +1432,127 @@ function sceneGray(x, y){
   });
 })();
 
-/* ── 문제 연습 ── */
+/* ── 문제 연습 v2: 파라미터 직접 수정 + 손코딩 + PDF 문제지 ── */
 (function(){
   var card = document.getElementById('qcard');
   var right = 0, tries = 0, curKind = 'storage', current = null;
   function ri(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); }
   function pick(arr){ return arr[ri(0, arr.length - 1)]; }
+  function pin(name, val, w){                       // 문제 속 수정 가능한 숫자
+    return '<input class="qparam" data-p="' + name + '" value="' + val + '"' +
+           (w ? ' style="width:' + w + 'px"' : '') + ' inputmode="numeric">';
+  }
+  function P(name){                                  // 현재 파라미터 값 읽기
+    var el = card.querySelector('.qparam[data-p="' + name + '"]');
+    return el ? el.value.trim() : '';
+  }
+  function Pn(name){ return +String(P(name)).replace(/,/g, ''); }
 
+  // 파이썬과 동일한 슬라이스 (놀이터와 같은 로직 — 실제 파이썬으로 검증됨)
+  function pySlice(arr, a, b, c){
+    var n = arr.length, step = (c === null || isNaN(c)) ? 1 : c;
+    if (step === 0) return null;
+    var start, stop, res = [];
+    if (step > 0){
+      start = a === null ? 0 : (a < 0 ? Math.max(n + a, 0) : Math.min(a, n));
+      stop  = b === null ? n : (b < 0 ? Math.max(n + b, 0) : Math.min(b, n));
+      for (var i = start; i < stop; i += step) res.push(arr[i]);
+    } else {
+      start = a === null ? n - 1 : (a < 0 ? Math.max(n + a, -1) : Math.min(a, n - 1));
+      stop  = b === null ? -1    : (b < 0 ? Math.max(n + b, -1) : Math.min(b, n - 1));
+      for (var j = start; j > stop; j += step) res.push(arr[j]);
+    }
+    return res;
+  }
+  function parseSliceExpr(expr){
+    var parts = String(expr).split(':');
+    if (parts.length < 2 || parts.length > 3) return null;
+    function num(t){ t = t.trim(); return t === '' ? null : (isNaN(+t) ? undefined : Math.trunc(+t)); }
+    var a = num(parts[0]), b = num(parts[1]), c = parts.length > 2 ? num(parts[2]) : null;
+    if (a === undefined || b === undefined || c === undefined) return null;
+    return pySlice([0,1,2,3,4,5,6,7,8,9], a, b, c);
+  }
+
+  /* 각 유형: make() → {text(html, pin 포함), fields[{label,unit,key,text?}], calc() → {key:정답}, sol() } */
   var GEN = {
-    storage: function(){
-      var M = pick([256, 512, 640, 800, 1024, 1280]);
-      var N = pick([256, 480, 512, 600, 768, 720]);
-      var k = pick([1, 2, 4, 8]);
-      var L = Math.pow(2, k);
-      var bits = M * N * k;
-      return {
-        tag: 'CH01 · 저장 공간  S = M × N × k',
-        text: '그레이 레벨이 <b>' + L + '단계</b>인 <b>' + M + ' × ' + N + '</b> 크기 영상을 저장하려면 몇 비트가 필요할까요?',
-        hint: '힌트: 먼저 L = 2^k에서 k(비트 수)를 구하세요. 답은 숫자만 입력 (쉼표 없이).',
-        inputs: [{label: 'S =', unit: '비트', ans: bits}],
-        sol: 'L = ' + L + ' = 2^' + k + ' → k = ' + k + '비트.  S = ' + M + ' × ' + N + ' × ' + k + ' = ' + bits.toLocaleString() + '비트 (' + (bits/8/1024).toLocaleString() + 'KB)'
-      };
-    },
-    quant: function(){
-      if (Math.random() < 0.5){
-        var k = ri(1, 8);
-        return { tag: 'CH01 · 양자화  L = 2^k',
-          text: '<b>' + k + '비트</b>로 양자화하면 표현할 수 있는 밝기 단계는 몇 개일까요?',
-          hint: 'L = 2^k', inputs: [{label: 'L =', unit: '단계', ans: Math.pow(2, k)}],
-          sol: 'L = 2^' + k + ' = ' + Math.pow(2, k) + '단계 (0 ~ ' + (Math.pow(2,k)-1) + ')' };
-      }
-      var k2 = ri(1, 8), L2 = Math.pow(2, k2);
-      return { tag: 'CH01 · 양자화  L = 2^k',
-        text: '밝기 단계가 <b>' + L2 + '개</b>인 영상은 화소당 몇 비트로 양자화된 것일까요?',
-        hint: '2를 몇 번 곱해야 ' + L2 + '이 되나요?', inputs: [{label: 'k =', unit: '비트', ans: k2}],
-        sol: '2^' + k2 + ' = ' + L2 + ' → k = ' + k2 + '비트' };
-    },
-    bright: function(){
-      var v = ri(30, 220), b = pick([-120, -100, -80, -50, 50, 80, 100, 120]);
-      var raw = v + b, ans = raw < 0 ? 0 : (raw > 255 ? 255 : raw);
-      return { tag: 'CH01 · 밝기 연산 (0~255 클리핑)',
-        text: '밝기가 <b>' + v + '</b>인 화소에 <b>' + (b>0?'+':'') + b + '</b>을 연산하면 저장되는 값은? (8비트 영상 — 범위를 벗어나면 0 또는 255로 잘라냅니다)',
-        hint: v + ' ' + (b>0?'+':'−') + ' ' + Math.abs(b) + ' 를 계산한 뒤 0~255 범위를 확인하세요.',
-        inputs: [{label: 'g =', unit: '', ans: ans}],
-        sol: v + (b>0?' + ':' − ') + Math.abs(b) + ' = ' + raw + (raw===ans ? '' : ' → 범위를 벗어나 ' + ans + '로 클리핑') };
-    },
-    slice: function(){
-      var a = [0,1,2,3,4,5,6,7,8,9];
-      var cases = [
-        {ex: 'a[:N]',    make: function(){ var n = ri(2,5); return {e:'a[:'+n+']', r: a.slice(0,n)}; }},
-        {ex: 'a[N:]',    make: function(){ var n = ri(5,8); return {e:'a['+n+':]', r: a.slice(n)}; }},
-        {ex: 'a[M:N]',   make: function(){ var m = ri(1,4), n = ri(m+2, 9); return {e:'a['+m+':'+n+']', r: a.slice(m,n)}; }},
-        {ex: 'a[::K]',   make: function(){ var k = pick([2,3]); var r=[]; for(var i=0;i<10;i+=k)r.push(i); return {e:'a[::'+k+']', r:r}; }},
-        {ex: 'a[::-1]',  make: function(){ return {e:'a[::-1]', r: a.slice().reverse()}; }},
-        {ex: 'a[M::K]',  make: function(){ var m = ri(1,3), k = pick([2,3]); var r=[]; for(var i=m;i<10;i+=k)r.push(i); return {e:'a['+m+'::'+k+']', r:r}; }},
-        {ex: 'a[:-N:-1]',make: function(){ var n = ri(3,5); var r=[]; for(var i=9;i>10-n;i--)r.push(i); return {e:'a[:-'+n+':-1]', r:r}; }},
-      ];
-      var q = pick(cases).make();
-      return { tag: 'CH03 · 슬라이스',
-        text: '<code>a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code> 일 때 <code>' + q.e + '</code> 의 결과는?',
-        hint: '형식: 1, 2, 3 처럼 쉼표로 구분해 입력 (대괄호는 안 써도 됩니다)',
-        inputs: [{label: '결과 =', unit: '', ans: q.r.join(','), text: true}],
-        sol: q.e + ' → [' + q.r.join(', ') + ']  (끝 인덱스 미포함, 음수 간격은 역순)' };
-    },
-    op: function(){
-      var a = ri(7, 29), b = ri(2, 6);
-      var cases = [
-        {e: a+' // '+b, ans: Math.floor(a/b), s: '몫만 취한다'},
-        {e: a+' % '+b,  ans: a % b,           s: '나머지만 취한다'},
-        {e: b+' ** 2',  ans: b*b,             s: '거듭제곱'},
-        {e: 'int('+ (a + 0.7) +')', ans: a,   s: '반올림이 아니라 버림!'},
-      ];
-      var q = pick(cases);
-      return { tag: 'CH03 · 연산자',
-        text: '<code>' + q.e + '</code> 의 결과는?', hint: '',
-        inputs: [{label: '=', unit: '', ans: q.ans}], sol: q.e + ' = ' + q.ans + '  (' + q.s + ')' };
-    },
+    storage: { tag: 'CH01 · 저장 공간  S = M × N × k',
+      make: function(){
+        var M = pick([256, 512, 640, 800, 1024, 1280]), N = pick([256, 480, 512, 600, 768, 720]);
+        var k = pick([1, 2, 4, 8]);
+        return { text: '그레이 레벨이 ' + pin('L', Math.pow(2, k)) + ' 단계인 ' +
+                       pin('M', M) + ' × ' + pin('N', N) + ' 크기 영상을 저장하려면 몇 비트가 필요할까요?',
+                 hint: '먼저 L = 2^k에서 k(비트 수)를 구하세요. 숫자만 입력(쉼표 없이). 보라색 숫자는 직접 바꿔도 됩니다!',
+                 fields: [{label: 'S =', unit: '비트', key: 's'}] };
+      },
+      calc: function(){
+        var L = Pn('L'), k = Math.log2(L);
+        if (!Number.isInteger(k)) return {err: 'L=' + P('L') + '은 2의 거듭제곱이 아니에요. 2, 4, 8, …, 256 중에서 넣어 주세요.'};
+        return {s: Pn('M') * Pn('N') * k};
+      },
+      sol: function(a){
+        var k = Math.log2(Pn('L'));
+        return 'L = ' + P('L') + ' = 2^' + k + ' → k = ' + k + '비트.  S = ' + P('M') + ' × ' + P('N') +
+               ' × ' + k + ' = ' + a.s.toLocaleString() + '비트 (' + (a.s/8/1024).toLocaleString() + 'KB)';
+      } },
+    quant: { tag: 'CH01 · 양자화  L = 2^k',
+      make: function(){
+        return { text: pin('k', ri(1, 8), 56) + ' 비트로 양자화하면 표현할 수 있는 밝기 단계는 몇 개일까요?',
+                 hint: 'L = 2^k — 보라색 숫자를 바꿔 가며 연습하세요.',
+                 fields: [{label: 'L =', unit: '단계', key: 'l'}] };
+      },
+      calc: function(){ return {l: Math.pow(2, Pn('k'))}; },
+      sol: function(a){ return 'L = 2^' + P('k') + ' = ' + a.l + '단계 (0 ~ ' + (a.l - 1) + ')'; } },
+    bright: { tag: 'CH01 · 밝기 연산 (0~255 클리핑)',
+      make: function(){
+        return { text: '밝기가 ' + pin('v', ri(30, 220), 64) + ' 인 화소에 ' +
+                       pin('b', pick([-120, -100, -80, 50, 80, 100, 120]), 64) +
+                       ' 을 더하면 저장되는 값은? (8비트 — 범위를 벗어나면 0 또는 255로 잘라냅니다)',
+                 hint: '두 수를 더한 뒤 0~255 범위를 벗어나는지 확인하세요.',
+                 fields: [{label: 'g =', unit: '', key: 'g'}] };
+      },
+      calc: function(){
+        var raw = Pn('v') + Pn('b');
+        return {g: raw < 0 ? 0 : (raw > 255 ? 255 : raw), raw: raw};
+      },
+      sol: function(a){
+        return P('v') + ' + (' + P('b') + ') = ' + a.raw + (a.raw === a.g ? '' : ' → 범위를 벗어나 ' + a.g + '로 클리핑');
+      } },
+    slice: { tag: 'CH03 · 슬라이스',
+      make: function(){
+        var expr = pick(['1:5', '2:8:2', '::2', '::-1', '3::3', ':-4:-1', '6:1:-2', ':4']);
+        return { text: '<code>a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code> 일 때 ' +
+                       '<code style="font-size:17px">a[ ' + pin('expr', expr, 110) + ' ]</code> 의 결과는?',
+                 hint: '형식: 1, 2, 3 처럼 쉼표로 구분 (대괄호 생략 가능). 보라색 칸의 슬라이스 식을 직접 바꿔도 됩니다!',
+                 fields: [{label: '결과 =', unit: '', key: 'r', text: true}] };
+      },
+      calc: function(){
+        var r = parseSliceExpr(P('expr'));
+        if (r === null) return {err: "'" + P('expr') + "' 는 올바른 슬라이스 식이 아니에요. 예: 2:8:2, ::-1"};
+        return {r: r.join(',')};
+      },
+      sol: function(a){ return 'a[' + P('expr') + '] → [' + a.r.replace(/,/g, ', ') + ']  (끝 인덱스 미포함, 음수 간격은 역순)'; } },
+    op: { tag: 'CH03 · 연산자',
+      make: function(){
+        var kind = pick(['//', '%', '**', 'int']);
+        var a = ri(7, 29), b = ri(2, 6);
+        var t = kind === 'int'
+          ? '<code>int( ' + pin('a', a + '.7', 70) + ' )</code> 의 결과는?'
+          : '<code>' + pin('a', a, 56) + ' ' + kind + ' ' + pin('b', kind === '**' ? 2 : b, 48) + '</code> 의 결과는?';
+        return { text: t, hint: '보라색 숫자를 바꿔 가며 연습하세요.', kind: kind,
+                 fields: [{label: '=', unit: '', key: 'x'}] };
+      },
+      calc: function(){
+        var k = current.spec.kind, a = Pn('a'), b = Pn('b');
+        var v = k === '//' ? Math.floor(a / b) : k === '%' ? ((a % b) + b) % b :
+                k === '**' ? Math.pow(a, b) : Math.trunc(a);
+        return {x: v};
+      },
+      sol: function(a2){
+        var k = current.spec.kind;
+        var why = {'//': '몫만 취한다', '%': '나머지만 취한다', '**': '거듭제곱', 'int': '반올림이 아니라 버림!'}[k];
+        return '결과 = ' + a2.x + '  (' + why + ')';
+      } },
   };
-
   var MC = [
     {q: 'OpenCV가 시작된 곳은?', c: ['인텔 (IPL 기반, 1999)', '구글', 'MS', 'NVIDIA'], a: 0,
      s: '인텔의 IPL(Image Processing Library)을 기반으로 1999년 시작했습니다.'},
@@ -1035,69 +1560,107 @@ function sceneGray(x, y){
      s: '2.0(2009)에서 C++ 클래스 기반으로 전환됐습니다.'},
     {q: 'SIFT·SURF 모듈이 유료화된 버전은?', c: ['2.2', '2.4', '3.4', '4.2'], a: 1,
      s: '특허 문제로 2.4에서 유료화 — 시험에 나오기 좋은 디테일.'},
-    {q: '창(imshow)이 안 뜬다면 가장 먼저 의심할 것은?', c: ['opencv-python-headless를 설치함', '컴퓨터 재부팅 필요', '파이썬 버전이 너무 높음', '모니터 문제'], a: 0,
+    {q: '창(imshow)이 안 뜬다면 가장 먼저 의심할 것은?', c: ['opencv-python-headless를 설치함', '재부팅 필요', '파이썬 버전 문제', '모니터 문제'], a: 0,
      s: 'headless는 창 표시 기능이 빠진 서버용 패키지입니다.'},
     {q: '파이썬 이름의 유래는?', c: ['영국 코미디쇼 몬티 파이썬', '뱀을 좋아해서', '그리스어로 지혜', '만든 사람의 별명'], a: 0,
      s: "귀도 반 로섬이 좋아한 '몬티 파이썬의 날아다니는 서커스'에서 왔습니다."},
-    {q: '파이참에서 코드를 실행해도 아무 일도 안 일어난다면?', c: ['인터프리터(python.exe) 미연결', '인터넷 연결 안 됨', '관리자 권한 필요', '한글 파일명 때문'], a: 0,
+    {q: '파이참에서 코드를 실행해도 아무 일도 없다면?', c: ['인터프리터(python.exe) 미연결', '인터넷 문제', '관리자 권한 필요', '한글 파일명 때문'], a: 0,
      s: '프로젝트에 인터프리터를 연결해야 실행됩니다 — 2장 핵심 개념.'},
   ];
+  var HAND = [
+    {t: '실행 결과가 다음과 같이 나오도록 코드를 작성하시오.',
+     given: 'sum1 =  700', req: 'kor = [70, 80, 90, 40, 50], eng = [90, 80, 70, 70, 60] 두 리스트의 모든 원소 합을 for와 range()로 구할 것',
+     ans: 'kor = [70, 80, 90, 40, 50]\neng = [90, 80, 70, 70, 60]\nsum1 = 0\nfor i in range(0, 5):\n    sum1 = sum1 + kor[i] + eng[i]\nprint(\'sum1 = \', sum1)'},
+    {t: '300행 400열의 회색(200) 영상을 만들어 창에 표시하는 OpenCV 코드를 작성하시오.',
+     given: '(회색 바탕의 "Window title" 창이 뜬다)', req: 'numpy와 cv2를 사용, 키 입력까지 창 유지',
+     ans: 'import numpy as np\nimport cv2\n\nimage = np.zeros((300, 400), np.uint8)\nimage.fill(200)\n\ncv2.imshow("Window title", image)\ncv2.waitKey(0)\ncv2.destroyAllWindows()'},
+    {t: '리스트 a = [0,1,2,...,9]를 만들고, 슬라이스만으로 다음을 차례로 출력하는 코드를 작성하시오.',
+     given: '[0, 1]\n[2, 4, 6, 8]\n[9, 8, 7, 6, 5, 4, 3, 2, 1, 0]', req: '각 줄마다 print() 한 번씩',
+     ans: 'a = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\nprint(a[:2])\nprint(a[2::2])\nprint(a[::-1])'},
+    {t: '연도를 담은 변수 year가 윤년인지 검사해 출력하는 코드를 작성하시오.',
+     given: '2020 는 윤년입니다.', req: 'if–elif–else 사용. 규칙: 4의 배수는 윤년, 100의 배수는 평년, 400의 배수는 윤년',
+     ans: 'year = 2020\nif (year % 4==0) and (year % 100 != 0):\n    print(year, "는 윤년입니다.")\nelif year % 400==0:\n    print(year, "는 윤년입니다.")\nelse:\n    print(year, "는 윤년이 아닙니다.")'},
+    {t: '0으로 채운 2행 5열 정수 행렬과 15로 채운 1차원 5개 실수 행렬을 만들어 shape를 출력하시오.',
+     given: '(2, 5)\n(5,)', req: 'numpy의 zeros와 full 사용',
+     ans: 'import numpy as np\na = np.zeros((2, 5), int)\nd = np.full(5, 15, np.float32)\nprint(a.shape)\nprint(d.shape)'},
+  ];
 
-  function esc(s){ return String(s); }
   function renderQ(){
+    delete card.dataset.done;
     var fb = '<div class="qfb" id="qfb"></div>';
     if (curKind === 'mc'){
-      current = pick(MC);
-      var html = '<div class="qtag">CH02 · OpenCV 상식</div><div class="qtext">' + current.q + '</div><div class="qchoices">';
-      current.c.forEach(function(c, i){ html += '<button data-i="' + i + '">' + c + '</button>'; });
+      current = {mc: pick(MC)};
+      var html = '<div class="qtag">CH02 · OpenCV 상식</div><div class="qtext">' + current.mc.q + '</div><div class="qchoices">';
+      current.mc.c.forEach(function(c, i){ html += '<button data-i="' + i + '">' + c + '</button>'; });
       html += '</div><div class="qbtns"><button class="btn new" id="qNew">새 문제</button></div>' + fb;
       card.innerHTML = html;
       card.querySelectorAll('.qchoices button').forEach(function(b){
         b.addEventListener('click', function(){
           if (card.dataset.done) return;
           card.dataset.done = '1'; tries++;
-          var ok = +b.dataset.i === current.a;
+          var ok = +b.dataset.i === current.mc.a;
           if (ok) right++;
           b.classList.add(ok ? 'pick-right' : 'pick-wrong');
-          card.querySelectorAll('.qchoices button')[current.a].classList.add('pick-right');
-          feedback(ok, current.s);
+          card.querySelectorAll('.qchoices button')[current.mc.a].classList.add('pick-right');
+          feedback(ok, current.mc.s);
         });
       });
+    } else if (curKind === 'hand'){
+      current = {hand: pick(HAND)};
+      var h = current.hand;
+      card.innerHTML =
+        '<div class="qtag">✍ 손코딩 — 직접 타이핑해 보기</div>' +
+        '<div class="qtext">' + h.t + '</div>' +
+        '<div class="handcode">' + h.given + '</div>' +
+        '<div class="qhint">조건: ' + h.req + '</div>' +
+        '<textarea spellcheck="false" placeholder="여기에 코드를 직접 작성해 보세요. 작성 후 모범 답안과 비교하고, 실습실에 붙여넣어 실행까지!"></textarea>' +
+        '<details class="sol-toggle"><summary>모범 답안 보기</summary><pre>' + h.ans.replace(/</g, '&lt;') + '</pre></details>' +
+        '<div class="qbtns"><button class="btn new" id="qNew">다음 문제</button></div>';
     } else {
-      current = GEN[curKind]();
-      var html2 = '<div class="qtag">' + current.tag + '</div><div class="qtext">' + current.text + '</div>' +
-        (current.hint ? '<div class="qhint">' + current.hint + '</div>' : '') + '<div class="qin">';
-      current.inputs.forEach(function(inp, i){
-        html2 += '<label>' + inp.label + ' <input id="qi' + i + '" ' +
-                 (inp.text ? '' : 'inputmode="numeric" ') + 'autocomplete="off"> ' + inp.unit + '</label>';
+      var g = GEN[curKind];
+      current = {spec: g.make(), gen: g};
+      var html2 = '<div class="qtag">' + g.tag + '</div><div class="qtext">' + current.spec.text + '</div>' +
+        (current.spec.hint ? '<div class="qhint">' + current.spec.hint + '</div>' : '') + '<div class="qin">';
+      current.spec.fields.forEach(function(f, i){
+        html2 += '<label>' + f.label + ' <input id="qi' + i + '" ' + (f.text ? '' : 'inputmode="numeric" ') +
+                 'autocomplete="off"> ' + f.unit + '</label>';
       });
       html2 += '</div><div class="qbtns"><button class="btn grade" id="qGrade">채점하기</button>' +
                '<button class="btn new" id="qNew">새 문제</button></div>' + fb;
       card.innerHTML = html2;
       document.getElementById('qGrade').addEventListener('click', grade);
-      card.querySelectorAll('input').forEach(function(el){
+      card.querySelectorAll('.qin input').forEach(function(el){
         el.addEventListener('keydown', function(e){ if (e.key === 'Enter') grade(); });
+      });
+      // 파라미터를 고치면 다시 풀 수 있게 채점 상태를 푼다
+      card.querySelectorAll('.qparam').forEach(function(el){
+        el.addEventListener('input', function(){
+          delete card.dataset.done;
+          var f = document.getElementById('qfb'); if (f) f.className = 'qfb';
+        });
       });
       document.getElementById('qi0').focus();
     }
-    document.getElementById('qNew').addEventListener('click', function(){ delete card.dataset.done; renderQ(); });
+    var nb = document.getElementById('qNew');
+    if (nb) nb.addEventListener('click', renderQ);
     updateScore();
   }
   function grade(){
     if (card.dataset.done) return;
+    var ans = current.gen.calc();
+    if (ans.err){ feedback(false, ans.err); return; }
     var ok = true;
-    current.inputs.forEach(function(inp, i){
+    current.spec.fields.forEach(function(f, i){
       var v = document.getElementById('qi' + i).value.trim();
-      if (inp.text){
-        var norm = v.replace(/[\[\]\s]/g, '');
-        if (norm !== String(inp.ans)) ok = false;
+      if (f.text){
+        if (v.replace(/[\[\]\s]/g, '') !== String(ans[f.key])) ok = false;
       } else {
-        if (v === '' || +v.replace(/,/g, '') !== +inp.ans) ok = false;
+        if (v === '' || +v.replace(/,/g, '') !== +ans[f.key]) ok = false;
       }
     });
     card.dataset.done = '1'; tries++;
     if (ok) right++;
-    feedback(ok, current.sol);
+    feedback(ok, current.gen.sol(ans));
   }
   function feedback(ok, sol){
     var fb = document.getElementById('qfb');
@@ -1106,19 +1669,79 @@ function sceneGray(x, y){
                    '<div class="sol">' + sol + '</div>';
     updateScore();
   }
-  function updateScore(){
-    document.getElementById('score').textContent = right + ' / ' + tries + ' 정답';
-  }
+  function updateScore(){ document.getElementById('score').textContent = right + ' / ' + tries + ' 정답'; }
   document.querySelectorAll('#qcats button').forEach(function(b){
     b.addEventListener('click', function(){
       document.querySelectorAll('#qcats button').forEach(function(x){ x.classList.remove('on'); });
       b.classList.add('on');
       curKind = b.dataset.q;
-      delete card.dataset.done;
       renderQ();
     });
   });
   renderQ();
+
+  /* ── PDF 문제지 — 지금 화면 기준으로 문제를 뽑아 인쇄용 페이지 생성 ── */
+  document.getElementById('makePdf').addEventListener('click', function(){
+    function esc(t){ return String(t).replace(/</g, '&lt;'); }
+    var qs = [], answers = [];
+    // 계산 문제: 유형별 3문항 (파라미터 고정 스냅샷)
+    var snapshots = {
+      storage: function(){ var M = pick([256,512,640,800,1024,1280]), N = pick([256,480,512,600,768,720]), k = pick([1,2,4,8]);
+        return {q: '그레이 레벨이 ' + Math.pow(2,k) + '단계인 ' + M + ' × ' + N + ' 크기 영상을 저장하는 데 필요한 공간은 몇 비트인가? (KB로도 환산하시오)',
+                a: 'k=' + k + '비트, S = ' + M + '×' + N + '×' + k + ' = ' + (M*N*k).toLocaleString() + '비트 = ' + (M*N*k/8/1024).toLocaleString() + 'KB'}; },
+      quant: function(){ var k = ri(1,8);
+        return {q: k + '비트로 양자화된 영상이 표현할 수 있는 밝기 단계 수와 그 범위를 쓰시오.',
+                a: 'L = 2^' + k + ' = ' + Math.pow(2,k) + '단계, 범위 0 ~ ' + (Math.pow(2,k)-1)}; },
+      bright: function(){ var v = ri(30,220), b = pick([-120,-100,-80,50,80,100,120]); var raw = v+b, g = raw<0?0:(raw>255?255:raw);
+        return {q: '8비트 영상에서 밝기 ' + v + '인 화소에 ' + (b>0?'+':'') + b + ' 연산을 하면 저장되는 값은? (클리핑 고려)',
+                a: v + '+(' + b + ') = ' + raw + (raw===g?'':' → 클리핑되어 ' + g)}; },
+      slice: function(){ var e = pick(['1:5','2:8:2','::2','::-1','3::3',':-4:-1','6:1:-2',':4']);
+        return {q: 'a = [0,1,2,…,9]일 때 a[' + e + ']의 결과를 쓰시오.', a: '[' + parseSliceExpr(e).join(', ') + ']'}; },
+      op: function(){ var a2 = ri(7,29), b2 = ri(2,6); var c = pick([
+          [a2+' // '+b2, Math.floor(a2/b2)], [a2+' % '+b2, a2%b2], [b2+' ** 2', b2*b2], ['int('+(a2+0.7)+')', a2]]);
+        return {q: c[0] + ' 의 결과를 쓰시오.', a: String(c[1])}; },
+    };
+    ['storage','quant','bright','slice','op'].forEach(function(kind){
+      for (var i = 0; i < 3; i++){ var s = snapshots[kind](); qs.push(s.q); answers.push(s.a); }
+    });
+    var handHtml = '';
+    HAND.forEach(function(h, i){
+      handHtml += '<div class="q"><b>' + (qs.length + i + 1) + '.</b> ' + h.t +
+        '<pre class="given">' + esc(h.given) + '</pre><div class="cond">조건: ' + h.req + '</div>' +
+        '<div class="codebox"></div></div>';
+      answers.push('(모범 답안)\n' + h.ans);
+    });
+    var qHtml = '';
+    qs.forEach(function(q, i){
+      qHtml += '<div class="q"><b>' + (i + 1) + '.</b> ' + q + '<div class="blank"></div></div>';
+    });
+    var ansHtml = '';
+    answers.forEach(function(a, i){ ansHtml += '<div class="a"><b>' + (i + 1) + '.</b> <pre>' + esc(a) + '</pre></div>'; });
+    var w = window.open('', '_blank');
+    w.document.write('<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>영상처리시스템 연습 문제지</title><style>' +
+      'body{font-family:"Malgun Gothic",sans-serif;margin:36px;color:#1c2028;line-height:1.6;word-break:keep-all}' +
+      'h1{font-size:20px;border-bottom:2.5px solid #1c2028;padding-bottom:8px}' +
+      '.meta{font-size:12px;color:#666;margin-bottom:18px}' +
+      '.q{margin:14px 0;font-size:13.5px;page-break-inside:avoid}' +
+      '.blank{height:52px;border-bottom:1px solid #bbb;margin-top:8px}' +
+      '.codebox{height:150px;border:1px solid #bbb;border-radius:6px;margin-top:8px}' +
+      '.given{background:#f2f2f2;border-radius:6px;padding:8px 12px;font-size:12.5px;margin:6px 0}' +
+      '.cond{font-size:12px;color:#555}' +
+      '.answers{page-break-before:always}' +
+      '.a{font-size:12.5px;margin:8px 0}.a pre{display:inline-block;vertical-align:top;background:#f6f6f6;padding:6px 10px;border-radius:6px;margin:2px 0;font-size:11.5px}' +
+      'h2{font-size:16px;margin-top:22px}' +
+      '@media print{.noprint{display:none}}</style></head><body>' +
+      '<div class="noprint" style="background:#eef;padding:10px 14px;border-radius:8px;margin-bottom:14px">' +
+      '인쇄 창이 자동으로 열립니다. PDF로 저장하려면 프린터 대상에서 "PDF로 저장"을 선택하세요. ' +
+      '<button onclick="print()">다시 인쇄</button></div>' +
+      '<h1>영상처리시스템 연습 문제지 (CH01~03)</h1>' +
+      '<div class="meta">이름: ______________ &nbsp; 날짜: ______________ &nbsp;·&nbsp; 계산 문제 15 + 손코딩 ' + HAND.length + '문항 &nbsp;·&nbsp; 정답지는 마지막 장</div>' +
+      qHtml + '<h2>✍ 손코딩 — 조건에 맞는 코드를 직접 작성하시오</h2>' + handHtml +
+      '<div class="answers"><h1>정답지</h1>' + ansHtml + '</div>' +
+      '</body></html>');
+    w.document.close();
+    setTimeout(function(){ w.print(); }, 400);
+  });
 })();
 </script>
 </body>
