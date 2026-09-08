@@ -25,6 +25,7 @@
   --shadow:0 1px 2px rgba(28,32,40,.05),0 6px 20px rgba(28,32,40,.06);
 }
 *{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none !important}
 html{color-scheme:light}
 html[data-theme="dark"]{color-scheme:dark}
 html[data-theme="dark"] body{
@@ -218,7 +219,13 @@ details.sol-toggle pre{margin-top:10px}
 .modebar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
 .modebar button{border:1.5px solid var(--line);background:var(--card);border-radius:11px;
   padding:9px 18px;font-size:13.5px;font-weight:700;color:var(--ink2);cursor:pointer}
-.modebar button.on{background:var(--c2);border-color:var(--c2);color:#fff}
+.modebar button[data-m="fill"].on{background:var(--c2);border-color:var(--c2);color:#fff}
+.modebar button[data-m="free"].on{background:var(--c1);border-color:var(--c1);color:#fff}
+.modebar button[data-m="dict"].on{background:var(--form);border-color:var(--form);color:#fff}
+.modebar button[data-m="fill"]{color:var(--c2)}
+.modebar button[data-m="free"]{color:var(--c1)}
+.modebar button[data-m="dict"]{color:var(--form)}
+.modebar button.on{color:#fff}
 .mode-desc{font-size:13px;color:var(--mute);margin-bottom:12px}
 /* 미니 코드 에디터 — 하이라이트 레이어 + 투명 textarea */
 .codeed{display:grid;grid-template-columns:40px 1fr;border-radius:14px;overflow:hidden;
@@ -1599,6 +1606,18 @@ print('1차원 변환:', a.flatten())`,
     dict: '왼쪽 원본을 보며 오른쪽에 그대로 타이핑합니다(받아쓰기). [원본과 비교]로 들여쓰기·띄어쓰기까지 확인 — 코드가 손에 붙는 가장 빠른 길.',
   };
   var mode = 'fill', freeEd = null, dictEd = null;
+  function stripTags(t){ return String(t).replace(/<[^>]+>/g, ''); }
+  function freeTemplate(ex){
+    var NL = String.fromCharCode(10);
+    var t = '# ' + ex.title + ' (' + ex.file + ') — 직접 작성해 보세요' + NL +
+            '# 목표: ' + stripTags(ex.purpose).replace(/\s+/g, ' ').trim() + NL;
+    var keys = Object.keys(ex.notes).slice(0, 3);
+    keys.forEach(function(k, i){
+      t += '# 힌트' + (i + 1) + ': ' + stripTags(ex.notes[k]).replace(/\s+/g, ' ').trim() + NL;
+    });
+    t += '# 막히면 아래 [원본 코드 보기]를 펼쳐 보세요.' + NL + NL;
+    return t;
+  }
   var freeWrap = document.getElementById('freeWrap'), dictWrap = document.getElementById('dictWrap');
   function setMode(m){
     mode = m;
@@ -1614,7 +1633,7 @@ print('1차원 변환:', a.flatten())`,
     out.textContent = '실행 결과가 여기에 표시됩니다.';
     if (m === 'free'){
       if (!freeEd) freeEd = window._pyEd(document.getElementById('freeEd'), '');
-      freeEd.set('# ' + cur.title + ' — 직접 작성해 보세요\n');
+      freeEd.set(freeTemplate(cur));
       document.getElementById('freeSrc').textContent = cur.code;
       freeEd.focus();
     }
@@ -1634,14 +1653,29 @@ print('1차원 변환:', a.flatten())`,
     while (src.length && !src[src.length-1]) src.pop();
     while (mine.length && !mine[mine.length-1]) mine.pop();
     for (var i = 0; i < Math.max(src.length, mine.length); i++){
-      if ((src[i] || '') !== (mine[i] || '')){
-        out.textContent = '✏ ' + (i + 1) + '번 줄이 달라요.\n원본:      ' + (src[i] || '(없음)') +
-                          '\n내 타이핑: ' + (mine[i] || '(없음)') +
-                          '\n(들여쓰기 4칸·띄어쓰기까지 똑같아야 해요)';
-        return;
+      var a = src[i], b2 = mine[i];
+      if (a === b2) continue;
+      var msg = '✏ ' + (i + 1) + '번 줄이 달라요.\n';
+      if (a === undefined){
+        msg += '원본에 없는 줄을 더 적었어요: "' + b2 + '"';
+      } else if (b2 === undefined){
+        msg += '이 줄이 빠졌어요. 원본: "' + a + '"';
+      } else {
+        var ia = (a.match(/^ */) || [''])[0].length, ib = (b2.match(/^ */) || [''])[0].length;
+        if (ia !== ib && a.trim() === b2.trim()){
+          msg += '내용은 맞는데 들여쓰기가 달라요 — 원본 ' + ia + '칸, 내 것 ' + ib + '칸. (파이썬은 들여쓰기가 문법!)';
+        } else {
+          var j = 0;
+          while (j < Math.min(a.length, b2.length) && a[j] === b2[j]) j++;
+          msg += (j + 1) + '번째 글자부터 달라요.\n원본:      ' + a + '\n내 타이핑: ' + b2 + '\n' +
+                 Array(12 + j).join(' ') + '^ 여기\n' +
+                 '(원본: "' + (a[j] || '끝') + '" · 내 것: "' + (b2[j] || '끝') + '" — 띄어쓰기·대소문자·기호까지 똑같아야 해요)';
+        }
       }
+      out.textContent = msg;
+      return;
     }
-    out.textContent = '🎉 완벽하게 일치! 이제 [실행]으로 결과까지 확인해 보세요.';
+    out.textContent = '🎉 완벽하게 일치! 받아쓰기 성공 — [실행]으로 결과까지 확인해 보세요.';
   });
 
   render(EX.find(function(e){ return e.file === '07.for.py'; }));
