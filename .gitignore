@@ -1,2 +1,4 @@
 *.bak
 _pages_upload/
+_*.js
+_*.txt
