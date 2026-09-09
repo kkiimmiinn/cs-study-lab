@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>객체지향시스템 — CS STUDY LAB</title>
+<meta name="description" content="객체지향시스템(C#) 스터디 랩 — 챕터별 정리, 강의 슬라이드 뷰어, C# 실습실, 문제 연습.">
+<meta name="theme-color" content="#0c1226">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='5' fill='%230c1226'/%3E%3Ctext x='12' y='16.5' text-anchor='middle' font-family='monospace' font-size='10' fill='%23b39df5'%3EC%23%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --paper:#f7f6f3; --card:#fff; --ink:#1c2028; --ink2:#4a5160; --mute:#8b91a0;
+  --line:#e3e1db; --navy:#0c1226; --navy2:#141c38; --navy-ink:#eef1fa; --navy-mute:#9aa4c4;
+  --c1:#3d4f9e; --c1-soft:#eceef8;          /* CH01 잉크 블루 */
+  --c2:#0e7d6b; --c2-soft:#e5f3f0;          /* CH02 딥 틸 */
+  --c3:#b05c22; --c3-soft:#faeee4;          /* CH03 코퍼 */
+  --tip:#2f7d4f; --tip-soft:#e9f4ec;        /* 쉽게 말하면 */
+  --warn:#a8432e; --warn-soft:#fbeeea;      /* 함정·주의 */
+  --form:#6b3fa0; --form-soft:#f1ebf9;      /* 공식 */
+  --mono:"Cascadia Mono","Consolas","D2Coding",ui-monospace,monospace;
+  --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic",sans-serif;
+  --serif:Georgia,"Times New Roman",serif;
+  --shadow:0 1px 2px rgba(28,32,40,.05),0 6px 20px rgba(28,32,40,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none !important}
+html{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
+html[data-theme="dark"] body{
+  --paper:#0e1320; --card:#171d2e; --ink:#e9edf6; --ink2:#bac3d8; --mute:#8590a8;
+  --line:#2b3350; --c1-soft:#20284a; --c2-soft:#173129; --c3-soft:#362519;
+  --tip-soft:#17291f; --warn-soft:#321d1c; --form-soft:#261c38;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);
+}
+html[data-theme="dark"] .tip{color:#a8d8b9}
+html[data-theme="dark"] .warnb{color:#e8a99a}
+html[data-theme="dark"] .ex-purpose{color:#9fd8c8}
+html[data-theme="dark"] .runner .out{background:#17291f;border-color:#2b4a3a;color:#b9e0c8}
+html[data-theme="dark"] .l3side{border-bottom-color:#232b42}
+html[data-theme="dark"] .handcode{background:#241f14;border-color:#4a4231;color:#d8cfa8}
+body{transition:background .25s,color .25s}
+.nb{white-space:nowrap}
+.nbc{white-space:nowrap}
+@media(max-width:700px){.nbc{white-space:normal}}
+a,button{touch-action:manipulation}
+button{font-family:var(--sans)}
+:focus-visible{outline:2px solid #7c93f5;outline-offset:3px;border-radius:4px}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.7;word-break:keep-all}
+h1,h2,h3{text-wrap:balance}
+p,li,td,.tip,.warnb,.c p,.glance p,.formula .d{text-wrap:pretty}
+
+/* ── 상단 ── */
+.top{background:var(--navy);color:var(--navy-ink)}
+.top-inner{max-width:1040px;margin:0 auto;padding:20px 28px 36px}
+.top a.back{color:var(--navy-mute);text-decoration:none;font-size:13.5px}
+.top a.back:hover{color:var(--navy-ink)}
+.top .kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.24em;color:#7c93f5;text-transform:uppercase;margin-top:22px}
+.top h1{font-size:40px;font-weight:800;letter-spacing:-.025em;margin:8px 0 6px}
+.top p{color:var(--navy-mute);font-size:14.5px;max-width:640px}
+.top-actions{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border-radius:9px;padding:11px 20px;font-size:14px;
+  font-weight:700;text-decoration:none;cursor:pointer;border:0;transition:transform .15s,box-shadow .15s}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:#3d4f9e;color:#fff}
+.btn-primary:hover{background:#4a5cb5}
+.btn-ghost{background:rgba(124,147,245,.14);color:#c9d4fb;border:1px solid #33406e}
+.btn-ghost:hover{background:rgba(124,147,245,.26)}
+
+/* ── 탭 ── */
+.tabs{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--line);z-index:5}
+.tabs-inner{max-width:1040px;margin:0 auto;padding:0 20px;display:flex;gap:2px;overflow-x:auto}
+.tabs button{border:0;background:none;font-size:14.5px;color:var(--ink2);white-space:nowrap;
+  padding:15px 16px;cursor:pointer;border-bottom:3px solid transparent}
+.tabs button.on{font-weight:800}
+.tabs .dot{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:8px;vertical-align:1px}
+.tabs .d1{background:var(--c1)} .tabs .dv{background:var(--navy)} .tabs .d2{background:var(--c2)}
+.tabs .dq{background:var(--form)} .tabs .dd{background:#b07d2c}
+html[data-theme="dark"] .tabs .dv{background:#7c93f5}
+.tabs button.on{background:var(--paper);border-radius:12px 12px 0 0}
+.theme-tab{margin-left:auto;font-size:17px !important;border-bottom:none !important}
+.tabs button[data-t="td"].on{color:#b07d2c;border-bottom-color:#b07d2c}
+.tabs button[data-t="tn"].on{color:var(--c1);border-bottom-color:var(--c1)}
+.tabs button[data-t="tv"].on{color:var(--navy);border-bottom-color:var(--navy)}
+.tabs button[data-t="tp"].on{color:var(--c2);border-bottom-color:var(--c2)}
+.tabs button[data-t="tq"].on{color:var(--form);border-bottom-color:var(--form)}
+/* 용어 툴팁 — 마우스를 올리면 뜻이 뜬다 */
+.term{border-bottom:2px dotted currentColor;cursor:help;position:relative;font-weight:600}
+.term::after{content:attr(data-tip);position:absolute;left:50%;bottom:130%;transform:translateX(-50%) translateY(4px);
+  background:var(--navy);color:#e6ebfa;font-size:12.5px;font-weight:500;line-height:1.55;border-radius:9px;
+  padding:9px 13px;width:max-content;max-width:280px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;
+  z-index:9;text-wrap:pretty;word-break:keep-all}
+.term:hover::after,.term:focus::after{opacity:1;transform:translateX(-50%) translateY(0)}
+/* 코드 시뮬레이터 */
+.sim-code{background:#141e24;color:#e8eef2;font-family:var(--mono);font-size:13px;line-height:1.7;
+  border-radius:12px;padding:16px 18px;overflow-x:auto}
+.sim-code b{color:#ffd166;font-weight:700}
+.runner textarea{width:100%;min-height:280px;background:#141e24;color:#e8eef2;font-family:var(--mono);
+  font-size:13.5px;line-height:1.6;border:0;border-radius:12px;padding:16px 18px;resize:vertical}
+.runner textarea:focus{outline:2px solid var(--c2)}
+.runner .out{background:#f4f7f4;border:1px solid #d8e4dc;border-radius:12px;padding:14px 18px;
+  font-family:var(--mono);font-size:13px;line-height:1.6;white-space:pre-wrap;min-height:60px;color:#20443a;overflow-x:auto}
+.runner .exbtns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.runner .exbtns button{border:1.5px solid var(--line);background:var(--card);border-radius:20px;
+  padding:7px 16px;font-size:13px;color:var(--ink2);cursor:pointer;font-family:var(--mono)}
+.runner .exbtns button.on{background:var(--c2);border-color:var(--c2);color:#fff}
+.btn-run{background:var(--c2);color:#fff}
+.btn-run:hover{background:#12967f}
+.btn-run:disabled{background:#9dbcb4;cursor:wait}
+
+/* ══ v3 디자인 보강 (뒤에 선언해 앞의 값을 덮어쓴다) ══ */
+body{font-size:16.5px}
+.top h1{font-size:38px}
+.top p{font-size:15.5px;max-width:660px}
+h2.sec{font-size:24.5px;margin-top:56px;padding-top:26px;border-top:1.5px dashed var(--line)}
+h2.sec:first-of-type{border-top:0;padding-top:0}
+.sec-sub{font-size:13.5px}
+.c p{font-size:15.3px;line-height:1.75}
+.c h3{font-size:16.5px}
+td{font-size:15px;padding:12px 16px}
+th{font-size:13.5px}
+.tip,.warnb{font-size:15.3px;padding:17px 24px;line-height:1.75}
+.glance p{font-size:17px;line-height:1.75}
+pre{font-size:13.5px}
+.c:hover{transform:translateY(-3px);box-shadow:0 6px 14px rgba(28,32,40,.1),0 16px 40px rgba(28,32,40,.12)}
+.lab:hover{box-shadow:0 6px 14px rgba(28,32,40,.08),0 16px 40px rgba(28,32,40,.1)}
+.sim-code{white-space:pre}
+.lab canvas.free{width:auto !important;height:auto !important;max-width:100%}
+/* 챕터 선택 바 — 챕터가 몇 개가 되어도 격자로 줄바꿈된다 */
+.chbar{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin:0 0 34px}
+.chbar button{border:1.5px solid var(--line);background:var(--card);border-radius:14px;
+  padding:14px 16px;cursor:pointer;text-align:left;transition:all .18s}
+.chbar button .num{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;
+  border-radius:11px;font-family:var(--mono);font-size:16px;font-weight:800;color:#fff;margin-bottom:9px}
+.chbar button .tt{display:block;font-size:14.5px;font-weight:800;color:var(--ink);line-height:1.4}
+.chbar button .kw{display:block;font-size:11.5px;color:var(--mute);margin-top:3px;font-family:var(--mono)}
+.chbar button[data-ch="t1"] .num{background:var(--c1)}
+.chbar button[data-ch="t2"] .num{background:var(--c2)}
+.chbar button[data-ch="t3"] .num{background:var(--c3)}
+.chbar button:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.chbar button.on[data-ch="t1"]{border-color:var(--c1);background:var(--c1-soft)}
+.chbar button.on[data-ch="t2"]{border-color:var(--c2);background:var(--c2-soft)}
+.chbar button.on[data-ch="t3"]{border-color:var(--c3);background:var(--c3-soft)}
+/* 실습실 에디터 — 줄 번호 + 코드 + 우측 해설 */
+.ed-wrap{display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.ed-left{flex:1.25;min-width:320px}
+.ed-box{display:flex;background:#141e24;border-radius:12px;overflow:hidden}
+.ed-gutter{padding:16px 10px 16px 14px;text-align:right;color:#4d6270;font-family:var(--mono);
+  font-size:13.5px;line-height:1.6;user-select:none;background:#101820;white-space:pre;overflow:hidden}
+.ed-box textarea{flex:1;min-height:340px;background:transparent;color:#e8eef2;font-family:var(--mono);
+  font-size:13.5px;line-height:1.6;border:0;padding:16px 16px 16px 8px;resize:vertical;white-space:pre;overflow:auto}
+.ed-box textarea:focus{outline:none}
+.ed-box:focus-within{outline:2px solid var(--c2)}
+.notes-pane{flex:1;min-width:280px;background:var(--card);border:1px solid var(--line);border-radius:12px;
+  box-shadow:var(--shadow);max-height:420px;overflow-y:auto}
+.notes-pane .np-h{position:sticky;top:0;background:var(--c2-soft);color:var(--c2);font-size:12.5px;
+  font-weight:800;padding:10px 16px;letter-spacing:.06em}
+.np-row{display:flex;gap:12px;padding:8px 16px;border-top:1px solid #f0f1ee;font-size:13.2px;line-height:1.55}
+.np-row:hover{background:#f7faf9}
+.np-row .ln{font-family:var(--mono);color:var(--c2);font-weight:700;min-width:26px;text-align:right}
+.np-row .tx{color:var(--ink2)}
+.np-row .tx b{color:var(--ink)}
+.star{color:#e8930c;font-weight:800}
+/* 문제 파라미터 입력 */
+.qparam{width:74px;padding:4px 8px;border:1.5px solid #d8cfe8;border-radius:7px;
+  font-family:var(--mono);font-size:15px;text-align:center;color:var(--form);font-weight:700;background:#faf8fd}
+.qparam:focus{border-color:var(--form);outline:none}
+.handcode{background:#fbfaf6;border:1px dashed #cfc7b4;border-radius:11px;padding:14px 18px;margin-top:14px;
+  font-family:var(--mono);font-size:13.5px;white-space:pre-wrap;color:#4a4a3a}
+.qcard textarea{width:100%;min-height:150px;font-family:var(--mono);font-size:13.5px;line-height:1.6;
+  border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;resize:vertical}
+.qcard textarea:focus{border-color:var(--form);outline:none}
+details.sol-toggle{margin-top:12px}
+details.sol-toggle summary{cursor:pointer;font-size:14px;font-weight:700;color:var(--form)}
+details.sol-toggle pre{margin-top:10px}
+/* 실습실 3.0 — 구조화 편집기 */
+.ex-purpose{background:var(--c2-soft);border-left:4px solid var(--c2);border-radius:0 12px 12px 0;
+  padding:12px 18px;margin:14px 0;font-size:14.5px;color:#1c4a40}
+.ex-purpose b{color:var(--c2)}
+.ex-purpose .fname{font-family:var(--mono);font-size:12px;color:var(--mute);margin-left:8px}
+.lab3{border-radius:14px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow)}
+.l3row{display:grid;grid-template-columns:40px 1fr minmax(200px,34%);align-items:stretch;min-height:24px}
+.l3row.head{min-height:0}
+.l3row.head .l3n{padding:7px 8px 7px 0}
+.l3row.head .l3code{background:#101820;color:#7e94a6;font-family:var(--sans);font-size:11.5px;padding:7px 12px}
+.l3row.head .l3side{background:var(--c2-soft);color:var(--c2);font-weight:800;font-size:11.5px;padding:7px 12px;border-bottom:0}
+.l3row:hover .l3code{background:#1a2733}
+.l3row.err .l3code{background:#3a1d20;box-shadow:inset 3px 0 0 #e05572}
+.l3row.err .l3n{color:#ff8fa0}
+.l3n{background:#101820;color:#4d6270;font-family:var(--mono);font-size:12px;
+  display:flex;align-items:center;justify-content:flex-end;padding-right:9px;user-select:none}
+.l3code{background:#141e24;font-family:var(--mono);font-size:13.5px;line-height:1.45;color:#e8eef2;
+  padding:1.5px 12px;white-space:pre;overflow-x:auto;display:flex;align-items:center;scrollbar-width:thin}
+.l3side{background:var(--card);border-bottom:1px solid #f0f1ee;padding:2px 12px;
+  font-size:12.3px;line-height:1.45;display:flex;flex-direction:column;justify-content:center}
+.l3side .ocm{font-family:var(--mono);font-size:12px;color:#6f9a86}
+.l3side .nt{color:var(--ink2)}
+.l3side .nt b{color:var(--ink)}
+/* 파이참(Darcula) 구문 색 */
+.tk-kw{color:#cc7832;font-weight:600}       /* for, in, if, def, import … */
+.tk-fn{color:#ffc66d}                        /* 함수 호출 이름 */
+.tk-str{color:#6a8759}                       /* 문자열 */
+.tk-num{color:#6897bb}                       /* 숫자 */
+.tk-op{color:#a9b7c6}
+.tk-self{color:#94558d}
+.l3code input{background:rgba(74,144,217,.07);border:0;border-bottom:1px dotted #3d5b74;color:inherit;
+  font-family:var(--mono);font-size:13.5px;line-height:1.45;padding:0;margin:0;border-radius:0;text-align:left;
+  min-width:1ch;box-sizing:content-box}
+.l3code input.tk-num{color:#6897bb}
+.l3code input.tk-str{color:#6a8759}
+.l3code input:focus{outline:none;background:rgba(74,144,217,.18);border-bottom-color:#4a90d9}
+.errhint{display:none;margin-top:12px;background:#fdeef1;border-left:4px solid #e05572;
+  border-radius:0 12px 12px 0;padding:14px 18px;font-size:14px;color:#7a2a3a}
+.errhint.show{display:block}
+.errhint b{color:#c0334d}
+.errhint code{font-family:var(--mono);background:#f7dde3;border-radius:5px;padding:1px 7px;font-size:13px}
+/* 학습 모드 바 */
+.modebar{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.modebar button{border:1.5px solid var(--line);background:var(--card);border-radius:11px;
+  padding:9px 18px;font-size:13.5px;font-weight:700;color:var(--ink2);cursor:pointer}
+.modebar button[data-m="fill"].on{background:var(--c2);border-color:var(--c2);color:#fff}
+.modebar button[data-m="free"].on{background:var(--c1);border-color:var(--c1);color:#fff}
+.modebar button[data-m="dict"].on{background:var(--form);border-color:var(--form);color:#fff}
+.modebar button[data-m="fill"]{color:var(--c2)}
+.modebar button[data-m="free"]{color:var(--c1)}
+.modebar button[data-m="dict"]{color:var(--form)}
+.modebar button.on{color:#fff}
+.mode-desc{font-size:13px;color:var(--mute);margin-bottom:12px}
+/* 미니 코드 에디터 — 하이라이트 레이어 + 투명 textarea */
+.codeed{display:grid;grid-template-columns:40px 1fr;border-radius:14px;overflow:hidden;
+  border:1px solid var(--line);box-shadow:var(--shadow);background:#141e24}
+.codeed .gut{background:#101820;color:#4d6270;font-family:var(--mono);font-size:12px;line-height:1.55;
+  text-align:right;padding:12px 9px 12px 0;user-select:none;white-space:pre;overflow:hidden}
+.codeed .stack{position:relative}
+.codeed pre.hl{position:absolute;inset:0;margin:0;padding:12px 14px;font-family:var(--mono);font-size:13.5px;
+  line-height:1.55;color:#e8eef2;white-space:pre;pointer-events:none;background:none;border-radius:0;overflow:hidden}
+.codeed textarea{position:relative;display:block;width:100%;min-height:220px;padding:12px 14px;border:0;resize:none;
+  background:transparent;color:transparent;caret-color:#7ecbff;font-family:var(--mono);font-size:13.5px;
+  line-height:1.55;white-space:pre;overflow-x:auto;overflow-y:hidden;outline:none;box-sizing:border-box;scrollbar-width:thin}
+.codeed textarea::selection{background:rgba(124,147,245,.3)}
+.ind{box-shadow:inset 1px 0 0 rgba(140,170,200,.14)}      /* 들여쓰기 가이드 세로줄 */
+.codeed .ph{color:#4d6270}
+.dict-wrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dict-src{border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#141e24}
+.dict-src .dh{background:#101820;color:#7e94a6;font-size:11.5px;padding:7px 12px;font-weight:700}
+.dict-src pre{margin:0;padding:12px 14px;font-size:13px;line-height:1.55;background:none}
+.diffok{color:var(--tip);font-weight:800}
+@media(max-width:860px){.dict-wrap{grid-template-columns:1fr}}
+@media(max-width:820px){
+  .lab3-head{display:none}
+  .l3row{grid-template-columns:36px 1fr}
+  .l3side{grid-column:2;border-left:3px solid var(--c2-soft)}
+}
+@media(max-width:760px){.term::after{max-width:210px}}
+.tabs button:hover{color:var(--ink)}
+
+.wrap{max-width:1040px;margin:0 auto;padding:40px 28px 90px}
+.panel{display:none}
+.panel.on{display:block;animation:fadein .35s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){.panel.on{animation:none}}
+
+/* ── 공통 블록 ── */
+.glance{border-radius:14px;padding:22px 26px;margin-bottom:34px;color:#fff;box-shadow:var(--shadow)}
+.t1 .glance{background:linear-gradient(120deg,#32418a,#4a5cb5)}
+.t2 .glance{background:linear-gradient(120deg,#0b6b5b,#159b84)}
+.t3 .glance{background:linear-gradient(120deg,#9a4d18,#c1662f)}
+.glance .g-label{font-family:var(--mono);font-size:11px;letter-spacing:.22em;opacity:.75;text-transform:uppercase}
+.glance p{font-size:15.5px;margin-top:8px}
+h2.sec{font-weight:800;letter-spacing:-.015em;font-size:22px;margin:44px 0 4px;display:flex;align-items:center;gap:10px}
+h2.sec::before{content:"";width:10px;height:10px;border-radius:3px;background:var(--accent,#3d4f9e)}
+.t1 h2.sec::before{background:var(--c1)} .t2 h2.sec::before{background:var(--c2)} .t3 h2.sec::before{background:var(--c3)}
+.sec-sub{font-size:13px;color:var(--mute);margin-bottom:14px}
+.cardrow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.c{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:18px 20px;box-shadow:var(--shadow);
+  border-top:3px solid var(--line);transition:transform .15s}
+.c:hover{transform:translateY(-2px)}
+.t1 .c{border-top-color:var(--c1)} .t2 .c{border-top-color:var(--c2)} .t3 .c{border-top-color:var(--c3)}
+.c h3{font-size:15.5px;margin-bottom:6px}
+.t1 .c h3{color:var(--c1)} .t2 .c h3{color:var(--c2)} .t3 .c h3{color:var(--c3)}
+.c p{font-size:14px;color:var(--ink2)}
+.c p b{color:var(--ink)}
+.tip{background:var(--tip-soft);border-left:4px solid var(--tip);border-radius:0 12px 12px 0;
+  padding:14px 20px;margin:14px 0;font-size:14px;color:#24503a}
+.tip b{color:var(--tip)}
+.tip .tag{display:inline-block;background:var(--tip);color:#fff;font-size:11px;font-weight:800;
+  border-radius:20px;padding:2px 11px;margin-right:8px;vertical-align:1px}
+.warnb{background:var(--warn-soft);border-left:4px solid var(--warn);border-radius:0 12px 12px 0;
+  padding:14px 20px;margin:14px 0;font-size:14px;color:#6e3325}
+.warnb b{color:var(--warn)}
+.formula{background:var(--form-soft);border:1px solid #ddcfF0;border-radius:13px;padding:20px 24px;margin:14px 0}
+.formula .f{font-family:var(--mono);font-size:19px;font-weight:700;color:var(--form)}
+.formula .d{font-size:13.5px;color:var(--ink2);margin-top:8px}
+table{border-collapse:collapse;width:100%;margin:14px 0;background:var(--card);box-shadow:var(--shadow);
+  border-radius:12px;overflow:hidden;font-size:14px}
+th{text-align:left;padding:10px 14px;font-size:13px;color:#fff}
+.t1 th{background:var(--c1)} .t2 th{background:var(--c2)} .t3 th{background:var(--c3)}
+td{border-top:1px solid var(--line);padding:10px 14px;color:var(--ink2)}
+td b{color:var(--ink)}
+.tblwrap{overflow-x:auto}
+pre{background:#141e24;color:#e8eef2;font-family:var(--mono);font-size:13px;line-height:1.65;
+  border-radius:12px;padding:18px 20px;overflow-x:auto;margin:14px 0}
+pre .cm{color:#7e9a8f}
+.fig{background:var(--card);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);
+  padding:14px;margin:16px 0}
+.fig img{width:100%;border-radius:8px;display:block}
+.fig figcaption{font-size:12.5px;color:var(--mute);margin-top:8px;text-align:center}
+
+/* ── 실험실 ── */
+.lab{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+  padding:24px;margin:18px 0}
+.lab h3{font-weight:800;font-size:19px;margin-bottom:4px}
+.lab .sub{font-size:13.5px;color:var(--mute);margin-bottom:18px}
+.lab-flex{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap}
+.lab canvas{border-radius:10px;border:1px solid var(--line);image-rendering:pixelated;width:340px;height:255px}
+.lab .ctrl{flex:1;min-width:250px}
+.lab label{display:block;font-size:13.5px;color:var(--ink2);margin:12px 0 4px}
+.lab label output{font-family:var(--mono);font-weight:800}
+.lab input[type=range]{width:100%}
+.t1 .lab input[type=range],.t1 .lab label output{accent-color:var(--c1);color:var(--c1)}
+.lab .stat{margin-top:14px;border-radius:10px;padding:12px 16px;font-family:var(--mono);font-size:13px}
+.t1 .lab .stat{background:var(--c1-soft);color:var(--c1)}
+.slice-boxes{display:flex;gap:6px;margin:14px 0;flex-wrap:wrap}
+.slice-boxes span{width:46px;height:46px;border-radius:9px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:16px;font-weight:700;background:#f1ece5;color:#b0a898;
+  border:1px solid var(--line);transition:all .2s}
+.slice-boxes span.on{background:var(--c3);color:#fff;border-color:var(--c3);transform:translateY(-3px)}
+.slice-ctrl{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-family:var(--mono);font-size:15px}
+.slice-ctrl input{width:64px;padding:8px;border:1.5px solid var(--line);border-radius:8px;
+  font-family:var(--mono);font-size:15px;text-align:center}
+.slice-ctrl input:focus{border-color:var(--c3);outline:none}
+.slice-out{margin-top:12px;font-family:var(--mono);font-size:15px;background:var(--c3-soft);color:var(--c3);
+  border-radius:10px;padding:12px 16px;font-weight:700}
+
+/* ── 슬라이드 뷰어 ── */
+.viewer{background:var(--navy);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+.viewer .frame{position:relative;border-radius:10px;overflow:hidden;background:#000}
+.viewer img{width:100%;display:block}
+.viewer .navbtn{position:absolute;top:0;bottom:0;width:18%;border:0;background:none;cursor:pointer;opacity:0}
+.viewer .navbtn:hover{opacity:1;background:linear-gradient(90deg,rgba(0,0,0,.35),transparent)}
+.viewer .navbtn.next:hover{background:linear-gradient(270deg,rgba(0,0,0,.35),transparent)}
+.viewer .navbtn span{color:#fff;font-size:34px;font-weight:800}
+.viewer .bar{display:flex;align-items:center;gap:16px;margin-top:16px;color:var(--navy-mute)}
+.viewer .bar button{background:#1d2745;color:#c9d4fb;border:0;border-radius:8px;padding:9px 16px;
+  font-size:14px;font-weight:700;cursor:pointer}
+.viewer .bar button:hover{background:#27335c}
+.viewer .cnt{font-family:var(--mono);font-size:14px;min-width:76px;text-align:center}
+.viewer input[type=range]{flex:1;accent-color:#7c93f5}
+.jump{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.jump button{background:none;border:1px solid #33406e;color:#9aa4c4;border-radius:20px;
+  padding:6px 16px;font-size:12.5px;cursor:pointer}
+.jump button:hover{color:#fff;border-color:#7c93f5}
+.viewer-note{font-size:12.5px;color:var(--mute);margin-top:12px}
+
+/* ── 문제 연습 ── */
+.quiz-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px}
+.score{font-family:var(--mono);font-size:14px;background:var(--form-soft);color:var(--form);
+  border-radius:20px;padding:6px 18px;font-weight:700}
+.qcats{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 20px}
+.qcats button{border:1.5px solid var(--line);background:var(--card);border-radius:20px;padding:8px 18px;
+  font-size:13.5px;color:var(--ink2);cursor:pointer;font-weight:600}
+.qcats button.on{background:var(--form);border-color:var(--form);color:#fff}
+.qcard{background:var(--card);border:1px solid var(--line);border-top:4px solid var(--form);border-radius:14px;
+  box-shadow:var(--shadow);padding:26px 28px}
+.qcard .qtag{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;color:var(--form);font-weight:700}
+.qcard .qtext{font-size:16.5px;margin:12px 0 4px;line-height:1.75}
+.qcard .qtext code{font-family:var(--mono);background:#f1f2f6;border-radius:6px;padding:2px 8px;font-size:15px}
+.qhint{font-size:13px;color:var(--mute);margin-bottom:14px}
+.qin{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.qin label{font-size:14px;color:var(--ink2);display:flex;align-items:center;gap:8px}
+.qin input{padding:10px 14px;border:1.5px solid var(--line);border-radius:9px;font-size:15px;
+  font-family:var(--mono);width:170px}
+.qin input:focus{border-color:var(--form);outline:none}
+.qbtns{display:flex;gap:10px;margin-top:14px}
+.qbtns .grade{background:var(--form);color:#fff}
+.qbtns .grade:hover{background:#7d4fb5}
+.qbtns .new{background:var(--card);color:var(--ink2);border:1.5px solid var(--line)}
+.qbtns .new:hover{border-color:var(--form);color:var(--form)}
+.qchoices{display:grid;gap:10px;margin:14px 0}
+.qchoices button{text-align:left;border:1.5px solid var(--line);background:var(--card);border-radius:10px;
+  padding:13px 18px;font-size:14.5px;color:var(--ink);cursor:pointer}
+.qchoices button:hover{border-color:var(--form)}
+.qchoices button.pick-right{border-color:var(--tip);background:var(--tip-soft)}
+.qchoices button.pick-wrong{border-color:var(--warn);background:var(--warn-soft)}
+.qfb{margin-top:16px;border-radius:11px;padding:14px 18px;font-size:14.5px;display:none}
+.qfb.ok{display:block;background:var(--tip-soft);color:#24503a;border-left:4px solid var(--tip)}
+.qfb.no{display:block;background:var(--warn-soft);color:#6e3325;border-left:4px solid var(--warn)}
+.qfb b{font-weight:800}
+.qfb .sol{font-family:var(--mono);font-size:13.5px;margin-top:6px}
+
+footer{border-top:1px solid var(--line);margin-top:30px}
+.foot-row{display:flex;gap:10px 22px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
+.foot-people{font-size:14px}
+.foot-people b{color:var(--ink)}
+.foot-people a{color:var(--c1);text-decoration:none;font-weight:700}
+.foot-people a:hover{text-decoration:underline}
+.foot-links{font-size:12.5px;color:var(--mute)}
+.foot-links a{color:var(--ink2);text-decoration:none;border-bottom:1px dotted var(--mute)}
+.foot-links a:hover{color:var(--c1);border-color:var(--c1)}
+.foot-legal{font-size:12px;color:var(--mute);line-height:1.8;max-width:900px;text-wrap:pretty;margin-top:6px}
+.foot-legal a{color:var(--ink2)}
+#toTop{position:fixed;right:22px;bottom:22px;width:46px;height:46px;border-radius:50%;border:0;
+  background:var(--navy);color:#c9d4fb;font-size:19px;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.25);
+  opacity:0;pointer-events:none;transition:opacity .25s;z-index:20}
+#toTop.show{opacity:1;pointer-events:auto}
+pre{position:relative}
+.copybtn{position:absolute;top:9px;right:9px;background:#2a3a48;color:#bcd;border:0;border-radius:7px;
+  padding:5px 12px;font-size:11.5px;cursor:pointer;opacity:0;transition:opacity .2s}
+pre:hover .copybtn{opacity:1}
+.copybtn.done{background:#2f8f62;color:#fff}
+.foot-inner{max-width:1040px;margin:0 auto;padding:26px 28px;font-size:12px;color:var(--mute);line-height:1.9}
+.foot-inner b{color:var(--ink2)}
+@media(max-width:760px){.cardrow{grid-template-columns:1fr}.top h1{font-size:27px}
+  .lab canvas{width:100%;height:auto}.qin input{width:130px}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="top-inner">
+    <a class="back" href="index.html">← CS STUDY LAB</a>
+    <div class="kicker">Subject 02 · Object-Oriented Systems</div>
+    <h1>객체지향시스템</h1>
+    <p><span class="nbc">핵심 정리부터 실습·연습 문제까지,</span> <span class="nbc">공부에 필요한 것을 한곳에 모았습니다.</span></p>
+  </div>
+</div>
+
+<nav class="tabs" aria-label="탭 선택">
+  <div class="tabs-inner">
+    <button class="on" data-t="tn"><i class="dot d1"></i>강의 노트</button>
+    <button data-t="tv"><i class="dot dv"></i>슬라이드</button>
+    <button data-t="tp"><i class="dot d2"></i>C# 실습실</button>
+    <button data-t="tq"><i class="dot dq"></i>연습 문제</button>
+    <button data-t="td"><i class="dot dd"></i>자료실</button>
+    <button id="themeBtn" class="theme-tab" title="라이트/다크 전환">◐</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<div class="chbar" id="chBar">
+  <button class="on" data-ch="t1"><span class="num">01</span><span class="tt">C#의 탄생과 첫 실행</span><span class="kw">닷넷 · 비주얼 스튜디오 · 빌드</span></button>
+</div>
+
+<!-- ═══════════════════ CH01 ═══════════════════ -->
+<section class="panel on t1" id="t1">
+  <div class="glance"><div class="g-label">Chapter 01 at a glance</div>
+    <p>C#은 마이크로소프트가 2000년에 발표한 <b>완전한 객체지향 언어</b>다. 소스 코드(.cs)는
+    <span class="term" tabindex="0" data-tip="컴파일(기계어 번역)과 링크(하나로 결합)를 한꺼번에 처리하는 과정. 결과로 실행 파일(.exe)이 생긴다">빌드</span>를
+    거쳐야 실행 파일(.exe)이 되므로, <b>한 글자라도 고쳤으면 반드시 다시 빌드</b>해야 한다.
+    개발 도구는 무료인 <b>Visual Studio Community</b>.</p></div>
+
+  <h2 class="sec">C#의 탄생 — 소송과 이름의 비밀</h2>
+  <div class="sec-sub">C(1972) → C++(1983) → C#(2000), 그리고 #에 숨은 + 네 개</div>
+  <div class="tblwrap"><table>
+    <tr><th>연도</th><th>사건</th></tr>
+    <tr><td>1972</td><td>벨 연구소 <b>데니스 리치</b>가 C 개발 — 유닉스가 C로 만들어지며 주류로</td></tr>
+    <tr><td>1983</td><td>C에 객체지향을 얹은 <b>C++</b> ("한 단계 향상"의 ++)</td></tr>
+    <tr><td>1991</td><td><b>제임스 고슬링</b>, C++의 복잡함을 덜어낸 자바 개발</td></tr>
+    <tr><td>1990s 말</td><td>마이크로소프트, 자바 확장판 <b>J++</b>를 만들었다가 포기</td></tr>
+    <tr><td><b>2000</b></td><td>마이크로소프트, 닷넷 프레임워크의 언어 <b>C#</b> 발표</td></tr>
+  </table></div>
+  <figure class="fig"><img src="oos/img/ch1_csharp_name.png" alt="C에서 C++, C#으로 이어지는 이름 변천과 # 기호가 + 네 개임을 보여주는 그림" loading="lazy">
+    <figcaption>직접 만든 그림 — C++가 "C보다 +2"라면 C#은 +2개 더. # 기호는 + 네 개를 겹친 모양이다 (교재 2.1절의 이름 유래)</figcaption></figure>
+  <div class="tip"><span class="tag">쉽게 말하면</span>읽는 법은 <b>'씨샵'</b>. C++를 계승하되 자바의
+    영향을 받았고, C/C++·자바·Visual Basic의 장점까지 흡수한 <b>독자 언어</b>입니다. 음악의 ♯(반음 올림)과도
+    통하는 중의적 이름이에요.</div>
+  <figure class="fig"><img src="oos/img/ch1_tiobe.png" alt="TIOBE 2022 상반기 언어 인기 순위 막대그래프 — C# 5위" loading="lazy">
+    <figcaption>TIOBE 지수(2022 상반기) — C#은 5위(5.92%), 전년 대비 +0.95%p 상승 중. 교재 그림 1-3의 수치로 직접 재구성</figcaption></figure>
+
+  <h2 class="sec">C#의 특징 여섯 가지</h2>
+  <div class="sec-sub">"엄격한 게 장점"이라는 역설이 핵심입니다</div>
+  <div class="tblwrap"><table>
+    <tr><th>특징</th><th>내용</th></tr>
+    <tr><td><b>① 간결한 문법</b></td><td>포인터 제거, 메모리는 <span class="term" tabindex="0" data-tip="더 이상 쓰지 않는 메모리를 자동으로 청소해 주는 장치. 자바에도 비슷한 개념이 있다">가비지 컬렉터</span>가 전담</td></tr>
+    <tr><td><b>② 엄격한 문법</b></td><td>case에 break 없으면 오류, 초기화 안 된 변수도 오류 — 실수를 미리 차단</td></tr>
+    <tr><td><b>③ 완전한 객체지향</b></td><td>클래스·추상화·캡슐화·다형성·상속 100% 지원 (11~12장에서 본격 학습)</td></tr>
+    <tr><td><b>④ 멀티 스레드</b></td><td>한 프로세스 안에서 여러 스레드 병렬 처리</td></tr>
+    <tr><td><b>⑤ 다양한 응용</b></td><td>데스크톱 앱 · ASP.NET 웹 · DB · <b>유니티 게임</b>까지</td></tr>
+    <tr><td><b>⑥ CLR 환경</b></td><td><span class="term" tabindex="0" data-tip="Common Language Runtime, 공용 언어 런타임. 닷넷의 심장으로, 실행 순간 중간 언어(IL)를 기계어로 바꿔 준다">CLR</span> 위에서 실행 — 성능·타 언어 통합·예외 처리·안정성</td></tr>
+  </table></div>
+  <div class="warnb"><b>시험 포인트</b> — "틀린 설명 고르기"로 나옵니다. <b>"문법 체크가 유연하다"(×, 엄격하다)</b>,
+    <b>"절차지향 언어다"(×, 객체지향)</b>가 단골 함정. 한계도 하나: 하드웨어 직접 제어는 제한적이라 C/C++와 혼용합니다.</div>
+
+  <h2 class="sec">닷넷 3형제 — 이름이 비슷해서 헷갈린다</h2>
+  <div class="tblwrap"><table>
+    <tr><th>이름</th><th>등장</th><th>정체</th></tr>
+    <tr><td><b>닷넷 프레임워크</b></td><td>2002</td><td>Windows 전용 개발·실행 환경. <b>4.8이 마지막</b> — 수업이 쓰는 환경(C# 7.3)</td></tr>
+    <tr><td><b>닷넷 코어</b></td><td>2014</td><td>크로스 플랫폼(윈도우·리눅스·맥)용</td></tr>
+    <tr><td><b>닷넷 (.NET)</b></td><td>2020~</td><td>둘을 통합한 이름 — .NET 5부터 모바일까지 지원</td></tr>
+  </table></div>
+  <div class="tip"><span class="tag">쉽게 말하면</span>우리 수업 환경은 <b>.NET Framework 4.8 + C# 7.3</b>.
+    Visual Studio를 설치하면 같이 깔리고, 초보 단계에서 버전은 신경 쓰지 않아도 됩니다.</div>
+
+  <h2 class="sec">코드가 .exe가 되기까지 — 빌드</h2>
+  <div class="sec-sub">파이썬과 가장 다른 지점입니다</div>
+  <div class="formula"><div class="f">코딩(.cs) → 컴파일 → 링크 → 실행(.exe)</div>
+    <div class="d">컴파일 = 기계어로 번역(→ 오브젝트 파일) · 링크 = 하나로 결합(→ 실행 파일).
+    둘을 한꺼번에 처리하는 것이 <b>빌드(Build)</b>. 소스가 하나뿐이어도 반드시 거친다.</div></div>
+  <div class="tblwrap"><table>
+    <tr><th>컴파일러 언어</th><th>스크립트 언어</th></tr>
+    <tr><td>일괄 번역 후 <b>실행 파일</b>을 실행</td><td>한 줄씩 해석하며 즉시 실행</td></tr>
+    <tr><td>C · C++ · 자바 · <b>C#</b></td><td><b>파이썬</b> · 자바스크립트 · 펄</td></tr>
+    <tr><td>실행 속도 빠름 · 배우는 데 오래</td><td>실행 파일 없음 · 빨리 배움</td></tr>
+  </table></div>
+  <div class="tip"><span class="tag">쉽게 말하면</span>영상처리 과목의 파이썬은 '수정 → 저장 → 끝'이었지만,
+    C#은 <b>'수정 → 저장 → 재빌드'</b>까지 해야 실행 결과가 바뀝니다. 더 깊이:
+    C#의 .exe는 사실 <span class="term" tabindex="0" data-tip="Intermediate Language, 중간 언어. 자바의 바이트 코드와 같은 개념으로, 실행 순간 CLR이 진짜 기계어로 바꾼다">IL</span>
+    상태의 '어셈블리'이고 실행 순간 CLR이 기계어로 재변환하지만, 내부 처리라 몰라도 됩니다.</div>
+
+  <div class="lab">
+    <h3>실험 ① 재빌드 함정 체험</h3>
+    <div class="sub">교재 실습 1-5의 함정을 그대로 재현했습니다. 숫자를 고치고 [저장]만 한 채 [실행]해 보세요 — 왜 결과가 안 바뀔까요?</div>
+    <div class="lab-flex">
+      <div style="flex:1;min-width:260px">
+        <pre class="sim-code" style="background:#141e24;color:#e8eef2;border-radius:12px;padding:16px 18px;font-size:14px;line-height:1.7">int result;
+result = 100 - <input id="rbN" value="50" inputmode="numeric" style="width:4ch;background:#233240;border:none;border-bottom:2px solid #b39df5;color:#ffd479;font:inherit;text-align:center;border-radius:4px">;
+Console.WriteLine(result);</pre>
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+          <button class="btn" id="rbSave" style="background:var(--card);border:1.5px solid var(--line);color:var(--ink2)">💾 저장</button>
+          <button class="btn" id="rbBuild" style="background:var(--c2);color:#fff">🔨 빌드</button>
+          <button class="btn btn-run" id="rbRun">▶ 실행</button>
+        </div>
+      </div>
+      <div class="ctrl" style="flex:1;min-width:240px">
+        <div class="stat" id="rbExe" style="margin-bottom:10px"></div>
+        <div class="out" id="rbOut" style="min-height:74px">아직 실행하지 않았습니다.</div>
+        <div class="stat" id="rbMsg" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="sec">개발 환경 — Visual Studio, 무료로 전부 된다</h2>
+  <div class="tblwrap"><table>
+    <tr><th>에디션</th><th>가격</th><th>비고</th></tr>
+    <tr><td>Enterprise / Professional</td><td>유료</td><td>기업용 — 기능 많은 순</td></tr>
+    <tr><td><b>Community</b></td><td>무료</td><td><b>유료판과 기능 차이 없음</b> — 개인·교육기관 제한 없이</td></tr>
+    <tr><td>Express</td><td>무료</td><td>2015를 끝으로 단종 — Community로 대체</td></tr>
+  </table></div>
+  <div class="tip"><span class="tag">설치 요점</span>visualstudio.microsoft.com에서 Community 2022 내려받기 →
+    워크로드는 <b>[.NET 데스크톱 개발]만 체크</b>(약 6.2GB, 여유 10GB 권장) → 로그인은 &lt;나중에&gt; 가능하지만
+    <b>30일 내 마이크로소프트 계정 로그인</b> 필요(무료). 설치 전에 파일 탐색기 '파일 확장명 표시'를 켜 두세요.</div>
+
+  <h2 class="sec">첫 프로젝트 — 다섯 번의 클릭</h2>
+  <div class="tblwrap"><table>
+    <tr><th>단계</th><th>내용</th></tr>
+    <tr><td>①</td><td>실습 폴더 <code>C:\CookC#</code> 을 미리 만든다</td></tr>
+    <tr><td>②</td><td>[새 프로젝트 만들기] → 언어 <b>[C#]</b> → 템플릿 <b>[콘솔 앱(.NET Framework)]</b></td></tr>
+    <tr><td>③</td><td>이름 <b>First</b> · 위치 C:\CookC# · <b>[솔루션 및 프로젝트를 같은 디렉터리에 배치]</b> 체크</td></tr>
+    <tr><td>④</td><td>프레임워크 <b>4.8</b> → &lt;만들기&gt;</td></tr>
+    <tr><td>⑤</td><td>소스 파일 <b>Program.cs</b>가 자동 생성 — 여기에 코딩</td></tr>
+  </table></div>
+  <div class="warnb"><b>가장 흔한 실수</b> — 템플릿 목록의 그냥 [콘솔 앱]을 고르면 안 됩니다.
+    반드시 뒤에 <b>(.NET Framework)</b>가 붙은 것! 그리고 규모 관계는 <b>솔루션 ⊃ 프로젝트 ⊃ 프로그램 소스</b>
+    (이 수업에선 솔루션 1 = 프로젝트 1).</div>
+
+  <h2 class="sec">첫 코드 세 줄 — 그리고 오류 읽는 법</h2>
+  <div class="cardrow">
+    <div class="c"><h3>직접 친 부분은 세 줄</h3><p><code>int result;</code> (변수 선언) →
+      <code>result = 100 - 50;</code> (=는 오른쪽을 계산해 왼쪽에) →
+      <code>Console.WriteLine(result);</code> (화면 출력). 나머지 using·namespace·class는 자동 생성 —
+      당분간 건드리지 않습니다.</p></div>
+    <div class="c"><h3>세미콜론이 문장의 끝</h3><p>C#은 줄바꿈이 아니라 <b>;</b>가 문장의 끝.
+      세미콜론을 빼고 빌드하면 <b>CS1002 "; 이 필요합니다"</b>가 파일·줄 번호와 함께 떠요.
+      오류를 더블클릭하면 그 줄로 바로 이동 — <b>오류 메시지를 읽는 습관이 곧 실력</b>입니다.</p></div>
+  </div>
+  <div class="tip"><span class="tag">이 과목의 시험 스타일</span><b>"실행 결과 화면만 주고 → 이 결과를 만드는
+    코드를 짜시오"</b> 유형이 예고되어 있습니다. C# 실습실의 받아쓰기·자유 코딩, 연습 문제의 ✍ 코드 역산이
+    바로 그 훈련장이에요. 학기 후반엔 회원 관리 프로그램류 개별 프로젝트로 이어집니다.</div>
+</section>
+
+<!-- ═══════════════════ 자료실 ═══════════════════ -->
+<section class="panel" id="td">
+  <h2 class="sec" style="margin-top:0">자료실 — 강의 PPT 내려받기</h2>
+  <div class="sec-sub">챕터를 골라 .pptx 파일을 받으세요. 발표자 노트(설명 멘트)가 포함되어 있습니다. 새 챕터가 올라오면 여기에 쌓입니다.</div>
+  <div class="cardrow" style="grid-template-columns:repeat(auto-fill,minmax(270px,1fr))">
+    <div class="c" style="border-top-color:#7a5af5">
+      <h3 style="color:#7a5af5">CH01 C#의 탄생과 첫 실행</h3>
+      <p>C 혈통 이야기 · 특징 6가지 · 닷넷 · 빌드 · 첫 프로그램 (18장)</p>
+      <a class="btn" style="background:#7a5af5;color:#fff;margin-top:12px" href="oos/객체지향시스템_CH01.pptx" download>PPT 내려받기</a>
+    </div>
+  </div>
+  <div class="tip"><span class="tag">참고</span>연습 문제 탭의 [문제지 만들기]로 <b>인쇄용 PDF 문제지</b>도 만들 수 있습니다.</div>
+</section>
+
+<!-- ═══════════════════ 슬라이드 뷰어 ═══════════════════ -->
+<section class="panel" id="tv">
+  <h2 class="sec" style="margin-top:0">강의 슬라이드 미리보기</h2>
+  <div class="sec-sub">챕터를 고르고 ← → 방향키, 좌우 클릭, 아래 바로 넘겨 보세요</div>
+  <div class="viewer">
+    <div class="jump" style="margin:0 0 16px">
+      <button data-deck="1" class="on" style="border-color:#7c93f5;color:#fff">CH01 C#의 탄생과 첫 실행</button>
+    </div>
+    <div class="frame">
+      <img id="slideImg" src="oos/s1/01.jpg" alt="강의 슬라이드 1번">
+      <button class="navbtn prev" id="prevBtn" aria-label="이전 슬라이드"><span>‹</span></button>
+      <button class="navbtn next" id="nextBtn" aria-label="다음 슬라이드" style="right:0"><span>›</span></button>
+    </div>
+    <div class="bar">
+      <button id="prevBtn2">← 이전</button>
+      <span class="cnt" id="slideCnt">1 / 18</span>
+      <input type="range" id="slideRange" min="1" max="18" value="1" aria-label="슬라이드 위치">
+      <button id="nextBtn2">다음 →</button>
+    </div>
+  </div>
+  <p class="viewer-note">원본이 필요하면 상단의 <b>PPT 내려받기</b> 버튼으로 챕터별 .pptx 파일을 받을 수 있습니다.
+  발표자 노트(각 슬라이드의 설명 멘트)는 PPT 파일 안에 들어 있어요.</p>
+</section>
+
+<!-- ═══════════════════ 파이썬 실습실 ═══════════════════ -->
+<section class="panel t2" id="tp">
+  <h2 class="sec" style="margin-top:0">C# 실습실 — 결과를 예측하고 바로 확인</h2>
+  <div class="sec-sub">교재 1장 예제와 SELF STUDY가 들어 있습니다. <span class="star">★</span>는 교재 실습 코드 그대로.
+  값을 바꾸고 [실행]하면 학습용 간이 C# 해석기가 즉시 결과를 보여 줍니다 (세미콜론 검사까지!)</div>
+  <div class="runner">
+    <div class="exbtns" id="exBtns"></div>
+    <div class="ex-purpose" id="exPurpose"></div>
+    <div class="modebar" id="modeBar">
+      <button class="on" data-m="fill">① 값 실험</button>
+      <button data-m="free">② 자유 코딩</button>
+      <button data-m="dict">③ 받아쓰기</button>
+    </div>
+    <div class="mode-desc" id="modeDesc">문법은 잠겨 있고, 연한 밑줄 값만 바꿔 가며 실행해 봅니다 — 개념 실험에 최적.</div>
+    <div class="lab3" id="lab3"></div>
+    <div id="freeWrap" hidden>
+      <div id="freeEd"></div>
+      <details class="sol-toggle" style="margin-top:10px"><summary>원본 코드 보기</summary><pre id="freeSrc"></pre></details>
+    </div>
+    <div class="dict-wrap" id="dictWrap" hidden>
+      <div class="dict-src"><div class="dh">원본 — 보고 그대로 타이핑</div><pre class="hl" id="dictSrc"></pre></div>
+      <div><div class="dh" style="background:var(--c2-soft);color:var(--c2);font-size:11.5px;padding:7px 12px;font-weight:800;border-radius:8px 8px 0 0">내 타이핑</div><div id="dictEd"></div></div>
+    </div>
+    <div style="display:flex;gap:10px;margin:14px 0;align-items:center;flex-wrap:wrap">
+      <button class="btn btn-run" id="pyRun">▶ 실행</button>
+      <button class="btn" id="dictCheck" hidden style="background:var(--form);color:#fff">원본과 비교</button>
+      <button class="btn" id="pyReset" style="background:var(--card);border:1.5px solid var(--line);color:var(--ink2)">↺ 초기화</button>
+      <span id="pyStatus" style="font-size:13px;color:var(--mute)"></span>
+    </div>
+    <div class="out" id="pyOut">실행 결과가 여기에 표시됩니다.</div>
+    <div class="errhint" id="errHint"></div>
+  <div class="tip" style="margin-top:20px"><span class="tag">이렇게 써 보세요</span>
+    연한 밑줄이 있는 숫자·문자열을 하나씩 바꿔 가며 [실행]해 보는 게 최고의 공부예요.
+    문법은 잠겨 있으니 마음껏 실험하세요 — 망가뜨려도 [값 초기화]로 언제든 원본으로 돌아옵니다.</div>
+  <div class="warnb"><b>참고</b> — 이 실행기는 1장 학습용 <b>간이 C# 해석기</b>입니다 (변수 선언·대입·Console.WriteLine 지원,
+    세미콜론 누락 시 진짜처럼 CS1002 오류!). 진짜 빌드·실행은 Visual Studio에서 — 자료실 탭의 PPT에 설치법이 있습니다.</div>
+</section>
+
+<!-- ═══════════════════ 문제 연습 ═══════════════════ -->
+<section class="panel" id="tq">
+  <div class="quiz-head">
+    <div>
+      <h2 class="sec" style="margin:0">연습 문제</h2>
+      <div class="sec-sub">수치가 매번 바뀌고, 문제 속 <b>보라색 숫자를 직접 고치면</b> 그 값 기준으로 채점됩니다.</div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+      <button class="btn" id="makePdf" style="background:var(--form);color:#fff">🖨 문제지 만들기 (인쇄·PDF)</button>
+      <span class="score" id="score">0 / 0 정답</span>
+    </div>
+  </div>
+  <div class="qcats" id="qcats">
+    <button class="on" data-q="predict">결과 예측 — 사칙연산</button>
+    <button data-q="after">출력 시점</button>
+    <button data-q="intdiv">정수 나눗셈</button>
+    <button data-q="dbl">실수 계산</button>
+    <button data-q="mc">C# 상식</button>
+    <button data-q="hand">✍ 코드 역산</button>
+  </div>
+  <div class="qcard" id="qcard"></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-row foot-people">
+      <span>만든 사람 <b>김민</b></span>
+      <a href="mailto:rlaalscjswo1@gmail.com">문의 · 의견 보내기</a>
+      <a id="ytLink" href="#" hidden>YouTube</a>
+      <a href="https://github.com/kkiimmiinn/cs-study-lab" target="_blank" rel="noopener">GitHub 저장소</a>
+      <a href="index.html">CS STUDY LAB 홈</a>
+    </div>
+    <div class="foot-row foot-links">
+      <span>근거 자료</span>
+      <a href="https://www.hanbit.co.kr/academy" target="_blank" rel="noopener">참고 교재 · 한빛아카데미</a>
+      <a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A0%80%EC%9E%91%EA%B6%8C%EB%B2%95" target="_blank" rel="noopener">저작권법 제28조·제37조 (국가법령정보센터)</a>
+      <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>
+    </div>
+    <p class="foot-legal">이 페이지는 대학원 개인 학습·연구 목적으로 제작되었습니다. 우재남, 『C# 프로그래밍 for Beginner』(한빛아카데미)의 개념 체계를 참고하되 내용은 직접 조사해 재구성했으며, 일부는 저작권법 제28조(공표된 저작물의 인용)에 따라 교육·연구 목적으로 인용하고 출처를 밝혔습니다. 도표·그래프·문제·코드 해설 등 자체 제작 콘텐츠는 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>으로 공유합니다 — 출처를 밝히면 비영리 목적으로 자유롭게 쓰고 고칠 수 있습니다(동일 조건). 교재에서 인용한 부분의 권리는 원저작권자에게 있으며 이 라이선스의 적용 대상이 아닙니다.</p>
+  </div>
+</footer>
+
+<script>
+/* ── 탭: 메인 4탭 + 강의 노트 안의 챕터 선택 ── */
+var curChapter = 't1';
+function showTab(id){
+  document.querySelectorAll('.tabs button[data-t]').forEach(function(x){ x.classList.toggle('on', x.dataset.t === id); });
+  var isNote = (id === 'tn');
+  document.getElementById('chBar').style.display = isNote ? '' : 'none';
+  document.querySelectorAll('.panel').forEach(function(p){
+    p.classList.toggle('on', isNote ? p.id === curChapter : p.id === id);
+  });
+  scrollTo({top:0});
+}
+document.querySelectorAll('.tabs button[data-t]').forEach(function(b){
+  b.addEventListener('click', function(){ showTab(b.dataset.t); });
+});
+document.querySelectorAll('#chBar button').forEach(function(b){
+  b.addEventListener('click', function(){
+    document.querySelectorAll('#chBar button').forEach(function(x){ x.classList.remove('on'); });
+    b.classList.add('on');
+    curChapter = b.dataset.ch;
+    showTab('tn');
+  });
+});
+
+
+/* ── 실험 ① 재빌드 함정 체험 ── */
+(function(){
+  var n = document.getElementById('rbN');
+  if (!n) return;
+  var exe = document.getElementById('rbExe'), outEl = document.getElementById('rbOut'),
+      msg = document.getElementById('rbMsg');
+  var builtN = 50;                     // 마지막으로 빌드된 시점의 값
+  function paint(){
+    var same = +n.value === builtN;
+    exe.textContent = 'First.exe 상태: result = 100 − ' + builtN + ' 로 빌드됨' + (same ? ' (최신 ✔)' : '  ← 소스보다 옛날!');
+  }
+  document.getElementById('rbSave').addEventListener('click', function(){
+    msg.textContent = '💾 소스를 저장했습니다. 하지만 .exe 파일은 아직 옛날 그대로예요.';
+    paint();
+  });
+  document.getElementById('rbBuild').addEventListener('click', function(){
+    builtN = +n.value || 0;
+    msg.textContent = '🔨 빌드 성공! 방금 소스로 First.exe가 새로 만들어졌습니다.';
+    paint();
+  });
+  document.getElementById('rbRun').addEventListener('click', function(){
+    outEl.textContent = String(100 - builtN);
+    if (+n.value !== builtN)
+      msg.textContent = '❓ 코드는 100 − ' + n.value + ' 인데 결과는 ' + (100 - builtN) +
+        ' — 실행된 건 예전에 빌드된 .exe이기 때문! [빌드]를 누르고 다시 실행해 보세요.';
+    else
+      msg.textContent = '✔ 코드와 결과가 일치합니다 — 고치면 재빌드, 이 감각이 1장의 핵심.';
+    paint();
+  });
+  paint();
+})();
+
+/* ── 슬라이드 뷰어 (챕터별 덱) ── */
+(function(){
+  var DECKS = {1: 18};
+  var deck = 1, cur = 1;
+  var img = document.getElementById('slideImg'), cnt = document.getElementById('slideCnt'),
+      rng = document.getElementById('slideRange');
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function show(n){
+    var N = DECKS[deck];
+    cur = Math.min(N, Math.max(1, n));
+    img.src = 'oos/s' + deck + '/' + pad(cur) + '.jpg';
+    img.alt = 'CH0' + deck + ' 슬라이드 ' + cur + '번';
+    cnt.textContent = cur + ' / ' + N;
+    rng.max = N; rng.value = cur;
+    if (cur < N) (new Image()).src = 'oos/s' + deck + '/' + pad(cur + 1) + '.jpg';
+  }
+  document.querySelectorAll('.jump button[data-deck]').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('.jump button[data-deck]').forEach(function(x){
+        x.classList.remove('on'); x.style.borderColor = ''; x.style.color = '';
+      });
+      b.classList.add('on'); b.style.borderColor = '#7c93f5'; b.style.color = '#fff';
+      deck = +b.dataset.deck;
+      show(1);
+    });
+  });
+  ['prevBtn','prevBtn2'].forEach(function(id){ document.getElementById(id).addEventListener('click', function(){ show(cur - 1); }); });
+  ['nextBtn','nextBtn2'].forEach(function(id){ document.getElementById(id).addEventListener('click', function(){ show(cur + 1); }); });
+  rng.addEventListener('input', function(){ show(+rng.value); });
+  addEventListener('keydown', function(e){
+    if (!document.getElementById('tv').classList.contains('on')) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowLeft') show(cur - 1);
+    if (e.key === 'ArrowRight') show(cur + 1);
+  });
+  show(1);
+})();
+
+/* ── C# 실습실 3.0 — 문법 잠금 편집기 + 구문 색상 + 줄별 주석·해설 + 에러 힌트 ── */
+(function(){
+  /* 예제: file=원본 파일명, title=의미 제목, purpose=이 실습의 목적, star=수업 실습,
+     code=원본 코드(주석 포함 — 주석은 자동으로 오른쪽 칸으로 분리된다), notes={줄번호: 해설} */
+  var EX = [
+{file:'01.first.cs', ch:1, star:true, title:'첫 프로그램 — 100 빼기 50',
+ purpose:'교재 <b>소스 1-2</b> 전체. 직접 친 부분은 Main 안 세 줄뿐 — 나머지는 자동 생성이다.',
+ code:`using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace First
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            int result;
+            result = 100 - 50;
+            Console.WriteLine(result);
+        }
+    }
+}`,
+ notes:{1:'이 선언 덕에 15행을 <b>Console.WriteLine()</b>으로 짧게 쓸 수 있다. 없으면 System.Console.WriteLine().',
+        9:'클래스 선언 — 프로젝트 이름과 같다. 지금은 그냥 두는 부분.',
+        11:'실제로 작동하는 <b>메인 코드</b>의 입구. 1~12행은 당분간 고정.',
+        13:'정수형 변수 result 선언. 숫자를 담을 그릇.',
+        14:'<b>=는 오른쪽을 다 계산한 뒤 왼쪽에</b> 넣는다 (result ← 100−50). 값을 바꿔 보자!',
+        15:'괄호 안 값을 화면에 출력하는 메서드. <b>;가 문장의 끝</b>.'}},
+
+{file:'02.rebuild.cs', ch:1, star:true, title:'고치면 재빌드 — 100 빼기 99',
+ purpose:'교재 <b>소스 1-3</b>. 저장만 하면 결과는 안 바뀐다 — 실행되는 건 빌드된 .exe이기 때문 (노트 탭 실험 ①).',
+ code:`// 1~12행(자동 생성)은 생략 — Main 안쪽만 적는다
+int result;
+result = 100 - 99;
+Console.WriteLine(result);`,
+ notes:{3:'100−50을 100−99로 고친 부분. 진짜 VS라면 <b>재빌드해야</b> 결과가 1로 바뀐다.',
+        4:'여기서는 간이 실행기라 바로 반영 — 대신 세미콜론을 지워 보라. CS1002가 뜬다!'}},
+
+{file:'03.selfstudy1.cs', ch:1, title:'SELF STUDY 1-1 — 123 × 456',
+ purpose:'교재 자가 점검 문제. 곱셈 연산자는 <b>*</b> (×가 아니다).',
+ code:`int result;
+result = 123 * 456;
+Console.WriteLine(result);`,
+ notes:{2:'곱하기는 별표(*). 나누기는 슬래시(/).',
+        3:'실행하면 56088. 값을 바꿔 가며 곱셈 감각을 익히자.'}},
+
+{file:'04.selfstudy2.cs', ch:1, title:'SELF STUDY 1-2 — 1000 + 2000',
+ purpose:'교재 자가 점검 문제 둘째. 새 프로젝트(Test)를 만들어 작성하는 연습이다.',
+ code:`int result;
+result = 1000 + 2000;
+Console.WriteLine(result);`,
+ notes:{2:'덧셈. 두 수를 바꿔 3000이 아닌 다른 결과도 만들어 보자.'}},
+
+{file:'05.double.cs', ch:1, title:'심화 — 3.14 × 3.14 (double형)',
+ purpose:'교재 <b>심화문제 9번</b>. 소수점 있는 실수는 <b>double</b>형에 담는다.',
+ code:`double pi;
+pi = 3.14;
+Console.WriteLine(pi + " x " + pi + " = " + pi * pi);`,
+ notes:{1:'double = 실수(소수점)용 데이터형. int에는 3.14를 못 담는다.',
+        3:'문자열과 숫자를 +로 이으면 <b>문자열 연결</b>이 된다. 곱셈(*)이 +보다 먼저 계산된다.'}},
+
+{file:'06.preview.cs', ch:1, title:'다음 장 맛보기 — 사칙연산 네 줄',
+ purpose:'교재 <b>소스 2-1</b>(2장 도입). 변수 두 개로 덧셈·뺄셈·곱셈·나눗셈을 차례로 출력한다.',
+ code:`int a, b;
+int result;
+
+a = 100;
+b = 50;
+
+result = a + b;
+Console.WriteLine(a + "+" + b + "=" + result);
+
+result = a - b;
+Console.WriteLine(a + "-" + b + "=" + result);
+
+result = a * b;
+Console.WriteLine(a + "*" + b + "=" + result);
+
+result = a / b;
+Console.WriteLine(a + "/" + b + "=" + result);`,
+ notes:{1:'쉼표로 변수 두 개를 한 줄에 선언할 수 있다.',
+        7:'result에 계산 결과를 넣고, 다음 줄에서 출력 — 이 패턴이 네 번 반복된다.',
+        16:'<b>int / int는 소수점을 버린 몫</b>이 나온다. b를 30으로 바꿔 확인해 보자 (100/30 = 3).'}},
+];
+
+  /* ── 미니 파이썬 토크나이저 (색상 + 값만 편집 가능) ── */
+  var KW = new Set(['using','namespace','class','internal','public','private','static','void','new',
+                    'int','double','float','string','bool','char','var','return','if','else','for','while',
+                    'do','switch','case','break','continue','true','false','null']);
+  var BUILT = new Set(['Console','WriteLine','Write','ReadLine','Main']);
+  function tokenizeLine(line){
+    // 주석 분리(문자열 밖의 첫 #)
+    var comment = null, inStr = null;
+    for (var i = 0; i < line.length; i++){
+      var ch = line[i];
+      if (inStr){ if (ch === inStr) inStr = null; continue; }
+      if (ch === "'" || ch === '"'){ inStr = ch; continue; }
+      if (ch === '/' && line[i + 1] === '/'){ comment = line.slice(i + 2).trim(); line = line.slice(0, i).replace(/\s+$/, ''); break; }
+    }
+    var segs = [], re = /('[^']*'|"[^"]*")|(\d+\.\d+j?|\d+j|\d+)|([A-Za-z_][A-Za-z_0-9]*)|(\s+)|(.)/g, m;
+    while ((m = re.exec(line)) !== null){
+      if (m[1]) segs.push({t: 'str', v: m[1]});                        // 문자열 → 편집 가능
+      else if (m[2]) segs.push({t: 'num', v: m[2]});                   // 숫자 → 편집 가능
+      else if (m[3]){
+        var w = m[3];
+        var next = line.slice(re.lastIndex).match(/^\s*\(/);
+        segs.push({t: KW.has(w) ? 'kw' : (BUILT.has(w) || next ? 'fn' : 'pl'), v: w});
+      }
+      else if (m[4]) segs.push({t: 'sp', v: m[4]});
+      else segs.push({t: 'op', v: m[5]});
+    }
+    return {segs: segs, comment: comment};
+  }
+
+  /* 하이라이트 한 줄 → HTML (들여쓰기 가이드 포함) */
+  function hlLine(line){
+    var lead = (line.match(/^ */) || [''])[0];
+    var guides = '';
+    for (var g = 0; g + 4 <= lead.length; g += 4) guides += '<span class="ind">    </span>';
+    var rest = line.slice(guides.length ? Math.floor(lead.length / 4) * 4 : 0);
+    // 주석 위치(문자열 밖 //)를 찾아 간격을 원문 그대로 보존한다 — 받아쓰기 원본과 실제 코드가 일치해야 하므로
+    var ci = -1, inS = false;
+    for (var q = 0; q < rest.length; q++){
+      if (rest[q] === '"') inS = !inS;
+      if (!inS && rest[q] === '/' && rest[q + 1] === '/'){ ci = q; break; }
+    }
+    var codePart = ci >= 0 ? rest.slice(0, ci) : rest;
+    var tk = tokenizeLine(codePart);
+    var h = '';
+    tk.segs.forEach(function(sg){
+      if (sg.t === 'sp') h += sg.v;
+      else h += '<span class="tk-' + (sg.t === 'pl' ? 'pl' : sg.t) + '">' + escH(sg.v) + '</span>';
+    });
+    if (ci >= 0) h += '<span class="tk-cm" style="color:#7e9a8f">' + escH(rest.slice(ci)) + '</span>';
+    return guides + h;
+  }
+  function escH(t){ return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function hlCode(code){
+    return code.split('\n').map(hlLine).join('\n') + '\n';
+  }
+  /* 미니 코드 에디터: 구문색 + Tab + 자동 들여쓰기 + 줄번호 */
+  function makeEditor(host, initial){
+    host.innerHTML = '<div class="codeed"><div class="gut">1</div>' +
+      '<div class="stack"><pre class="hl"><code></code></pre>' +
+      '<textarea spellcheck="false" wrap="off" aria-label="코드 입력"></textarea></div></div>';
+    var gut = host.querySelector('.gut'), code = host.querySelector('code'),
+        ta = host.querySelector('textarea'), stack = host.querySelector('.stack');
+    function refresh(){
+      code.innerHTML = hlCode(ta.value);
+      var n = ta.value.split('\n').length, gtext = '';
+      for (var i = 1; i <= n; i++) gtext += i + '\n';
+      gut.textContent = gtext;
+      ta.style.height = 'auto';
+      ta.style.height = Math.max(220, ta.scrollHeight) + 'px';   // 세로는 자동으로 늘어난다
+    }
+    ta.addEventListener('input', refresh);
+    ta.addEventListener('scroll', function(){                     // 가로 스크롤 동기화
+      code.parentElement.scrollLeft = ta.scrollLeft;
+      gut.scrollTop = ta.scrollTop;
+    });
+    ta.addEventListener('keydown', function(e){
+      var st = ta.selectionStart, en = ta.selectionEnd, v = ta.value;
+      if (e.key === 'Tab'){
+        e.preventDefault();
+        if (e.shiftKey){
+          var ls = v.lastIndexOf('\n', st - 1) + 1;
+          if (v.substr(ls, 4) === '    '){
+            ta.value = v.slice(0, ls) + v.slice(ls + 4);
+            ta.selectionStart = ta.selectionEnd = Math.max(ls, st - 4);
+          }
+        } else {
+          ta.value = v.slice(0, st) + '    ' + v.slice(en);
+          ta.selectionStart = ta.selectionEnd = st + 4;
+        }
+        refresh();
+      } else if (e.key === 'Enter'){
+        e.preventDefault();
+        var ls2 = v.lastIndexOf('\n', st - 1) + 1;
+        var line = v.slice(ls2, st);
+        var indent = (line.match(/^ */) || [''])[0];
+        if (/[{:]\s*$/.test(line)) indent += '    ';
+        ta.value = v.slice(0, st) + '\n' + indent + v.slice(en);
+        ta.selectionStart = ta.selectionEnd = st + 1 + indent.length;
+        refresh();
+      }
+    });
+    ta.value = initial || '';
+    refresh();
+    return {get: function(){ return ta.value; },
+            set: function(t){ ta.value = t; refresh(); },
+            focus: function(){ ta.focus(); }};
+  }
+  window._pyHl = hlCode;   // 손코딩(연습 문제)에서도 쓴다
+  window._pyEd = makeEditor;
+
+  var box = document.getElementById('lab3'), out = document.getElementById('pyOut'),
+      run = document.getElementById('pyRun'), st = document.getElementById('pyStatus'),
+      bar = document.getElementById('exBtns'), purpose = document.getElementById('exPurpose'),
+      ehint = document.getElementById('errHint');
+  var cur = null, lineMeta = [];
+
+  function esc(t){ return t.replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function render(ex){
+    cur = ex; lineMeta = [];
+    purpose.innerHTML = '<b>' + ex.title + '</b><span class="fname">' + ex.file + '</span><br>' + ex.purpose;
+    out.textContent = '실행 결과가 여기에 표시됩니다.';
+    ehint.className = 'errhint';
+    var html = '<div class="l3row head"><span class="l3n">줄</span>' +
+               '<div class="l3code">코드 — 연한 밑줄 값(숫자·문자열)만 수정 가능, 문법·괄호는 잠김</div>' +
+               '<div class="l3side">주석 · 해설</div></div>';
+    function chw(v){                              // 한글은 2ch 폭으로 계산
+      var n = 0;
+      for (var i = 0; i < v.length; i++) n += v.charCodeAt(i) > 0x2000 ? 2 : 1;
+      return Math.max(1, n);
+    }
+    ex.code.split('\n').forEach(function(line, li){
+      var tk = tokenizeLine(line);
+      lineMeta.push(tk);
+      var codeHtml = '';
+      tk.segs.forEach(function(sg, si){
+        if (sg.t === 'num')
+          codeHtml += '<input class="tk-num" data-l="' + li + '" data-s="' + si + '" value="' + sg.v + '" style="width:' + Math.max(1, sg.v.length) + 'ch">';
+        else if (sg.t === 'str'){
+          var inner = sg.v.slice(1, -1), q = sg.v[0];
+          codeHtml += '<span class="tk-str">' + q + '</span>' +
+            '<input class="tk-str" data-l="' + li + '" data-s="' + si + '" value="' + esc(inner).replace(/"/g, '&quot;') + '" style="width:' + chw(inner) + 'ch">' +
+            '<span class="tk-str">' + q + '</span>';
+        }
+        else if (sg.t === 'sp') codeHtml += sg.v.replace(/ /g, '&nbsp;');
+        else codeHtml += '<span class="tk-' + sg.t + '">' + esc(sg.v) + '</span>';
+      });
+      var side = '';
+      if (tk.comment) side += '<span class="ocm">// ' + esc(tk.comment) + '</span>';
+      if (ex.notes[li + 1]) side += '<span class="nt">' + ex.notes[li + 1] + '</span>';
+      html += '<div class="l3row" data-l="' + li + '"><span class="l3n">' + (li + 1) + '</span>' +
+              '<div class="l3code">' + (codeHtml || '&nbsp;') + '</div>' +
+              '<div class="l3side">' + side + '</div></div>';
+    });
+    box.innerHTML = html;
+    box.querySelectorAll('input').forEach(function(inp){
+      inp.addEventListener('input', function(){
+        var n = 0;                                  // 한글은 2ch 폭으로 계산
+        for (var i = 0; i < inp.value.length; i++)
+          n += inp.value.charCodeAt(i) > 0x2000 ? 2 : 1;
+        inp.style.width = Math.max(1, n) + 'ch';
+        clearErr();
+      });
+    });
+    bar.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x.dataset.file === ex.file); });
+  }
+  function buildCode(){
+    return cur.code.split('\n').map(function(_, li){
+      var tk = lineMeta[li], s2 = '';
+      tk.segs.forEach(function(sg, si){
+        if (sg.t === 'num' || sg.t === 'str'){
+          var inp = box.querySelector('input[data-l="' + li + '"][data-s="' + si + '"]');
+          s2 += sg.t === 'str' ? sg.v[0] + inp.value + sg.v[0] : inp.value;
+        } else s2 += sg.v;
+      });
+      if (tk.comment) s2 += (s2 ? '   ' : '') + '// ' + tk.comment;
+      return s2;
+    }).join('\n');
+  }
+  function clearErr(){
+    ehint.className = 'errhint';
+    box.querySelectorAll('.l3row.err').forEach(function(r){ r.classList.remove('err'); });
+  }
+
+  /* 예제 버튼 */
+  EX.forEach(function(ex){
+    var b = document.createElement('button');
+    b.dataset.file = ex.file;
+    b.innerHTML = (ex.star ? '<span class="star">★</span> ' : '') + ex.title;
+    b.title = ex.file + (ex.star ? ' · 수업 시간에 실제 실습한 파일' : ' · 교재 예제 (수업에서는 건너뜀)');
+    b.style.fontFamily = 'var(--sans)';
+    b.addEventListener('click', function(){
+      render(ex);
+      if (typeof mode !== 'undefined' && mode !== 'fill') setMode(mode);
+    });
+    bar.appendChild(b);
+  });
+  /* ── 학습 모드: 값 실험 / 자유 코딩 / 받아쓰기 ── */
+  var MODE_DESC = {
+    fill: '문법은 잠겨 있고, 연한 밑줄 값만 바꿔 가며 실행해 봅니다 — 개념 실험에 최적.',
+    free: '빈 화면에 처음부터 끝까지 직접 코딩합니다. Tab 들여쓰기, 여는 중괄호 { 뒤 엔터 자동 들여쓰기, 들여쓰기 세로 가이드 지원. 막히면 아래 [원본 코드 보기].',
+    dict: '왼쪽 원본을 보며 오른쪽에 그대로 타이핑합니다(받아쓰기). [원본과 비교]로 들여쓰기·띄어쓰기까지 확인 — 코드가 손에 붙는 가장 빠른 길.',
+  };
+  var mode = 'fill', freeEd = null, dictEd = null;
+  function stripTags(t){ return String(t).replace(/<[^>]+>/g, ''); }
+  function freeTemplate(ex){
+    var NL = String.fromCharCode(10);
+    var t = '// ' + ex.title + ' (' + ex.file + ') — 직접 작성해 보세요' + NL +
+            '// 목표: ' + stripTags(ex.purpose).replace(/\s+/g, ' ').trim() + NL;
+    var keys = Object.keys(ex.notes).slice(0, 3);
+    keys.forEach(function(k, i){
+      t += '// 힌트' + (i + 1) + ': ' + stripTags(ex.notes[k]).replace(/\s+/g, ' ').trim() + NL;
+    });
+    t += '// 막히면 아래 [원본 코드 보기]를 펼쳐 보세요.' + NL + NL;
+    return t;
+  }
+  var freeWrap = document.getElementById('freeWrap'), dictWrap = document.getElementById('dictWrap');
+  function setMode(m){
+    mode = m;
+    document.querySelectorAll('#modeBar button').forEach(function(x){ x.classList.toggle('on', x.dataset.m === m); });
+    document.getElementById('modeDesc').textContent = MODE_DESC[m];
+    box.hidden = m !== 'fill';
+    box.style.display = m === 'fill' ? '' : 'none';
+    freeWrap.hidden = m !== 'free';
+    dictWrap.hidden = m !== 'dict';
+    document.getElementById('dictCheck').hidden = m !== 'dict';
+    document.getElementById('pyReset').textContent = m === 'fill' ? '↺ 값 초기화' : '↺ 초기화';
+    clearErr();
+    out.textContent = '실행 결과가 여기에 표시됩니다.';
+    if (m === 'free'){
+      if (!freeEd) freeEd = window._pyEd(document.getElementById('freeEd'), '');
+      freeEd.set(freeTemplate(cur));
+      document.getElementById('freeSrc').textContent = cur.code;
+      freeEd.focus();
+    }
+    if (m === 'dict'){
+      if (!dictEd) dictEd = window._pyEd(document.getElementById('dictEd'), '');
+      dictEd.set('');
+      document.getElementById('dictSrc').innerHTML = window._pyHl(cur.code);
+      dictEd.focus();
+    }
+  }
+  document.querySelectorAll('#modeBar button').forEach(function(b){
+    b.addEventListener('click', function(){ setMode(b.dataset.m); });
+  });
+  document.getElementById('dictCheck').addEventListener('click', function(){
+    var src = cur.code.split('\n').map(function(l){ return l.replace(/\s+$/, ''); });
+    var mine = dictEd.get().split('\n').map(function(l){ return l.replace(/\s+$/, ''); });
+    while (src.length && !src[src.length-1]) src.pop();
+    while (mine.length && !mine[mine.length-1]) mine.pop();
+    for (var i = 0; i < Math.max(src.length, mine.length); i++){
+      var a = src[i], b2 = mine[i];
+      if (a === b2) continue;
+      var msg = '✏ ' + (i + 1) + '번 줄이 달라요.\n';
+      if (a === undefined){
+        msg += '원본에 없는 줄을 더 적었어요: "' + b2 + '"';
+      } else if (b2 === undefined){
+        msg += '이 줄이 빠졌어요. 원본: "' + a + '"';
+      } else {
+        var ia = (a.match(/^ */) || [''])[0].length, ib = (b2.match(/^ */) || [''])[0].length;
+        if (ia !== ib && a.trim() === b2.trim()){
+          msg += '내용은 맞는데 들여쓰기가 달라요 — 원본 ' + ia + '칸, 내 것 ' + ib + '칸. (C#도 원본 모양 그대로 맞춰 쓰는 연습!)';
+        } else {
+          var j = 0;
+          while (j < Math.min(a.length, b2.length) && a[j] === b2[j]) j++;
+          msg += (j + 1) + '번째 글자부터 달라요.\n원본:      ' + a + '\n내 타이핑: ' + b2 + '\n' +
+                 Array(12 + j).join(' ') + '^ 여기\n' +
+                 '(원본: "' + (a[j] || '끝') + '" · 내 것: "' + (b2[j] || '끝') + '" — 띄어쓰기·대소문자·기호까지 똑같아야 해요)';
+        }
+      }
+      out.textContent = msg;
+      return;
+    }
+    out.textContent = '🎉 완벽하게 일치! 받아쓰기 성공 — [실행]으로 결과까지 확인해 보세요.';
+  });
+
+  render(EX.find(function(e){ return e.file === '01.first.cs'; }));
+  document.getElementById('pyReset').addEventListener('click', function(){
+    if (mode === 'fill') render(cur);
+    else if (mode === 'free') freeEd.set(freeTemplate(cur));
+    else dictEd.set('');
+    out.textContent = '실행 결과가 여기에 표시됩니다.';
+    clearErr();
+  });
+
+  /* ── 실행 엔진: 학습용 간이 C# 해석기 ── */
+  var HINTS = {
+    CS1002: '문장 끝에 세미콜론(;)이 빠졌어요. C#은 줄바꿈이 아니라 ;가 문장의 끝!',
+    CS0103: '선언하지 않은 이름을 썼어요. 변수 철자를 확인하거나 int/double로 먼저 선언하세요.',
+    CS0165: '변수를 선언만 하고 값을 넣지 않은 채 사용했어요. 먼저 = 로 값을 대입하세요.',
+    DivideByZeroException: '0으로 나눌 수는 없어요. 나누는 수를 0이 아닌 값으로 바꿔 보세요.',
+    CSLAB: '이 간이 실행기는 변수 선언·대입·Console.WriteLine만 이해해요. 진짜 실행은 Visual Studio에서!',
+  };
+  function runCS(code){
+    var vars = {}, outBuf = '';
+    function fmtNum(v){ return String(parseFloat((+v).toPrecision(12))); }
+    function fmt(val){ return val.t === 'str' ? val.v : fmtNum(val.v); }
+    function evalExpr(src, ln){
+      var toks = [], re = /\s*("(?:[^"\\]|\\.)*"|\d+\.\d+|\d+|[A-Za-z_]\w*|[()+\-*\/%])/g, m, pos = 0;
+      while ((m = re.exec(src)) !== null){
+        if (m.index !== pos && src.slice(pos, m.index).trim()) throw {cs:'CSLAB', ln:ln};
+        pos = re.lastIndex; toks.push(m[1]);
+      }
+      if (src.slice(pos).trim()) throw {cs:'CSLAB', ln:ln};
+      var p = 0;
+      function peek(){ return toks[p]; }
+      function atom(){
+        var t = toks[p++];
+        if (t === undefined) throw {cs:'CSLAB', ln:ln};
+        if (t === '('){ var v = addsub(); if (toks[p++] !== ')') throw {cs:'CSLAB', ln:ln}; return v; }
+        if (t === '-'){ var v2 = atom(); if (v2.t === 'str') throw {cs:'CSLAB', ln:ln}; return {t:v2.t, v:-v2.v}; }
+        if (t[0] === '"') return {t:'str', v: t.slice(1, -1).replace(/\\"/g, '"')};
+        if (/^\d/.test(t)) return {t: t.indexOf('.') >= 0 ? 'double' : 'int', v: +t};
+        if (!(t in vars)) throw {cs:'CS0103', name:t, ln:ln};
+        if (!vars[t].set) throw {cs:'CS0165', name:t, ln:ln};
+        return {t: vars[t].type === 'string' ? 'str' : vars[t].type, v: vars[t].v};
+      }
+      function muldiv(){
+        var L = atom();
+        while (peek() === '*' || peek() === '/' || peek() === '%'){
+          var op = toks[p++], R = atom();
+          if (L.t === 'str' || R.t === 'str') throw {cs:'CSLAB', ln:ln};
+          var bothInt = L.t === 'int' && R.t === 'int';
+          if ((op === '/' || op === '%') && R.v === 0 && bothInt) throw {cs:'DivideByZeroException', ln:ln};
+          var v = op === '*' ? L.v * R.v : op === '/' ? L.v / R.v : L.v % R.v;
+          if (bothInt && op === '/') v = Math.trunc(v);
+          L = {t: bothInt ? 'int' : 'double', v: v};
+        }
+        return L;
+      }
+      function addsub(){
+        var L = muldiv();
+        while (peek() === '+' || peek() === '-'){
+          var op = toks[p++], R = muldiv();
+          if (op === '+' && (L.t === 'str' || R.t === 'str'))
+            L = {t:'str', v: fmt(L) + fmt(R)};
+          else if (L.t === 'str' || R.t === 'str') throw {cs:'CSLAB', ln:ln};
+          else L = {t: (L.t === 'int' && R.t === 'int') ? 'int' : 'double',
+                    v: op === '+' ? L.v + R.v : L.v - R.v};
+        }
+        return L;
+      }
+      var res = addsub();
+      if (p !== toks.length) throw {cs:'CSLAB', ln:ln};
+      return res;
+    }
+    function coerce(type, val, ln){
+      if (type === 'string'){ return {t:'str', v: fmt(val)}; }
+      if (val.t === 'str') throw {cs:'CSLAB', ln:ln};
+      return {t: type, v: type === 'int' ? Math.trunc(val.v) : val.v};
+    }
+    var lines = code.split('\n');
+    try {
+      for (var i = 0; i < lines.length; i++){
+        var ln = i + 1;
+        var line = lines[i];
+        // 문자열 밖의 // 주석 제거
+        var t = '', inStr = false;
+        for (var k = 0; k < line.length; k++){
+          if (line[k] === '"') inStr = !inStr;
+          if (!inStr && line[k] === '/' && line[k+1] === '/') break;
+          t += line[k];
+        }
+        t = t.trim();
+        if (!t) continue;
+        if (/^(using\s|namespace\s|internal\s|class\s|public\s|static\s)/.test(t)) continue;   // 뼈대는 통과
+        if (t === '{' || t === '}') continue;
+        if (!/;$/.test(t)) return {err:'CS1002', msg:'; 이 필요합니다', line:ln};
+        t = t.slice(0, -1).trim();
+        var m;
+        if ((m = t.match(/^(int|double|string)\s+(.+)$/))){
+          var type = m[1];
+          var parts = m[2].split(',');
+          for (var d = 0; d < parts.length; d++){
+            var dm = parts[d].trim().match(/^([A-Za-z_]\w*)(?:\s*=\s*(.+))?$/);
+            if (!dm) return {err:'CSLAB', msg:'선언을 이해하지 못했어요', line:ln};
+            if (dm[2]){
+              var v0 = coerce(type, evalExpr(dm[2], ln), ln);
+              vars[dm[1]] = {type:type, v:v0.v, set:true};
+            } else vars[dm[1]] = {type:type, v:null, set:false};
+          }
+        } else if ((m = t.match(/^Console\.Write(Line)?\s*\((.*)\)$/))){
+          var val = m[2].trim() === '' ? {t:'str', v:''} : evalExpr(m[2], ln);
+          outBuf += fmt(val) + (m[1] ? '\n' : '');
+        } else if ((m = t.match(/^([A-Za-z_]\w*)\s*=\s*(.+)$/))){
+          if (!(m[1] in vars)) return {err:'CS0103', msg:"'" + m[1] + "' 이름이 현재 컨텍스트에 없습니다", line:ln};
+          var v1 = coerce(vars[m[1]].type, evalExpr(m[2], ln), ln);
+          vars[m[1]].v = v1.v; vars[m[1]].set = true;
+        } else {
+          return {err:'CSLAB', msg:'간이 실행기가 이해하지 못하는 문장이에요', line:ln};
+        }
+      }
+    } catch (e){
+      if (e && e.cs){
+        var msgs = {CS0103: "'" + (e.name || '?') + "' 이름이 현재 컨텍스트에 없습니다",
+                    CS0165: "할당되지 않은 지역 변수 '" + (e.name || '?') + "' 사용",
+                    DivideByZeroException: '0으로 나누려 했습니다',
+                    CSLAB: '식을 이해하지 못했어요'};
+        return {err: e.cs, msg: msgs[e.cs] || '', line: e.ln};
+      }
+      return {err:'CSLAB', msg:String(e), line:null};
+    }
+    return {out: outBuf};
+  }
+  function currentSource(){
+    if (mode === 'free') return freeEd ? freeEd.get() : '';
+    if (mode === 'dict') return dictEd ? dictEd.get() : '';
+    return buildCode();
+  }
+  run.addEventListener('click', function(){
+    clearErr();
+    st.textContent = '';
+    var r = runCS(currentSource());
+    if (r.err){
+      out.textContent = '';
+      var row = (mode === 'fill' && r.line) ? box.querySelector('.l3row[data-l="' + (r.line - 1) + '"]') : null;
+      if (row){ row.classList.add('err'); row.scrollIntoView({block: 'nearest'}); }
+      ehint.className = 'errhint show';
+      ehint.innerHTML = '<b>' + r.err + '</b>' + (r.line ? ' — <code>' + r.line + '번 줄</code>에서 났어요.' : '') +
+        '<br>' + (HINTS[r.err] || '') +
+        (r.msg ? '<br><span style="font-size:12.5px;color:#a05">컴파일러 메시지: ' + esc(r.msg) + '</span>' : '');
+    } else {
+      out.textContent = r.out || '(출력 없음 — Console.WriteLine( )을 넣어 보세요)';
+    }
+  });
+})();
+
+/* ── 문제 연습 v2: 파라미터 직접 수정 + 손코딩 + PDF 문제지 ── */
+(function(){
+  var card = document.getElementById('qcard');
+  var right = 0, tries = 0, curKind = 'predict', current = null, seenKinds = {};
+  var CONCEPT = {
+    predict: '<b>=는 오른쪽을 다 계산한 뒤 왼쪽에</b> 넣는다 (result ← 100−50). Console.WriteLine( )은 괄호 안 값을 출력. — 교재 소스 1-2',
+    after: '출력은 <b>그 시점의 값</b>으로 찍힌다. Console.WriteLine 뒤에 오는 대입은 이미 출력된 결과를 바꾸지 못한다. — 교재 연습문제 6번',
+    intdiv: 'C#에서 <b>int / int는 소수점을 버린 몫</b>이 나온다 (100/30 = 3). 나머지는 % 연산자. — 교재 소스 2-1의 나눗셈',
+    dbl: '소수점 있는 실수는 <b>double</b>형에 담는다. 문자열과 +로 이으면 문자열 연결, 곱셈(*)이 +보다 먼저. — 교재 심화문제 9번',
+  };
+  function ri(a, b){ return a + Math.floor(Math.random() * (b - a + 1)); }
+  function pick(arr){ return arr[ri(0, arr.length - 1)]; }
+  function pin(name, val, w){                       // 문제 속 수정 가능한 숫자
+    return '<input class="qparam" data-p="' + name + '" value="' + val + '"' +
+           (w ? ' style="width:' + w + 'px"' : '') + ' inputmode="numeric">';
+  }
+  function P(name){                                  // 현재 파라미터 값 읽기
+    var el = card.querySelector('.qparam[data-p="' + name + '"]');
+    return el ? el.value.trim() : '';
+  }
+  function Pn(name){ return +String(P(name)).replace(/,/g, ''); }
+
+  /* 각 유형: make() → {text(html, pin 포함), fields[{label,unit,key,text?}], calc() → {key:정답}, sol() } */
+  var GEN = {
+    predict: { tag: 'CH01 · 결과 예측 — 사칙연산',
+      make: function(){
+        var A = ri(50, 900), B = ri(10, 49), op = pick(['-', '+', '*']);
+        return { text: '<code>int result;</code><br><code>result = ' + pin('A', A, 64) + ' ' + op + ' ' + pin('B', B, 56) +
+                       ';</code><br><code>Console.WriteLine(result);</code><br>실행하면 무엇이 출력될까요?',
+                 hint: '보라색 숫자는 직접 바꿔도 됩니다 — 바꾼 값 기준으로 채점돼요.', kind: op,
+                 fields: [{label: '출력 =', unit: '', key: 'x'}] };
+      },
+      calc: function(){
+        var A = Pn('A'), B = Pn('B'), op = current.spec.kind;
+        return {x: op === '-' ? A - B : op === '+' ? A + B : A * B};
+      },
+      sol: function(a){ return P('A') + ' ' + current.spec.kind + ' ' + P('B') + ' = ' + a.x + '  (=는 오른쪽을 계산해 왼쪽에)'; },
+      canon: function(){
+        return { canon: true, kind: '-',
+                 text: '<code>int result;</code><br><code>result = ' + pin('A', 100, 64) + ' - ' + pin('B', 50, 56) +
+                       ';</code><br><code>Console.WriteLine(result);</code><br>실행하면 무엇이 출력될까요?',
+                 hint: '교재 소스 1-2 그대로입니다.',
+                 fields: [{label: '출력 =', unit: '', key: 'x'}] };
+      } },
+    after: { tag: 'CH01 · 출력 시점',
+      make: function(){
+        return { text: '<code>int result = ' + pin('A', ri(10, 500), 64) + ';</code><br>' +
+                       '<code>Console.WriteLine(result);</code><br>' +
+                       '<code>result = ' + pin('B', ri(10, 500), 64) + ';</code><br>실행하면 무엇이 출력될까요?',
+                 hint: '어느 시점의 값이 출력되는지 생각해 보세요.',
+                 fields: [{label: '출력 =', unit: '', key: 'x'}] };
+      },
+      calc: function(){ return {x: Pn('A')}; },
+      sol: function(a){ return '출력 = ' + a.x + ' — WriteLine 뒤의 대입(' + P('B') + ')은 이미 출력된 결과를 바꾸지 못한다'; },
+      canon: function(){
+        return { canon: true, text: '<code>int result = ' + pin('A', 100, 64) + ';</code><br>' +
+                 '<code>Console.WriteLine(result);</code><br><code>result = ' + pin('B', 200, 64) + ';</code><br>실행하면 무엇이 출력될까요?',
+                 hint: '교재 연습문제 6번 그대로입니다.',
+                 fields: [{label: '출력 =', unit: '', key: 'x'}] };
+      } },
+    intdiv: { tag: 'CH01 · 정수 나눗셈과 나머지',
+      make: function(){
+        var op = pick(['/', '%']);
+        return { text: '<code>int result = ' + pin('A', ri(11, 99), 56) + ' ' + op + ' ' + pin('B', ri(2, 9), 48) +
+                       ';</code><br><code>Console.WriteLine(result);</code><br>출력은?',
+                 hint: 'int끼리의 나눗셈(/)은 소수점을 버립니다. %는 나머지.', kind: op,
+                 fields: [{label: '출력 =', unit: '', key: 'x'}] };
+      },
+      calc: function(){
+        var A = Pn('A'), B = Pn('B');
+        if (B === 0) return {err: '0으로는 나눌 수 없어요 (DivideByZeroException). B를 바꿔 주세요.'};
+        return {x: current.spec.kind === '/' ? Math.trunc(A / B) : A % B};
+      },
+      sol: function(a){
+        return P('A') + ' ' + current.spec.kind + ' ' + P('B') + ' = ' + a.x +
+               (current.spec.kind === '/' ? '  (int / int는 몫만 — 소수점 버림)' : '  (%는 나머지)');
+      },
+      canon: function(){
+        return { canon: true, kind: '/',
+                 text: '<code>int result = ' + pin('A', 100, 56) + ' / ' + pin('B', 30, 48) +
+                       ';</code><br><code>Console.WriteLine(result);</code><br>출력은?',
+                 hint: '수업 예제의 함정 — 3.33...이 아닙니다!',
+                 fields: [{label: '출력 =', unit: '', key: 'x'}] };
+      } },
+    dbl: { tag: 'CH01 · 실수(double) 계산',
+      make: function(){
+        var v = pick(['1.5', '2.5', '0.5', '1.2', '2.2']);
+        return { text: '<code>double pi = ' + pin('A', v, 64) + ';</code><br>' +
+                       '<code>Console.WriteLine(pi * pi);</code><br>출력은? (소수점까지)',
+                 hint: '실수는 double형 — 제곱을 소수점까지 계산하세요.',
+                 fields: [{label: '출력 =', unit: '', key: 'x'}] };
+      },
+      calc: function(){ var v = Pn('A'); return {x: parseFloat((v * v).toPrecision(12))}; },
+      sol: function(a){ return P('A') + ' × ' + P('A') + ' = ' + a.x + '  (int에는 소수를 못 담는다 — double!)'; },
+      canon: function(){
+        return { canon: true, text: '<code>double pi = ' + pin('A', '3.14', 64) + ';</code><br>' +
+                 '<code>Console.WriteLine(pi * pi);</code><br>출력은? (소수점까지)',
+                 hint: '교재 심화문제 9번의 핵심 계산입니다.',
+                 fields: [{label: '출력 =', unit: '', key: 'x'}] };
+      } },
+  };
+  var MC = [
+    {q: '다음 중 C#의 특징으로 틀린 것은?', c: ['문법 체크가 유연해서 프로그래머에게 자유를 준다', '간결한 문법을 제공한다', '완전한 객체지향 언어다', '멀티 스레드 프로그래밍을 지원한다'], a: 0,
+     s: 'C#은 오히려 문법이 엄격해서 실수를 미리 잡아 줍니다 — 교재 연습문제 3번.'},
+    {q: 'C# 프로그램이 만들어지는 순서로 맞는 것은?', c: ['소스 코딩 → 컴파일 → 링크 → 파일 실행', '컴파일 → 소스 코딩 → 링크 → 파일 실행', '소스 코딩 → 링크 → 컴파일 → 파일 실행', '링크 → 컴파일 → 소스 코딩 → 파일 실행'], a: 0,
+     s: '컴파일+링크를 한꺼번에 처리하는 것이 빌드 — 교재 연습문제 4번.'},
+    {q: 'Visual Studio의 무료 에디션은?', c: ['Community', 'Enterprise', 'Professional', 'Ultimate'], a: 0,
+     s: 'Community는 유료판과 기능 차이가 없습니다. Express도 무료였지만 2015를 끝으로 단종 — 연습문제 5번.'},
+    {q: '규모가 큰 것부터 나열하면?', c: ['솔루션 > 프로젝트 > 프로그램 소스', '프로젝트 > 솔루션 > 프로그램 소스', '프로그램 소스 > 프로젝트 > 솔루션', '셋은 같은 크기다'], a: 0,
+     s: '솔루션 ⊃ 프로젝트 ⊃ 소스. 이 수업에선 솔루션 1 = 프로젝트 1 — 연습문제 7번.'},
+    {q: 'Visual Studio 2022를 설치할 수 없는 운영체제는?', c: ['Windows 7', 'Windows 10', 'Windows 11', '셋 다 설치 가능'], a: 0,
+     s: 'VS 2022는 Windows 10·11 전용(64bit) — 교재 연습문제 8번, 표 1-2.'},
+    {q: "C# 이름의 '#' 기호에 담긴 뜻은?", c: ["'+' 4개를 겹친 모양 — 사실상 C++++", '해시태그의 유행을 반영', '우물 정(井)자에서 따옴', '별 뜻 없음'], a: 0,
+     s: 'C++보다 +2개 더 — 훨씬 진보했다는 은유입니다. 읽는 법은 씨샵.'},
+    {q: '다음 중 스크립트(인터프리터) 언어는?', c: ['파이썬', 'C', 'C++', 'C#'], a: 0,
+     s: '파이썬은 한 줄씩 해석하며 실행 — C 계열은 빌드를 거치는 컴파일러 언어입니다.'},
+  ];
+  var HAND = [
+    {t: '실행 결과가 다음과 같이 나오도록 Main 안쪽 코드를 작성하시오.',
+     given: '50', req: 'int 변수 result에 100에서 50을 뺀 값을 담고 Console.WriteLine으로 출력할 것 (교재 소스 1-2)',
+     ans: 'int result;\nresult = 100 - 50;\nConsole.WriteLine(result);'},
+    {t: '실행 결과가 다음과 같이 나오도록 코드를 작성하시오.',
+     given: '56088', req: '123과 456의 곱을 int 변수에 담아 출력할 것 (SELF STUDY 1-1)',
+     ans: 'int result;\nresult = 123 * 456;\nConsole.WriteLine(result);'},
+    {t: '실행 결과가 다음과 같이 나오도록 코드를 작성하시오.',
+     given: '3000', req: '1000과 2000의 합을 int 변수에 담아 출력할 것 (SELF STUDY 1-2)',
+     ans: 'int result;\nresult = 1000 + 2000;\nConsole.WriteLine(result);'},
+    {t: '실행 결과가 다음과 같이 나오도록 코드를 작성하시오.',
+     given: '3.14 x 3.14 = 9.8596', req: 'double형 변수를 사용하고, 문자열 연결(+)로 한 줄에 출력할 것 (교재 심화문제 9번)',
+     ans: 'double pi;\npi = 3.14;\nConsole.WriteLine(pi + " x " + pi + " = " + pi * pi);'},
+    {t: '실행 결과가 다음과 같이 나오도록 코드를 작성하시오.',
+     given: '100+50=150\n100-50=50\n100*50=5000\n100/50=2', req: '변수 a=100, b=50과 result를 선언하고 사칙연산을 차례로 출력할 것 (교재 소스 2-1, 다음 장 맛보기)',
+     ans: 'int a, b;\nint result;\n\na = 100;\nb = 50;\n\nresult = a + b;\nConsole.WriteLine(a + "+" + b + "=" + result);\n\nresult = a - b;\nConsole.WriteLine(a + "-" + b + "=" + result);\n\nresult = a * b;\nConsole.WriteLine(a + "*" + b + "=" + result);\n\nresult = a / b;\nConsole.WriteLine(a + "/" + b + "=" + result);'},
+  ];
+  function renderQ(){
+    delete card.dataset.done;
+    var fb = '<div class="qfb" id="qfb"></div>';
+    if (curKind === 'mc'){
+      current = {mc: pick(MC)};
+      var html = '<div class="qtag">CH01 · C# 상식</div><div class="qtext">' + current.mc.q + '</div><div class="qchoices">';
+      current.mc.c.forEach(function(c, i){ html += '<button data-i="' + i + '">' + c + '</button>'; });
+      html += '</div><div class="qbtns"><button class="btn new" id="qNew">새 문제</button></div>' + fb;
+      card.innerHTML = html;
+      card.querySelectorAll('.qchoices button').forEach(function(b){
+        b.addEventListener('click', function(){
+          if (card.dataset.done) return;
+          card.dataset.done = '1'; tries++;
+          var ok = +b.dataset.i === current.mc.a;
+          if (ok) right++;
+          b.classList.add(ok ? 'pick-right' : 'pick-wrong');
+          card.querySelectorAll('.qchoices button')[current.mc.a].classList.add('pick-right');
+          feedback(ok, current.mc.s);
+        });
+      });
+    } else if (curKind === 'hand'){
+      current = {hand: pick(HAND)};
+      var h = current.hand;
+      card.innerHTML =
+        '<div class="qtag">✍ 코드 역산 — 결과를 보고 코드를 쓰시오 (이 과목의 시험 스타일!)</div>' +
+        '<div class="qtext">' + h.t + '</div>' +
+        '<div class="handcode">' + h.given + '</div>' +
+        '<div class="qhint">조건: ' + h.req + '</div>' +
+        '<div class="handEd" id="handEd" style="margin-top:12px"></div>' +
+        '<div class="qhint" style="margin-top:8px">Tab 들여쓰기 · 여는 중괄호 { 뒤 엔터 자동 들여쓰기 — 실습실 에디터와 같습니다. using·namespace 뼈대는 생략하고 Main 안쪽만 쓰세요.</div>' +
+        '<details class="sol-toggle"><summary>모범 답안 보기</summary><pre>' + h.ans.replace(/</g, '&lt;') + '</pre></details>' +
+        '<div class="qbtns"><button class="btn new" id="qNew">다음 문제</button></div>';
+      if (window._pyEd) window._pyEd(document.getElementById('handEd'), '');
+    } else {
+      var g = GEN[curKind];
+      var useCanon = !seenKinds[curKind] && g.canon;
+      seenKinds[curKind] = 1;
+      current = {spec: useCanon ? g.canon() : g.make(), gen: g};
+      var html2 = '<div class="qtag">' + g.tag + (current.spec.canon ? ' · 교재 대표 문제' : '') + '</div>' +
+        '<div class="qtext">' + current.spec.text + '</div>' +
+        (current.spec.hint ? '<div class="qhint">' + current.spec.hint + '</div>' : '') +
+        (CONCEPT[curKind] ? '<details class="sol-toggle"><summary>개념 힌트 보기</summary><div class="qhint" style="margin-top:8px">' + CONCEPT[curKind] + '</div></details>' : '') +
+        '<div class="qin">';
+      current.spec.fields.forEach(function(f, i){
+        html2 += '<label>' + f.label + ' <input id="qi' + i + '" ' + (f.text ? '' : 'inputmode="numeric" ') +
+                 'autocomplete="off"> ' + f.unit + '</label>';
+      });
+      html2 += '</div><div class="qbtns"><button class="btn grade" id="qGrade">채점하기</button>' +
+               '<button class="btn new" id="qNew">새 문제</button></div>' + fb;
+      card.innerHTML = html2;
+      document.getElementById('qGrade').addEventListener('click', grade);
+      card.querySelectorAll('.qin input').forEach(function(el){
+        el.addEventListener('keydown', function(e){ if (e.key === 'Enter') grade(); });
+      });
+      // 파라미터를 고치면 다시 풀 수 있게 채점 상태를 푼다
+      card.querySelectorAll('.qparam').forEach(function(el){
+        el.addEventListener('input', function(){
+          delete card.dataset.done;
+          var f = document.getElementById('qfb'); if (f) f.className = 'qfb';
+        });
+      });
+      document.getElementById('qi0').focus();
+    }
+    var nb = document.getElementById('qNew');
+    if (nb) nb.addEventListener('click', renderQ);
+    updateScore();
+  }
+  function grade(){
+    if (card.dataset.done) return;
+    var ans = current.gen.calc();
+    if (ans.err){ feedback(false, ans.err); return; }
+    var ok = true;
+    current.spec.fields.forEach(function(f, i){
+      var v = document.getElementById('qi' + i).value.trim();
+      if (f.text){
+        if (v.replace(/[\[\]\s]/g, '') !== String(ans[f.key])) ok = false;
+      } else {
+        if (v === '' || +v.replace(/,/g, '') !== +ans[f.key]) ok = false;
+      }
+    });
+    card.dataset.done = '1'; tries++;
+    if (ok) right++;
+    feedback(ok, current.gen.sol(ans));
+  }
+  function feedback(ok, sol){
+    var fb = document.getElementById('qfb');
+    fb.className = 'qfb ' + (ok ? 'ok' : 'no');
+    fb.innerHTML = (ok ? '<b>정답!</b> 잘하고 있어요.' : '<b>아쉽네요.</b> 풀이를 확인해 보세요.') +
+                   '<div class="sol">' + sol + '</div>';
+    updateScore();
+  }
+  function updateScore(){ document.getElementById('score').textContent = right + ' / ' + tries + ' 정답'; }
+  document.querySelectorAll('#qcats button').forEach(function(b){
+    b.addEventListener('click', function(){
+      document.querySelectorAll('#qcats button').forEach(function(x){ x.classList.remove('on'); });
+      b.classList.add('on');
+      curKind = b.dataset.q;
+      renderQ();
+    });
+  });
+  renderQ();
+
+  /* ── PDF 문제지 — 지금 화면 기준으로 문제를 뽑아 인쇄용 페이지 생성 ── */
+  function openPdfDialog(){
+    var ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;background:rgba(12,18,38,.55);z-index:50;display:flex;align-items:center;justify-content:center;padding:20px';
+    var kindNames = [['predict', '결과 예측 — 사칙연산'], ['after', '출력 시점'], ['intdiv', '정수 나눗셈'],
+                     ['dbl', '실수 계산'], ['hand', '코드 역산']];
+    var boxes = kindNames.map(function(kn){
+      return '<label style="display:flex;gap:8px;align-items:center;font-size:14.5px;padding:5px 0">' +
+             '<input type="checkbox" class="pdfk" value="' + kn[0] + '" checked style="width:17px;height:17px;accent-color:var(--form)"> ' + kn[1] + '</label>';
+    }).join('');
+    ov.innerHTML = '<div style="background:var(--card);border-radius:16px;padding:26px 30px;max-width:430px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.3)">' +
+      '<h3 style="font-size:18px;margin-bottom:6px">문제지 구성</h3>' +
+      '<p style="font-size:13px;color:var(--mute);margin-bottom:14px">포함할 유형을 고르면 선택한 유형에서 골고루 출제됩니다.</p>' +
+      boxes +
+      '<div style="display:flex;gap:10px;align-items:center;margin:12px 0;font-size:14.5px">유형당 문항 수 ' +
+      '<select id="pdfCnt" style="padding:6px 10px;border-radius:8px;border:1.5px solid var(--line);font-size:14px"><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>' +
+      '<label style="display:flex;gap:8px;align-items:center;font-size:14.5px;padding:4px 0"><input type="checkbox" id="pdfCanon" checked style="width:17px;height:17px;accent-color:var(--form)"> 교재 대표 문제를 각 유형 첫 문항으로</label>' +
+      '<div style="display:flex;gap:10px;margin-top:16px;justify-content:flex-end">' +
+      '<button class="btn" id="pdfCancel" style="background:var(--card);border:1.5px solid var(--line);color:var(--ink2)">취소</button>' +
+      '<button class="btn" id="pdfGo" style="background:var(--form);color:#fff">만들기</button></div></div>';
+    document.body.appendChild(ov);
+    ov.querySelector('#pdfCancel').addEventListener('click', function(){ ov.remove(); });
+    ov.addEventListener('click', function(e){ if (e.target === ov) ov.remove(); });
+    ov.querySelector('#pdfGo').addEventListener('click', function(){
+      var kinds = Array.prototype.map.call(ov.querySelectorAll('.pdfk:checked'), function(c){ return c.value; });
+      var per = +ov.querySelector('#pdfCnt').value;
+      var canonFirst = ov.querySelector('#pdfCanon').checked;
+      ov.remove();
+      if (kinds.length) buildSheet(kinds, per, canonFirst);
+    });
+  }
+  document.getElementById('makePdf').addEventListener('click', openPdfDialog);
+
+  function buildSheet(kinds, per, canonFirst){
+    function esc(t){ return String(t).replace(/</g, '&lt;'); }
+    var qs = [], answers = [];
+    var CANONQ = {
+      predict: {q: 'int result; result = 100 - 50; Console.WriteLine(result);  실행 결과를 쓰시오. [교재 소스 1-2]', a: '50'},
+      after: {q: 'int result = 100; Console.WriteLine(result); result = 200;  실행 결과를 쓰시오. [교재 연습문제 6번]', a: '100 — 출력 뒤의 대입은 결과를 바꾸지 못한다'},
+      intdiv: {q: 'int result = 100 / 30; Console.WriteLine(result);  실행 결과를 쓰시오.', a: '3 — int/int는 소수점을 버린 몫'},
+      dbl: {q: 'double pi = 3.14; Console.WriteLine(pi * pi);  실행 결과를 쓰시오. [교재 심화문제 9번]', a: '9.8596'},
+    };
+    var snapshots = {
+      predict: function(){ var A = ri(50, 900), B = ri(10, 49), op = pick(['-', '+', '*']);
+        var v = op === '-' ? A - B : op === '+' ? A + B : A * B;
+        return {q: 'int result; result = ' + A + ' ' + op + ' ' + B + '; Console.WriteLine(result);  실행 결과를 쓰시오.', a: String(v)}; },
+      after: function(){ var A = ri(10, 500), B = ri(10, 500);
+        return {q: 'int result = ' + A + '; Console.WriteLine(result); result = ' + B + ';  실행 결과를 쓰시오.',
+                a: A + ' — 출력 시점의 값'}; },
+      intdiv: function(){ var A = ri(11, 99), B = ri(2, 9), op = pick(['/', '%']);
+        var v = op === '/' ? Math.trunc(A / B) : A % B;
+        return {q: 'int result = ' + A + ' ' + op + ' ' + B + '; Console.WriteLine(result);  실행 결과를 쓰시오.',
+                a: v + (op === '/' ? ' (몫만 — 버림)' : ' (나머지)')}; },
+      dbl: function(){ var v = +pick(['1.5', '2.5', '0.5', '1.2', '2.2']);
+        return {q: 'double pi = ' + v + '; Console.WriteLine(pi * pi);  실행 결과를 쓰시오. (소수점까지)',
+                a: String(parseFloat((v * v).toPrecision(12)))}; },
+    };
+    kinds.filter(function(k){ return k !== 'hand'; }).forEach(function(kind){
+      var n0 = 0;
+      if (canonFirst && CANONQ[kind]){ qs.push(CANONQ[kind].q); answers.push(CANONQ[kind].a); n0 = 1; }
+      for (var i = n0; i < per; i++){ var s = snapshots[kind](); qs.push(s.q); answers.push(s.a); }
+    });
+    var handList = kinds.indexOf('hand') >= 0 ? HAND.slice(0, Math.max(per, 3)) : [];
+    var handHtml = '';
+    handList.forEach(function(h, i){
+      handHtml += '<div class="q"><b>' + (qs.length + i + 1) + '.</b> ' + h.t +
+        '<pre class="given">' + esc(h.given) + '</pre><div class="cond">조건: ' + h.req + '</div>' +
+        '<div class="codebox"></div></div>';
+      answers.push('(모범 답안)\n' + h.ans);
+    });
+    var qHtml = '';
+    qs.forEach(function(q, i){
+      qHtml += '<div class="q"><b>' + (i + 1) + '.</b> ' + q + '<div class="blank"></div></div>';
+    });
+    var handTitle = handList.length ? '<h2>코드 역산 — 실행 결과를 보고 코드를 작성하시오</h2>' : '';
+    var ansHtml = '';
+    answers.forEach(function(a, i){ ansHtml += '<div class="a"><b>' + (i + 1) + '.</b> <pre>' + esc(a) + '</pre></div>'; });
+    var w = window.open('', '_blank');
+    w.document.write('<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8"><title>객체지향시스템 연습 문제지</title><style>' +
+      'body{font-family:"Malgun Gothic",sans-serif;margin:36px;color:#1c2028;line-height:1.6;word-break:keep-all}' +
+      'h1{font-size:20px;border-bottom:2.5px solid #1c2028;padding-bottom:8px}' +
+      '.meta{font-size:12px;color:#666;margin-bottom:18px}' +
+      '.q{margin:14px 0;font-size:13.5px;page-break-inside:avoid}' +
+      '.blank{height:52px;border-bottom:1px solid #bbb;margin-top:8px}' +
+      '.codebox{height:150px;border:1px solid #bbb;border-radius:6px;margin-top:8px}' +
+      '.given{background:#f2f2f2;border-radius:6px;padding:8px 12px;font-size:12.5px;margin:6px 0}' +
+      '.cond{font-size:12px;color:#555}' +
+      '.answers{page-break-before:always}' +
+      '.a{font-size:12.5px;margin:8px 0}.a pre{display:inline-block;vertical-align:top;background:#f6f6f6;padding:6px 10px;border-radius:6px;margin:2px 0;font-size:11.5px}' +
+      'h2{font-size:16px;margin-top:22px}' +
+      '@media print{.noprint{display:none}}</style></head><body>' +
+      '<div class="noprint" style="background:#eef;padding:10px 14px;border-radius:8px;margin-bottom:14px">' +
+      '인쇄 창이 자동으로 열립니다. PDF로 저장하려면 프린터 대상에서 "PDF로 저장"을 선택하세요. ' +
+      '<button onclick="print()">다시 인쇄</button></div>' +
+      '<h1>객체지향시스템 연습 문제지</h1>' +
+      '<div class="meta">이름: ______________ &nbsp; 날짜: ______________ &nbsp;·&nbsp; 문항 수 ' + (qs.length + handList.length) + '개 &nbsp;·&nbsp; 정답지는 마지막 장</div>' +
+      qHtml + handTitle + handHtml +
+      '<div class="answers"><h1>정답지</h1>' + ansHtml + '</div>' +
+      '</body></html>');
+    w.document.close();
+    setTimeout(function(){ w.print(); }, 400);
+  }
+})();
+
+/* ── 테마 전환 · 코드 복사 · 맨 위로 ── */
+(function(){
+  var KEY = 'cslab-theme';
+  function apply(t){ document.documentElement.dataset.theme = t;
+    try { localStorage.setItem(KEY, t); } catch(e){} }
+  var saved = null;
+  try { saved = localStorage.getItem(KEY); } catch(e){}
+  if (saved) apply(saved);
+  var tb = document.getElementById('themeBtn');
+  if (tb) tb.addEventListener('click', function(){
+    apply(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
+  });
+
+  document.querySelectorAll('pre').forEach(function(pre){
+    var b = document.createElement('button');
+    b.className = 'copybtn'; b.textContent = '복사';
+    b.addEventListener('click', function(){
+      navigator.clipboard.writeText(pre.innerText.replace(/^복사\n?/, '')).then(function(){
+        b.textContent = '복사됨!'; b.classList.add('done');
+        setTimeout(function(){ b.textContent = '복사'; b.classList.remove('done'); }, 1500);
+      });
+    });
+    pre.appendChild(b);
+  });
+
+  var top = document.createElement('button');
+  top.id = 'toTop'; top.textContent = '↑'; top.title = '맨 위로';
+  document.body.appendChild(top);
+  top.addEventListener('click', function(){ scrollTo({top: 0, behavior: 'smooth'}); });
+  var ticking = false;
+  addEventListener('scroll', function(){
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      top.classList.toggle('show', scrollY > 600);
+      ticking = false;
+    });
+  }, {passive: true});
+})();
+</script>
+</body>
+</html>
