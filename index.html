@@ -64,6 +64,11 @@ h1,h2,h3{text-wrap:balance}
 .wordmark{font-family:var(--mono);font-size:13px;letter-spacing:.18em;color:var(--hero-ink);text-decoration:none}
 .wordmark b{color:var(--hero-acc)}
 .topbar nav{display:flex;gap:26px}
+.topbar-right{display:flex;align-items:center;gap:26px}
+.hero-ctl{background:none;border:1px solid var(--hero-line);color:var(--hero-mute);border-radius:8px;font-size:13px;cursor:pointer;font-family:var(--sans)}
+button.hero-ctl{padding:6px 12px}
+select.hero-ctl{padding:5px 8px;font-size:12.5px}
+@media(max-width:720px){.topbar-right{gap:10px}}
 .topbar nav a{font-size:13.5px;color:var(--hero-mute);text-decoration:none;transition:color .2s}
 .topbar nav a:hover,.topbar nav a:focus-visible{color:var(--hero-ink)}
 .hero-body{position:relative;z-index:2;flex:1;display:flex;align-items:center;
@@ -150,16 +155,18 @@ footer{border-top:1px solid var(--line);margin-top:96px}
   <div class="veil" aria-hidden="true"></div>
   <div class="topbar">
     <a class="wordmark" href="#"><b>CS</b> STUDY LAB</a>
-    <nav aria-label="주요 섹션" style="display:flex;align-items:center;gap:26px">
-      <a href="#welcome" data-i18n="h.2">소개</a>
-      <a href="#subjects" data-i18n="h.3">과목</a>
-      <a href="#labs" data-i18n="h.4">실험실</a>
-      <a href="#notes" data-i18n="h.5">주간 노트</a>
-      <button id="themeBtn" title="라이트/다크 전환" style="background:none;border:1px solid var(--hero-line);color:var(--hero-mute);border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer">◐</button>
-      <select id="langSel" aria-label="Language" style="background:none;border:1px solid var(--hero-line);color:var(--hero-mute);border-radius:8px;padding:5px 8px;font-size:12.5px;cursor:pointer;font-family:var(--sans)">
-        <option value="ko">한국어</option><option value="en">EN</option><option value="zh">中文</option><option value="mn">МН</option>
+    <div class="topbar-right">
+      <nav aria-label="주요 섹션">
+        <a href="#welcome" data-i18n="h.2">소개</a>
+        <a href="#subjects" data-i18n="h.3">과목</a>
+        <a href="#labs" data-i18n="h.4">실험실</a>
+        <a href="#notes" data-i18n="h.5">주간 노트</a>
+      </nav>
+      <button id="themeBtn" class="hero-ctl" title="라이트/다크 전환">◐</button>
+      <select id="langSel" class="hero-ctl" aria-label="Language">
+        <option value="ko">한국어</option><option value="en">English</option><option value="zh">中文</option><option value="mn">Монгол</option>
       </select>
-    </nav>
+    </div>
   </div>
   <div class="hero-body">
     <div class="hero-copy">

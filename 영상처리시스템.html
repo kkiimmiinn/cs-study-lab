@@ -92,7 +92,8 @@ p,li,td,.tip,.warnb,.c p,.glance p,.formula .d{text-wrap:pretty}
 .tabs .dq{background:var(--form)} .tabs .dd{background:#b07d2c}
 html[data-theme="dark"] .tabs .dv{background:#7c93f5}
 .tabs button.on{background:var(--paper);border-radius:12px 12px 0 0}
-.lang-sel{margin-left:auto;align-self:center;border:1.5px solid var(--line);background:var(--card);color:var(--ink2);border-radius:8px;padding:4px 8px;font-size:12.5px;font-family:var(--sans)}
+.tabs-ctl{margin-left:auto;position:sticky;right:-20px;display:flex;align-items:center;gap:8px;background:var(--card);padding:0 20px 0 12px;margin-right:-20px;box-shadow:-12px 0 12px -8px rgba(0,0,0,.12)}
+.lang-sel{align-self:center;border:1.5px solid var(--line);background:var(--card);color:var(--ink2);border-radius:8px;padding:4px 8px;font-size:12.5px;font-family:var(--sans)}
 .theme-tab{font-size:17px !important;border-bottom:none !important}
 .tabs button[data-t="td"].on{color:#b07d2c;border-bottom-color:#b07d2c}
 .tabs button[data-t="tn"].on{color:var(--c1);border-bottom-color:var(--c1)}
@@ -447,10 +448,12 @@ pre:hover .copybtn{opacity:1}
     <button data-t="tp" data-i18n="i.49"><i class="dot d2"></i>파이썬 실습실</button>
     <button data-t="tq" data-i18n="i.50"><i class="dot dq"></i>연습 문제</button>
     <button data-t="td" data-i18n="i.51"><i class="dot dd"></i>자료실</button>
-    <select id="langSel" class="lang-sel" aria-label="Language">
-      <option value="ko">한국어</option><option value="en">EN</option><option value="zh">中文</option><option value="mn">МН</option>
-    </select>
-    <button id="themeBtn" class="theme-tab" title="라이트/다크 전환">◐</button>
+    <span class="tabs-ctl">
+      <select id="langSel" class="lang-sel" aria-label="Language">
+        <option value="ko">한국어</option><option value="en">English</option><option value="zh">中文</option><option value="mn">Монгол</option>
+      </select>
+      <button id="themeBtn" class="theme-tab" title="라이트/다크 전환">◐</button>
+    </span>
   </div>
 </nav>
 
