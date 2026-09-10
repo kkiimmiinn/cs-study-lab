@@ -13,7 +13,8 @@
 :root{
   --paper:#f7f6f3; --card:#fff; --ink:#1c2028; --ink2:#4a5160; --mute:#8b91a0;
   --line:#e3e1db; --acc:#3d4f9e; --acc-soft:#eceef8; --gold:#b07d2c;
-  --hero-bg:#0c1226; --hero-ink:#eef1fa; --hero-mute:#9aa4c4; --hero-line:#232c4d;
+  --hero-bg:#f3f2ee; --hero-ink:#1c2028; --hero-mute:#5a6178; --hero-line:#dbd8cf;
+  --hero-acc:#3d4f9e; --hero-veil:rgba(243,242,238,.82); --cta-border:#b9c1e2; --cta-bg:rgba(61,79,158,.08); --cta-bg-h:rgba(61,79,158,.17);
   --mono:"Cascadia Mono","Consolas","D2Coding",ui-monospace,monospace;
   --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Segoe UI","Malgun Gothic",sans-serif;
   --serif:Georgia,"Times New Roman",serif;
@@ -25,6 +26,8 @@ html[data-theme="dark"]{color-scheme:dark}
 html[data-theme="dark"] body{
   --paper:#0e1320; --card:#171d2e; --ink:#e9edf6; --ink2:#bac3d8; --mute:#8590a8;
   --line:#2b3350; --acc-soft:#20284a;
+  --hero-bg:#0c1226; --hero-ink:#eef1fa; --hero-mute:#9aa4c4; --hero-line:#232c4d;
+  --hero-acc:#7c93f5; --hero-veil:rgba(12,18,38,.82); --cta-border:#3b4a86; --cta-bg:rgba(61,79,158,.18); --cta-bg-h:rgba(61,79,158,.38);
   --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.35);
 }
 html[data-theme="dark"] .note-row:hover{background:#1d2438}
@@ -32,6 +35,17 @@ body{transition:background .25s,color .25s}
 .nb{white-space:nowrap}
 .nbc{white-space:nowrap}
 @media(max-width:700px){.nbc{white-space:normal}}
+/* ── 언어별 조판 (한국어와 동등한 줄바꿈 품질) ──
+   ko: 단어 단위 유지(keep-all) + 구절 nowrap(.nb/.nbc)
+   zh: 띄어쓰기가 없으므로 아무 곳에서나 줄바꿈해야 넘치지 않는다
+   en/mn: 공백 기준 줄바꿈 + 긴 토큰만 강제 분할, 구절 nowrap은 해제 */
+html[lang="zh-Hans"] body{word-break:normal;line-break:auto}
+html[lang="zh-Hans"] .nb,html[lang="zh-Hans"] .nbc{white-space:normal}
+html[lang="en"] body,html[lang="mn"] body{word-break:normal;overflow-wrap:break-word}
+html[lang="en"] .nb,html[lang="en"] .nbc,
+html[lang="mn"] .nb,html[lang="mn"] .nbc{white-space:normal}
+html[lang="mn"] body{hyphens:auto}
+
 a,button{touch-action:manipulation}
 :focus-visible{outline:2px solid #7c93f5;outline-offset:3px;border-radius:4px}
 .skip{position:absolute;left:-9999px;z-index:9;background:var(--card);color:var(--ink);padding:10px 18px;border-radius:0 0 8px 0}
@@ -44,25 +58,25 @@ h1,h2,h3{text-wrap:balance}
 .hero{position:relative;min-height:100dvh;background:var(--hero-bg);color:var(--hero-ink);
   display:flex;flex-direction:column;overflow:hidden}
 .hero canvas{position:absolute;inset:0;width:100%;height:100%}
-.hero .veil{position:absolute;inset:0;background:radial-gradient(ellipse 90% 70% at 30% 45%,transparent 40%,rgba(12,18,38,.82) 100%)}
+.hero .veil{position:absolute;inset:0;background:radial-gradient(ellipse 90% 70% at 30% 45%,transparent 40%,var(--hero-veil) 100%)}
 .topbar{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;
   padding:22px 40px;max-width:1180px;width:100%;margin:0 auto}
 .wordmark{font-family:var(--mono);font-size:13px;letter-spacing:.18em;color:var(--hero-ink);text-decoration:none}
-.wordmark b{color:#7c93f5}
+.wordmark b{color:var(--hero-acc)}
 .topbar nav{display:flex;gap:26px}
 .topbar nav a{font-size:13.5px;color:var(--hero-mute);text-decoration:none;transition:color .2s}
 .topbar nav a:hover,.topbar nav a:focus-visible{color:var(--hero-ink)}
 .hero-body{position:relative;z-index:2;flex:1;display:flex;align-items:center;
   max-width:1180px;width:100%;margin:0 auto;padding:40px}
 .hero-copy{max-width:640px}
-.hero .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.26em;color:#7c93f5;text-transform:uppercase}
+.hero .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.26em;color:var(--hero-acc);text-transform:uppercase}
 .hero h1{font-size:clamp(42px,6.4vw,72px);font-weight:800;line-height:1.14;letter-spacing:-.028em;margin:18px 0 16px}
-.hero h1 em{font-style:normal;color:#8fa3f7}
+.hero h1 em{font-style:normal;color:var(--hero-acc)}
 .hero .lede{color:var(--hero-mute);font-size:17.5px;max-width:36em;text-wrap:pretty}
-.hero .cta{display:inline-block;margin-top:34px;padding:13px 30px;border:1px solid #3b4a86;border-radius:8px;
-  color:var(--hero-ink);text-decoration:none;font-size:14.5px;letter-spacing:.14em;background:rgba(61,79,158,.18);
+.hero .cta{display:inline-block;margin-top:34px;padding:13px 30px;border:1px solid var(--cta-border);border-radius:8px;
+  color:var(--hero-ink);text-decoration:none;font-size:14.5px;letter-spacing:.14em;background:var(--cta-bg);
   transition:background .2s,transform .15s}
-.hero .cta:hover{background:rgba(61,79,158,.38)}
+.hero .cta:hover{background:var(--cta-bg-h)}
 .hero .cta:active{transform:scale(.98)}
 
 /* ---------- light body ---------- */
@@ -129,7 +143,7 @@ footer{border-top:1px solid var(--line);margin-top:96px}
 </style>
 </head>
 <body>
-<a class="skip" href="#welcome">본문으로 건너뛰기</a>
+<a class="skip" href="#welcome" data-i18n="h.1">본문으로 건너뛰기</a>
 
 <header class="hero">
   <canvas id="net" aria-hidden="true"></canvas>
@@ -137,18 +151,21 @@ footer{border-top:1px solid var(--line);margin-top:96px}
   <div class="topbar">
     <a class="wordmark" href="#"><b>CS</b> STUDY LAB</a>
     <nav aria-label="주요 섹션" style="display:flex;align-items:center;gap:26px">
-      <a href="#welcome">소개</a>
-      <a href="#subjects">과목</a>
-      <a href="#labs">실험실</a>
-      <a href="#notes">주간 노트</a>
-      <button id="themeBtn" title="라이트/다크 전환" style="background:none;border:1px solid #33406e;color:#9aa4c4;border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer">◐</button>
+      <a href="#welcome" data-i18n="h.2">소개</a>
+      <a href="#subjects" data-i18n="h.3">과목</a>
+      <a href="#labs" data-i18n="h.4">실험실</a>
+      <a href="#notes" data-i18n="h.5">주간 노트</a>
+      <button id="themeBtn" title="라이트/다크 전환" style="background:none;border:1px solid var(--hero-line);color:var(--hero-mute);border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer">◐</button>
+      <select id="langSel" aria-label="Language" style="background:none;border:1px solid var(--hero-line);color:var(--hero-mute);border-radius:8px;padding:5px 8px;font-size:12.5px;cursor:pointer;font-family:var(--sans)">
+        <option value="ko">한국어</option><option value="en">EN</option><option value="zh">中文</option><option value="mn">МН</option>
+      </select>
     </nav>
   </div>
   <div class="hero-body">
     <div class="hero-copy">
       <div class="kicker">Kyungnam Univ. · Ph.D. Course</div>
-      <h1>공부한 것은 전부<br><em>내 것으로</em> 만든다</h1>
-      <p class="lede"><span class="nbc">박사과정 공부를 쉬운 언어로 정리하고,</span> <span class="nbc">직접 조작하며 익히는 온라인 실험실입니다.</span></p>
+      <h1 data-i18n="h.15">공부한 것은 전부<br><em>내 것으로</em> 만든다</h1>
+      <p class="lede" data-i18n="h.21"><span class="nbc">박사과정 공부를 쉬운 언어로 정리하고,</span> <span class="nbc">직접 조작하며 익히는 온라인 실험실입니다.</span></p>
       <a class="cta" href="#welcome">E N T E R</a>
     </div>
   </div>
@@ -158,16 +175,16 @@ footer{border-top:1px solid var(--line);margin-top:96px}
   <div class="welcome-inner">
     <span class="en">Welcome</span>
     <h2>CS STUDY LAB</h2>
-    <p>이 사이트는 경남대학교 대학원 융합IT공학과 컴퓨터및소프트웨어공학전공 박사과정을
+    <p data-i18n="h.22">이 사이트는 경남대학교 대학원 융합IT공학과 컴퓨터및소프트웨어공학전공 박사과정을
     공부하며 배운 것을 기록하는 개인 연구 노트입니다. 수업에서 배운 개념을 그대로 옮겨 적는 것이 아니라,
     공학을 처음 접하는 사람도 이해할 수 있는 쉬운 예시와 정확한 용어로 다시 풀어 쓰는 것을 원칙으로 합니다.</p>
-    <p>글로 읽는 것에서 멈추지 않고, 중요한 원리는 브라우저에서 직접 조작해 볼 수 있는
+    <p data-i18n="h.23">글로 읽는 것에서 멈추지 않고, 중요한 원리는 브라우저에서 직접 조작해 볼 수 있는
     실험실(LAB)로 만들어 모읍니다. 눈으로 확인하고 손으로 만져 본 개념만 진짜 내 것이 된다고 믿기 때문입니다.</p>
     <ul class="fields">
-      <li>매주 과목별 수업 내용을 쉬운 언어로 정리</li>
-      <li>핵심 원리는 인터랙티브 실험실로 제작</li>
-      <li>퍼셉트론부터 시작한 신경망 학습 기록</li>
-      <li>파이썬 기초 문법 훈련 드릴</li>
+      <li data-i18n="h.33">매주 과목별 수업 내용을 쉬운 언어로 정리</li>
+      <li data-i18n="h.34">핵심 원리는 인터랙티브 실험실로 제작</li>
+      <li data-i18n="h.35">퍼셉트론부터 시작한 신경망 학습 기록</li>
+      <li data-i18n="h.36">파이썬 기초 문법 훈련 드릴</li>
     </ul>
   </div>
 </section>
@@ -175,29 +192,29 @@ footer{border-top:1px solid var(--line);margin-top:96px}
 <section class="section" id="subjects">
   <div class="sec-head">
     <span class="en">Subjects</span>
-    <h2>이번 학기 과목</h2>
-    <p>2026학년도 2학기 수강 과목이 확정되면 과목별 노트가 이곳에 쌓입니다.
+    <h2 data-i18n="h.16">이번 학기 과목</h2>
+    <p data-i18n="h.24">2026학년도 2학기 수강 과목이 확정되면 과목별 노트가 이곳에 쌓입니다.
     각 과목은 주차별 정리, 강의 슬라이드, 실험실로 구성됩니다.</p>
   </div>
   <div class="grid">
     <a class="card" href="영상처리시스템.html" style="border-top:3px solid #4a63d8">
       <div class="no" style="color:#4a63d8">SUBJECT 01 · IMAGE PROCESSING</div>
-      <h3>영상처리시스템</h3>
-      <p>챕터별 핵심 정리 + 강의 슬라이드 뷰어 + 조작형 실험 3종(표본화·밝기·슬라이스)
+      <h3 data-i18n="h.17">영상처리시스템</h3>
+      <p data-i18n="h.25">챕터별 핵심 정리 + 강의 슬라이드 뷰어 + 조작형 실험 3종(표본화·밝기·슬라이스)
       + 수치가 매번 바뀌는 문제 연습장. PPT 다운로드 포함.</p>
-      <div class="tags"><span class="tag">OpenCV</span><span class="tag">파이썬</span><span class="tag">문제 연습</span><span class="tag g">CH01–03</span></div>
+      <div class="tags" data-i18n="h.38"><span class="tag">OpenCV</span><span class="tag">파이썬</span><span class="tag">문제 연습</span><span class="tag g">CH01–03</span></div>
     </a>
     <a class="card" href="객체지향시스템.html" style="border-top:3px solid #7a5af5">
       <div class="no" style="color:#7a5af5">SUBJECT 02 · OBJECT-ORIENTED SYSTEMS</div>
-      <h3>객체지향시스템</h3>
-      <p>C#의 탄생 이야기부터 첫 빌드까지 챕터별 정리 + 재빌드 함정 체험 실험
+      <h3 data-i18n="h.18">객체지향시스템</h3>
+      <p data-i18n="h.26">C#의 탄생 이야기부터 첫 빌드까지 챕터별 정리 + 재빌드 함정 체험 실험
       + 세미콜론까지 잡아내는 C# 실습실 + 결과를 보고 코드를 역산하는 문제 연습장.</p>
-      <div class="tags"><span class="tag" style="background:#efeafc;color:#6a48e0">C#</span><span class="tag" style="background:#efeafc;color:#6a48e0">비주얼 스튜디오</span><span class="tag" style="background:#efeafc;color:#6a48e0">코드 역산</span><span class="tag g">CH01</span></div>
+      <div class="tags" data-i18n="h.39"><span class="tag" style="background:#efeafc;color:#6a48e0">C#</span><span class="tag" style="background:#efeafc;color:#6a48e0">비주얼 스튜디오</span><span class="tag" style="background:#efeafc;color:#6a48e0">코드 역산</span><span class="tag g">CH01</span></div>
     </a>
     <div class="card empty">
       <div class="no">SUBJECT 03</div>
-      <h3>머신러닝 · 딥러닝 · 인공지능</h3>
-      <p>첫 수업 자료가 정리되면 공개됩니다.</p>
+      <h3 data-i18n="h.19">머신러닝 · 딥러닝 · 인공지능</h3>
+      <p data-i18n="h.27">첫 수업 자료가 정리되면 공개됩니다.</p>
     </div>
   </div>
 </section>
@@ -205,28 +222,28 @@ footer{border-top:1px solid var(--line);margin-top:96px}
 <section class="section" id="labs">
   <div class="sec-head">
     <span class="en">Labs</span>
-    <h2>인터랙티브 실험실</h2>
-    <p>설치도 인터넷도 필요 없습니다. 전부 브라우저에서 바로 실행됩니다.</p>
+    <h2 data-i18n="h.20">인터랙티브 실험실</h2>
+    <p data-i18n="h.28">설치도 인터넷도 필요 없습니다. 전부 브라우저에서 바로 실행됩니다.</p>
   </div>
   <div class="grid">
     <a class="card" href="neural-lab.html">
       <div class="no">LAB 02 · NEURAL NETWORKS</div>
       <h3>Neural Lab</h3>
-      <p>인공 뉴런 한 개에서 출발해 브라우저 안에서 진짜 신경망을 학습시키고
+      <p data-i18n="h.29">인공 뉴런 한 개에서 출발해 브라우저 안에서 진짜 신경망을 학습시키고
       직접 그린 숫자를 인식시키는 실험실. 실험 7종과 무한 문제은행 포함.</p>
-      <div class="tags"><span class="tag">퍼셉트론</span><span class="tag">역전파</span><span class="tag">손글씨 인식</span></div>
+      <div class="tags" data-i18n="h.40"><span class="tag">퍼셉트론</span><span class="tag">역전파</span><span class="tag">손글씨 인식</span></div>
     </a>
     <a class="card" href="star-pattern-lab.html">
       <div class="no">LAB 01 · PYTHON</div>
       <h3>Star Pattern Lab</h3>
-      <p>별찍기 20문제를 클릭으로 조립하며 배우는 파이썬 문법 드릴.
+      <p data-i18n="h.30">별찍기 20문제를 클릭으로 조립하며 배우는 파이썬 문법 드릴.
       식이 계산되는 과정과 오답의 원인까지 보여줍니다.</p>
-      <div class="tags"><span class="tag">반복문</span><span class="tag">조건문</span></div>
+      <div class="tags" data-i18n="h.41"><span class="tag">반복문</span><span class="tag">조건문</span></div>
     </a>
     <a class="card" href="star-pattern-3d.html">
       <div class="no">LAB 01-B · PYTHON</div>
       <h3>Star Pattern 3D</h3>
-      <p>별찍기 패턴을 3차원으로 확장한 실험 버전.</p>
+      <p data-i18n="h.31">별찍기 패턴을 3차원으로 확장한 실험 버전.</p>
       <div class="tags"><span class="tag">3D</span></div>
     </a>
   </div>
@@ -235,31 +252,31 @@ footer{border-top:1px solid var(--line);margin-top:96px}
 <section class="section" id="notes">
   <div class="sec-head">
     <span class="en">Weekly Notes</span>
-    <h2>주간 노트</h2>
-    <p>매주 수업에서 배운 내용을 과목별로 정리해 올립니다.</p>
+    <h2 data-i18n="h.42">주간 노트</h2>
+    <p data-i18n="h.43">매주 수업에서 배운 내용을 과목별로 정리해 올립니다.</p>
   </div>
   <div class="notes-filter" id="notesFilter">
-    <button class="on" data-f="all">전체</button>
-    <button data-f="영상처리시스템">영상처리시스템</button>
-    <button data-f="객체지향시스템">객체지향시스템</button>
+    <button class="on" data-f="all" data-i18n="h.12">전체</button>
+    <button data-f="영상처리시스템" data-i18n="h.13">영상처리시스템</button>
+    <button data-f="객체지향시스템" data-i18n="h.14">객체지향시스템</button>
   </div>
   <div class="notes-list">
-    <a class="note-row" data-subj="객체지향시스템" href="객체지향시스템.html">
+    <a class="note-row" data-subj="객체지향시스템" href="객체지향시스템.html" data-i18n="h.6">
       <span class="note-date">2026.09.09</span>
       <span class="note-subj">객체지향시스템</span>
       <span class="note-title">CH01 C#의 탄생과 첫 실행 — 닷넷·비주얼 스튜디오·빌드</span>
     </a>
-    <a class="note-row" data-subj="영상처리시스템" href="영상처리시스템.html">
+    <a class="note-row" data-subj="영상처리시스템" href="영상처리시스템.html" data-i18n="h.7">
       <span class="note-date">2026.09.07</span>
       <span class="note-subj">영상처리시스템</span>
       <span class="note-title">CH03 파이썬 핵심 문법 — 자료구조·슬라이스·NumPy</span>
     </a>
-    <a class="note-row" data-subj="영상처리시스템" href="영상처리시스템.html">
+    <a class="note-row" data-subj="영상처리시스템" href="영상처리시스템.html" data-i18n="h.8">
       <span class="note-date">2026.09.07</span>
       <span class="note-subj">영상처리시스템</span>
       <span class="note-title">CH02 개발 환경 구축 — 파이썬·파이참·OpenCV</span>
     </a>
-    <a class="note-row" data-subj="영상처리시스템" href="영상처리시스템.html">
+    <a class="note-row" data-subj="영상처리시스템" href="영상처리시스템.html" data-i18n="h.9">
       <span class="note-date">2026.09.07</span>
       <span class="note-subj">영상처리시스템</span>
       <span class="note-title">CH01 디지털 영상의 원리 — 화소·표본화·양자화</span>
@@ -270,21 +287,42 @@ footer{border-top:1px solid var(--line);margin-top:96px}
 <footer>
   <div class="foot-inner" style="display:block">
     <div class="foot-row foot-people" style="display:flex;gap:10px 22px;flex-wrap:wrap;font-size:14px;margin-bottom:10px">
-      <span>만든 사람 <b style="color:var(--ink)">김민</b></span>
-      <a href="mailto:rlaalscjswo1@gmail.com" style="color:var(--acc);font-weight:700;text-decoration:none">문의 · 의견 보내기</a>
+      <span data-i18n="h.37">만든 사람 <b style="color:var(--ink)">김민</b></span>
+      <a href="mailto:rlaalscjswo1@gmail.com" style="color:var(--acc);font-weight:700;text-decoration:none" data-i18n="h.10">문의 · 의견 보내기</a>
       <a id="ytLink" href="#" hidden style="color:var(--acc);font-weight:700;text-decoration:none">YouTube</a>
-      <a href="https://github.com/kkiimmiinn/cs-study-lab" target="_blank" rel="noopener" style="color:var(--acc);font-weight:700;text-decoration:none">GitHub 저장소</a>
+      <a href="https://github.com/kkiimmiinn/cs-study-lab" target="_blank" rel="noopener" style="color:var(--acc);font-weight:700;text-decoration:none" data-i18n="h.11">GitHub 저장소</a>
     </div>
-    <p style="font-size:12px;color:var(--mute);line-height:1.8;max-width:880px;text-wrap:pretty">CS STUDY LAB의 자체 제작 콘텐츠(정리 글·도표·실험실·문제)는
+    <p style="font-size:12px;color:var(--mute);line-height:1.8;max-width:880px;text-wrap:pretty" data-i18n="h.32">CS STUDY LAB의 자체 제작 콘텐츠(정리 글·도표·실험실·문제)는
     <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko" target="_blank" rel="noopener" style="color:var(--ink2)">CC BY-NC-SA 4.0</a>으로 공유합니다.
     과목별 참고 문헌과 인용 근거(저작권법 제28조)는 각 과목 페이지 하단에 밝혀 두었습니다. 순수 HTML/CSS/JS로 만들었습니다.</p>
   </div>
 </footer>
+<script id="i18nData">window.I18N_ALL={"en":{"static":{"h.1":"Skip to main content","h.2":"About","h.3":"Courses","h.4":"Labs","h.5":"Weekly Notes","h.6":"\n      <span class=\"note-date\">2026.09.09</span>\n      <span class=\"note-subj\">Object-Oriented Systems</span>\n      <span class=\"note-title\">CH01 The Birth of C# and the First Run — .NET · Visual Studio · Build</span>\n    ","h.7":"\n      <span class=\"note-date\">2026.09.07</span>\n      <span class=\"note-subj\">Image Processing Systems</span>\n      <span class=\"note-title\">CH03 Python Core Syntax — Data Structures · Slicing · NumPy</span>\n    ","h.8":"\n      <span class=\"note-date\">2026.09.07</span>\n      <span class=\"note-subj\">Image Processing Systems</span>\n      <span class=\"note-title\">CH02 Setting Up the Development Environment — Python · PyCharm · OpenCV</span>\n    ","h.9":"\n      <span class=\"note-date\">2026.09.07</span>\n      <span class=\"note-subj\">Image Processing Systems</span>\n      <span class=\"note-title\">CH01 Principles of Digital Images — Pixels · Sampling · Quantization</span>\n    ","h.10":"Contact · Send Feedback","h.11":"GitHub Repository","h.12":"All","h.13":"Image Processing Systems","h.14":"Object-Oriented Systems","h.15":"Everything I study<br>becomes <em>my own</em>","h.16":"This Semester's Courses","h.17":"Image Processing Systems","h.18":"Object-Oriented Systems","h.19":"Machine Learning · Deep Learning · AI","h.20":"Interactive Labs","h.21":"<span class=\"nbc\">Ph.D. coursework rewritten in plain language,</span> <span class=\"nbc\">an online lab where you learn by hands-on tinkering.</span>","h.22":"This site is a personal research notebook recording what I learn while pursuing a Ph.D. in the Dept. of Convergence IT Engineering, Computer & Software Engineering Major, Graduate School of Kyungnam University.\n    Rather than copying class concepts down verbatim, my rule is to rewrite them with easy examples and precise terminology\n    so that even someone new to engineering can understand.","h.23":"I don't stop at reading — the important principles become interactive labs (LAB) you can manipulate\n    right in your browser. I believe only the concepts you have seen with your eyes and touched with your hands truly become your own.","h.24":"Once the courses for the second semester of 2026 are finalized, per-course notes will accumulate here.\n    Each course consists of weekly summaries, lecture slides, and labs.","h.25":"Chapter-by-chapter key summaries + lecture slide viewer + 3 hands-on experiments (sampling · brightness · slicing)\n      + a practice workbook whose numbers change every time. PPT downloads included.","h.26":"From the story of C#'s birth to your first build — chapter summaries + a rebuild-trap experiment\n      + a C# practice room that even catches missing semicolons + a workbook where you reverse-engineer code from its output.","h.27":"Opens once the first class materials are ready.","h.28":"No installation, no internet needed. Everything runs right in your browser.","h.29":"A lab where you start from a single artificial neuron, train a real neural network in your browser,\n      and make it recognize digits you draw yourself. Includes 7 experiments and an endless problem bank.","h.30":"A Python syntax drill where you assemble 20 star-printing problems by clicking.\n      Shows how each expression is evaluated and why the wrong answers go wrong.","h.31":"An experimental version that extends the star-printing patterns into 3D.","h.32":"CS STUDY LAB's original content (summaries, diagrams, labs, and problems) is shared under\n    <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--ink2)\">CC BY-NC-SA 4.0</a>.\n    References and citation grounds (Article 28 of the Korean Copyright Act) for each course are listed at the bottom of each course page. Built with pure HTML/CSS/JS.","h.33":"Weekly class summaries for each course, in plain language","h.34":"Core principles built into interactive labs","h.35":"A neural-network learning log, starting from the perceptron","h.36":"A Python basic-syntax training drill","h.37":"Made by <b style=\"color:var(--ink)\">Kim Min</b>","h.title":"CS STUDY LAB — Kim Min's Computer Science Research Notes","h.desc":"Computer science study notes and interactive labs, recorded while pursuing a Ph.D. at Kyungnam University.","h.38":"<span class=\"tag\">OpenCV</span><span class=\"tag\">Python</span><span class=\"tag\">Problem Practice</span><span class=\"tag g\">CH01–03</span>","h.39":"<span class=\"tag\" style=\"background:#efeafc;color:#6a48e0\">C#</span><span class=\"tag\" style=\"background:#efeafc;color:#6a48e0\">Visual Studio</span><span class=\"tag\" style=\"background:#efeafc;color:#6a48e0\">Code Reverse-Engineering</span><span class=\"tag g\">CH01</span>","h.40":"<span class=\"tag\">Perceptron</span><span class=\"tag\">Backpropagation</span><span class=\"tag\">Handwriting Recognition</span>","h.41":"<span class=\"tag\">Loops</span><span class=\"tag\">Conditionals</span>","h.42":"Weekly Notes","h.43":"Each week I organize what I learned in class by course and post it here."}},"zh":{"static":{"h.1":"跳转到正文","h.2":"简介","h.3":"课程","h.4":"实验室","h.5":"每周笔记","h.6":"\n      <span class=\"note-date\">2026.09.09</span>\n      <span class=\"note-subj\">面向对象系统</span>\n      <span class=\"note-title\">CH01 C# 的诞生与首次运行 — .NET·Visual Studio·生成</span>\n    ","h.7":"\n      <span class=\"note-date\">2026.09.07</span>\n      <span class=\"note-subj\">图像处理系统</span>\n      <span class=\"note-title\">CH03 Python 核心语法 — 数据结构·切片·NumPy</span>\n    ","h.8":"\n      <span class=\"note-date\">2026.09.07</span>\n      <span class=\"note-subj\">图像处理系统</span>\n      <span class=\"note-title\">CH02 搭建开发环境 — Python·PyCharm·OpenCV</span>\n    ","h.9":"\n      <span class=\"note-date\">2026.09.07</span>\n      <span class=\"note-subj\">图像处理系统</span>\n      <span class=\"note-title\">CH01 数字图像的原理 — 像素·采样·量化</span>\n    ","h.10":"联系 · 反馈意见","h.11":"GitHub 仓库","h.12":"全部","h.13":"图像处理系统","h.14":"面向对象系统","h.15":"学过的东西全部<br>变成<em>自己的</em>","h.16":"本学期课程","h.17":"图像处理系统","h.18":"面向对象系统","h.19":"机器学习 · 深度学习 · 人工智能","h.20":"交互式实验室","h.21":"<span class=\"nbc\">把博士课程的学习内容用通俗的语言整理出来，</span> <span class=\"nbc\">并亲手操作着掌握的在线实验室。</span>","h.22":"这个网站是我在庆南大学研究生院融合IT工学系 计算机与软件工学专业(博士课程)\n    学习期间记录所学内容的个人研究笔记。原则不是把课上学到的概念原样抄下来，\n    而是用初次接触工学的人也能理解的简单例子和准确的术语重新讲述一遍。","h.23":"不止步于用文字阅读，重要的原理都做成可以在浏览器里亲手操作的\n    实验室(LAB)收集起来。因为我相信，只有用眼睛确认过、用手摸过的概念才真正成为自己的。","h.24":"2026学年第二学期的选修课程确定后，各课程的笔记会在这里积累。\n    每门课程由每周整理、讲义幻灯片和实验室组成。","h.25":"分章节的核心整理 + 讲义幻灯片浏览器 + 3种可操作实验(采样·亮度·切片)\n      + 数值每次都变化的习题练习本。含 PPT 下载。","h.26":"从 C# 的诞生故事到第一次生成的分章节整理 + 重新生成陷阱体验实验\n      + 连分号都能查出来的 C# 实践室 + 看结果反推代码的习题练习本。","h.27":"第一次课的资料整理好后即公开。","h.28":"不需要安装，也不需要网络。全部直接在浏览器中运行。","h.29":"从一个人工神经元出发，在浏览器里训练真正的神经网络，\n      让它识别自己手写的数字的实验室。含7种实验和无限题库。","h.30":"点击组装20道打印星号题来学习的 Python 语法训练。\n      还会展示表达式的计算过程和答错的原因。","h.31":"把打印星号图案扩展到三维的实验版本。","h.32":"CS STUDY LAB 的自制内容(整理文章·图表·实验室·习题)以\n    <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--ink2)\">CC BY-NC-SA 4.0</a> 共享。\n    各课程的参考文献与引用依据(著作权法第28条)在各课程页面底部注明。使用纯 HTML/CSS/JS 制作。","h.33":"每周用通俗的语言整理各科目的课堂内容","h.34":"把核心原理做成交互式实验室","h.35":"从感知机开始的神经网络学习记录","h.36":"Python 基础语法训练","h.37":"制作者 <b style=\"color:var(--ink)\">金民</b>","h.title":"CS STUDY LAB — 金民的计算机工学研究笔记","h.desc":"在庆南大学攻读博士课程期间记录的计算机工学整理笔记与交互式实验室。","h.38":"<span class=\"tag\">OpenCV</span><span class=\"tag\">Python</span><span class=\"tag\">习题练习</span><span class=\"tag g\">CH01–03</span>","h.39":"<span class=\"tag\" style=\"background:#efeafc;color:#6a48e0\">C#</span><span class=\"tag\" style=\"background:#efeafc;color:#6a48e0\">Visual Studio</span><span class=\"tag\" style=\"background:#efeafc;color:#6a48e0\">代码反推</span><span class=\"tag g\">CH01</span>","h.40":"<span class=\"tag\">感知机</span><span class=\"tag\">反向传播</span><span class=\"tag\">手写识别</span>","h.41":"<span class=\"tag\">循环语句</span><span class=\"tag\">条件语句</span>","h.42":"每周笔记","h.43":"每周把课堂上学到的内容按科目整理后发布。"}},"mn":{"static":{"h.1":"Үндсэн агуулга руу шилжих","h.2":"Танилцуулга","h.3":"Хичээлүүд","h.4":"Лаборатори","h.5":"Долоо хоногийн тэмдэглэл","h.6":"\n      <span class=\"note-date\">2026.09.09</span>\n      <span class=\"note-subj\">Объект хандалтат систем</span>\n      <span class=\"note-title\">CH01 C#-ийн төрөлт ба анхны ажиллуулалт — .NET · Visual Studio · Бүтээх (build)</span>\n    ","h.7":"\n      <span class=\"note-date\">2026.09.07</span>\n      <span class=\"note-subj\">Дүрс боловсруулах систем</span>\n      <span class=\"note-title\">CH03 Python-ы үндсэн синтакс — Өгөгдлийн бүтэц · Зүсэлт (slice) · NumPy</span>\n    ","h.8":"\n      <span class=\"note-date\">2026.09.07</span>\n      <span class=\"note-subj\">Дүрс боловсруулах систем</span>\n      <span class=\"note-title\">CH02 Хөгжүүлэлтийн орчин бүрдүүлэх — Python · PyCharm · OpenCV</span>\n    ","h.9":"\n      <span class=\"note-date\">2026.09.07</span>\n      <span class=\"note-subj\">Дүрс боловсруулах систем</span>\n      <span class=\"note-title\">CH01 Дижитал дүрсийн зарчим — Пиксел · Түүвэрлэлт · Квантчлал</span>\n    ","h.10":"Холбоо барих · Санал илгээх","h.11":"GitHub сан (repository)","h.12":"Бүгд","h.13":"Дүрс боловсруулах систем","h.14":"Объект хандалтат систем","h.15":"Сурсан бүхнээ<br><em>өөрийн болгоно</em>","h.16":"Энэ улирлын хичээлүүд","h.17":"Дүрс боловсруулах систем","h.18":"Объект хандалтат систем","h.19":"Машин сургалт · Гүн сургалт · Хиймэл оюун ухаан","h.20":"Интерактив лаборатори","h.21":"<span class=\"nbc\">Докторантурын хичээлээ энгийн хэлээр эмхэтгэж,</span> <span class=\"nbc\">өөрөө гараараа оролдож сурдаг онлайн лаборатори.</span>","h.22":"Энэ сайт бол Кённам их сургуулийн Төгсөлтийн дараах сургуулийн Нэгдмэл IT инженерчлэлийн тэнхим (Convergence IT Engineering),\n    Компьютер ба программ хангамжийн инженерчлэлийн мэргэжлээр докторантурт суралцаж байхдаа сурсан зүйлээ тэмдэглэдэг хувийн судалгааны дэвтэр юм.\n    Хичээл дээр үзсэн ойлголтыг байгаагаар нь хуулж бичихийн оронд, инженерчлэлтэй анх танилцаж буй хүн ч ойлгож чадахаар энгийн жишээ,\n    оновчтой нэр томьёогоор дахин тайлбарлан бичихийг зарчим болгодог.","h.23":"Зөвхөн уншаад зогсохгүй, чухал зарчмуудыг хөтөч дээрээ шууд оролдож үзэх боломжтой\n    лаборатори (LAB) болгон хийж цуглуулдаг. Нүдээрээ хараад, гараараа оролдож үзсэн ойлголт л жинхэнэ өөрийн болдог гэдэгт итгэдэг учраас.","h.24":"2026 оны хичээлийн жилийн 2-р улирлын хичээлүүд батлагдмагц хичээл тус бүрийн тэмдэглэл энд хуримтлагдана.\n    Хичээл бүр долоо хоног тутмын эмхэтгэл, лекцийн слайд, лабораториос бүрдэнэ.","h.25":"Бүлэг тус бүрийн гол эмхэтгэл + лекцийн слайд үзүүлэгч + гараар удирдах 3 туршилт (түүвэрлэлт · гэрэлтэлт · зүсэлт)\n      + тоон утга нь болгон удаа өөрчлөгддөг бодлогын дэвтэр. PPT татах багтсан.","h.26":"C#-ийн төрөлтийн түүхээс эхлээд анхны бүтээлт (build) хүртэл бүлэг тус бүрийн эмхэтгэл + дахин бүтээх урхийг мэдрэх туршилт\n      + цэгтэй таслал (;) хүртэл барьж авдаг C# дасгалын өрөө + үр дүнг хараад кодыг ухаж боддог бодлогын дэвтэр.","h.27":"Эхний хичээлийн материал бэлэн болмогц нээгдэнэ.","h.28":"Суулгах ч, интернэт ч хэрэггүй. Бүгд хөтөч дээр шууд ажиллана.","h.29":"Ганц хиймэл нейроноос эхлээд хөтөч дотроо жинхэнэ мэдрэлийн сүлжээ сургаж,\n      өөрийн зурсан цифрийг таниулдаг лаборатори. 7 туршилт болон төгсгөлгүй бодлогын сан багтсан.","h.30":"Од хэвлэх 20 бодлогыг товшилтоор угсарч сурдаг Python синтаксийн дасгал (drill).\n      Илэрхийлэл хэрхэн бодогдож байгаа болон буруу хариултын шалтгааныг хүртэл харуулна.","h.31":"Од хэвлэх хээг гурван хэмжээст (3D) өргөтгөсөн туршилтын хувилбар.","h.32":"CS STUDY LAB-ын өөрсдийн бүтээсэн агуулга (эмхэтгэл · диаграм · лаборатори · бодлого)-ыг\n    <a href=\"https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ko\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--ink2)\">CC BY-NC-SA 4.0</a> нөхцөлөөр хуваалцдаг.\n    Хичээл тус бүрийн ашигласан ном зүй болон иш татсан үндэслэлийг (Зохиогчийн эрхийн тухай хуулийн 28 дугаар зүйл) тухайн хичээлийн хуудасны доод хэсэгт заасан болно. Цэвэр HTML/CSS/JS-ээр хийсэн.","h.33":"Хичээл тус бүрийн долоо хоног тутмын агуулгыг энгийн хэлээр эмхэтгэсэн","h.34":"Гол зарчмуудыг интерактив лаборатори болгон бүтээсэн","h.35":"Перцептроноос эхэлсэн мэдрэлийн сүлжээний сургалтын тэмдэглэл","h.36":"Python-ы үндсэн синтаксийн дасгал (drill)","h.37":"Бүтээсэн хүн <b style=\"color:var(--ink)\">Ким Мин</b>","h.title":"CS STUDY LAB — Ким Мины компьютерийн инженерчлэлийн судалгааны тэмдэглэл","h.desc":"Кённам их сургуулийн докторантурт суралцахдаа тэмдэглэж буй компьютерийн инженерчлэлийн эмхэтгэл тэмдэглэл ба интерактив лаборатори.","h.38":"<span class=\"tag\">OpenCV</span><span class=\"tag\">Python</span><span class=\"tag\">Бодлогын дасгал</span><span class=\"tag g\">CH01–03</span>","h.39":"<span class=\"tag\" style=\"background:#efeafc;color:#6a48e0\">C#</span><span class=\"tag\" style=\"background:#efeafc;color:#6a48e0\">Visual Studio</span><span class=\"tag\" style=\"background:#efeafc;color:#6a48e0\">Кодыг ухаж бодох</span><span class=\"tag g\">CH01</span>","h.40":"<span class=\"tag\">Перцептрон</span><span class=\"tag\">Буцаан тархалт (backpropagation)</span><span class=\"tag\">Гар бичмэл таних</span>","h.41":"<span class=\"tag\">Давталт</span><span class=\"tag\">Нөхцөл</span>","h.42":"Долоо хоногийн тэмдэглэл","h.43":"Долоо хоног бүр хичээл дээр сурсан зүйлээ хичээл тус бүрээр эмхэтгэн байршуулдаг."}}};</script><!--/i18nData-->
 <script>
+(function(){
+  var LANG = (function(){ try { return localStorage.getItem('cslab-lang') || 'ko'; } catch(e){ return 'ko'; } })();
+  var sel = document.getElementById('langSel');
+  if (sel){
+    sel.value = LANG;
+    sel.addEventListener('change', function(){
+      try { localStorage.setItem('cslab-lang', sel.value); } catch(e){}
+      location.reload();
+    });
+  }
+  var d = (window.I18N_ALL && window.I18N_ALL[LANG]) || null;
+  if (!d || !d['static']) return;
+  document.documentElement.lang = ({en:'en', zh:'zh-Hans', mn:'mn'})[LANG] || 'ko';
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var t = d['static'][el.dataset.i18n];
+    if (t) el.innerHTML = t;
+  });
+  if (d['static']['h.title']) document.title = d['static']['h.title'];
+})();
 (function(){
   var KEY = 'cslab-theme';
   function apply(t){ document.documentElement.dataset.theme = t;
-    try { localStorage.setItem(KEY, t); } catch(e){} }
+    try { localStorage.setItem(KEY, t); } catch(e){}
+    if (window._heroRepaint) window._heroRepaint(); }
   var saved = null;
   try { saved = localStorage.getItem(KEY); } catch(e){}
   if (saved) apply(saved);
@@ -346,40 +384,49 @@ footer{border-top:1px solid var(--line);margin-top:96px}
     }
     return tr.pts[tr.pts.length - 1];
   }
+  var PALS = {
+    dark:  {grid:'rgba(124,147,245,.05)', line:'rgba(124,147,245,.10)', node:'rgba(124,147,245,.20)',
+            p0:'rgba(140,170,255,.85)', p1:'rgba(110,145,245,.25)', p2:'rgba(110,145,245,0)', core:'rgba(230,240,255,.95)'},
+    light: {grid:'rgba(61,79,158,.07)', line:'rgba(61,79,158,.14)', node:'rgba(61,79,158,.26)',
+            p0:'rgba(61,79,158,.70)', p1:'rgba(61,79,158,.20)', p2:'rgba(61,79,158,0)', core:'rgba(38,52,110,.95)'},
+  };
+  function PAL(){ return document.documentElement.dataset.theme === 'dark' ? PALS.dark : PALS.light; }
   function drawBase(){
     ctx.clearRect(0, 0, w, h);
+    var pal = PAL();
     // 아주 옅은 격자점
-    ctx.fillStyle = 'rgba(124,147,245,.05)';
+    ctx.fillStyle = pal.grid;
     for (var gx = 40; gx < w; gx += 56)
       for (var gy = 40; gy < h; gy += 56)
         ctx.fillRect(gx, gy, 1.6, 1.6);
     // 트레이스와 노드(꺾임점)
     traces.forEach(function(tr){
-      ctx.strokeStyle = 'rgba(124,147,245,.10)';
+      ctx.strokeStyle = pal.line;
       ctx.lineWidth = 1.4;
       ctx.beginPath();
       ctx.moveTo(tr.pts[0].x, tr.pts[0].y);
       for (var j = 1; j < tr.pts.length; j++) ctx.lineTo(tr.pts[j].x, tr.pts[j].y);
       ctx.stroke();
       for (var k3 = 1; k3 < tr.pts.length - 1; k3 += 2){
-        ctx.fillStyle = 'rgba(124,147,245,.20)';
+        ctx.fillStyle = pal.node;
         ctx.fillRect(tr.pts[k3].x - 2, tr.pts[k3].y - 2, 4, 4);
       }
     });
   }
   function frame(){
     drawBase();
+    var pal = PAL();
     pulses.forEach(function(p){
       p.d += p.v;
       if (p.d > 1) p.d = 0;
       var pos = pointAt(traces[p.t], p.d);
       var g = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, 26);
-      g.addColorStop(0, 'rgba(140,170,255,.85)');
-      g.addColorStop(0.35, 'rgba(110,145,245,.25)');
-      g.addColorStop(1, 'rgba(110,145,245,0)');
+      g.addColorStop(0, pal.p0);
+      g.addColorStop(0.35, pal.p1);
+      g.addColorStop(1, pal.p2);
       ctx.fillStyle = g;
       ctx.beginPath(); ctx.arc(pos.x, pos.y, 26, 0, 6.2832); ctx.fill();
-      ctx.fillStyle = 'rgba(230,240,255,.95)';
+      ctx.fillStyle = pal.core;
       ctx.beginPath(); ctx.arc(pos.x, pos.y, 2.2, 0, 6.2832); ctx.fill();
     });
     if (running) raf = requestAnimationFrame(frame);
@@ -388,6 +435,7 @@ footer{border-top:1px solid var(--line);margin-top:96px}
   function stop(){ running = false; cancelAnimationFrame(raf); }
 
   resize(); seed(); drawBase();
+  window._heroRepaint = drawBase;
   addEventListener('resize', function(){ resize(); seed(); drawBase(); });
   if (!reduce && 'IntersectionObserver' in window){
     new IntersectionObserver(function(es){ es[0].isIntersecting ? start() : stop(); })
